@@ -1,0 +1,20 @@
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+.venv/
+
+# Persönliches, bleibt nur auf dem eigenen Rechner
+.env
+.env.*
+.einrichtung-fertig
+
+# Eigene Referenzen (Teilnehmerfotos, Umsatz-Screenshots): nur lokal, nie öffentlich
+deck/referenzen/
+
+# Erzeugte Dateien
+deck/pdfwork/
+banner/ausgabe/
+
+# Die Vorlage selbst gehört ins Repo (überschreibt Ignore-Regeln anderer Rechner)
+!.env.example

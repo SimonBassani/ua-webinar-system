@@ -1,0 +1,23 @@
+{
+  "name": "beispiel-akquise-copilot",
+  "badge_oben": "INKL. LIVE-DEMO",
+  "datum_pille": "LIVE · DI 22.09. · 11:00 UHR",
+  "titel_klein": "Dein",
+  "titel_gross": "Akquise-Copilot",
+  "untertitel": "[[Doppelter Umsatz]] aus alten Kontakten!",
+  "logos": ["assets/logos/unternehmensathleten-wortmarke.png", "assets/logos/wortmarke-digiup-dunkel.png"],
+  "hosts": [
+    {"name": "Simon", "firma": "DigiUp", "foto": "assets/hosts/simon.png", "seite": "links", "farbe": "mint", "beschnitt": 0.0},
+    {"name": "Alex", "firma": "Unternehmensathleten", "foto": "assets/hosts/alex.png", "seite": "rechts", "farbe": "coral", "beschnitt": 0.0}
+  ],
+  "karte": {
+    "titel": "Akquise-Copilot",
+    "status": "aktiv",
+    "chips": [
+      {"text": "Sarah", "tag": "SUPER HEISS", "farbe": "mint"},
+      {"text": "Thomas", "tag": "HEISS", "farbe": "coral"}
+    ],
+    "ergebnis": "20.000 €"
+  },
+  "ausgabe": "banner/ausgabe"
+}

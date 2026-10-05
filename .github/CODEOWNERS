@@ -1,0 +1,12 @@
+# Änderungen an diesen Pfaden brauchen die Freigabe von Simon (Branch-Schutz auf main)
+/.claude/       @SimonBassani
+/.githooks/     @SimonBassani
+/.github/       @SimonBassani
+/tools/         @SimonBassani
+/banner/        @SimonBassani
+/deck/          @SimonBassani
+/requirements/  @SimonBassani
+/docs/          @SimonBassani
+/vorlagen/      @SimonBassani
+/CLAUDE.md      @SimonBassani
+/README.md      @SimonBassani
