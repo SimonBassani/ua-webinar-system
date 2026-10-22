@@ -21,7 +21,7 @@ AUSGANG = WURZEL / "deck" / "Akquise-Copilot.html"
 ZIEL = Path(__file__).resolve().parent / "deck.html"
 
 d = Deck(AUSGANG)
-alt = {l: d.folien[d._index(l)] for l in ("Titel", "Kalender offen", "Live Q&A")}
+alt = {l: d.folien[d._index(l)] for l in ("Titel", "Für wen das ist", "Kalender offen", "Live Q&A")}
 alt_deck = d
 
 # ---- Bausteine für dieses Deck ----------------------------------------------------------------------
@@ -114,6 +114,28 @@ def kapitel(nr, titel, satz, wer, notiz):
         + sub(satz, 38, 36), GRUEN)
 
 
+def nummern(punkte, k=99, farbe=MINT):
+    """Raster 2 × 3 mit nummerierten Karten, Stufe k zeigt die ersten k."""
+    karten = "".join(
+        f'<div style="{"" if k > j else "visibility:hidden;"}display:flex;align-items:center;gap:28px;background:#131312;'
+        f'border:1px solid #34322F;border-radius:22px;padding:0 36px">'
+        f'<div style="width:64px;height:64px;border-radius:16px;background:{farbe};color:#10241A;flex-shrink:0;display:flex;'
+        f'align-items:center;justify-content:center;font-size:30px;font-weight:700">{j + 1}</div>'
+        f'<div style="font-size:34px;font-weight:600;line-height:1.25">{p}</div></div>' for j, p in enumerate(punkte))
+    return f'<div style="margin-top:48px;flex:1;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:24px">{karten}</div>'
+
+
+def gestrichen(punkte):
+    return "".join(f'<div style="display:flex;align-items:center;gap:16px;font-size:32px;color:#8C8780">'
+                   f'<span style="color:{CORAL};font-weight:700">✕</span><span style="text-decoration:line-through;text-decoration-color:{CORAL}">{p}</span></div>'
+                   for p in punkte)
+
+
+def haken(punkte, farbe=MINT, zeichen="✓"):
+    return "".join(f'<div style="display:flex;align-items:flex-start;gap:18px;font-size:34px;line-height:1.3">'
+                   f'<span style="color:{farbe};font-weight:700">{zeichen}</span><span>{p}</span></div>' for p in punkte)
+
+
 # =====================================================================================================
 # TEIL 1 · EINSTIEG  (überarbeitet nach Review 21.10.2026)
 # =====================================================================================================
@@ -147,6 +169,33 @@ def antworten(opts, farbe="#34322F"):
                       f'justify-content:center;text-align:center;padding:24px;font-size:40px;font-weight:600;line-height:1.2">{o}</div>' for o in opts)
             + "</div>")
 
+
+neu("Wie es den meisten geht", "A", "In den meisten Webinaren werden die Teilnehmer mit Theorie überschüttet. Deshalb bekommst du heute eine klare Reihenfolge, die du ab morgen umsetzen kannst. Fragen bitte notieren, am Ende ist Q&A. Keine Aufzeichnung.",
+    f'<div style="flex:1;display:flex;gap:70px;align-items:center">'
+    + f'<div style="flex:0 0 620px;height:780px;transform:rotate(-3deg);border:3px dashed {GELB};border-radius:30px;background:rgba(232,201,122,.06);'
+      f'display:flex;align-items:center;justify-content:center;text-align:center;padding:50px;{MONO}font-size:24px;line-height:1.5;color:{GELB}">'
+      f'OFFEN<br><br>Bild oder GIF: Teilnehmer wird mit Infos überschüttet.<br>Eigenes Motiv, Rechte klären.</div>'
+    + '<div style="flex:1;display:flex;flex-direction:column">'
+    + eyebrow("Ehrlich gesagt") + h2(f"In den meisten Webinaren geht es den Teilnehmern {c('so.')}", 76)
+    + sub("Weil sie mit Theorie und unnötigen Infos überschüttet werden.", 34, 26)
+    + f'<div style="margin-top:44px;background:linear-gradient(160deg,#10241A,#152C20);border:1.5px solid {MINT};border-radius:26px;padding:40px 44px;font-size:38px;font-weight:600;line-height:1.35">'
+      f'Deshalb bekommst du heute eine {m("klare Reihenfolge")}, die du ab morgen umsetzen kannst.</div>'
+    + f'<div style="margin-top:28px;background:#131312;border:1px solid #34322F;border-radius:22px;padding:28px 36px;font-size:28px;color:#B4AFA6">'
+      f'{w("Wichtig:")} Fragen notieren und am Ende im Q&amp;A stellen. Es gibt keine Aufzeichnung.</div>'
+    + "</div></div>")
+
+
+def stimme(j):
+    return (f'<div style="background:#131312;border:1px solid #34322F;border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:14px">'
+            f'<div style="height:150px;border-radius:14px;border:2px dashed {GELB};display:flex;align-items:center;justify-content:center;{MONO}font-size:16px;color:{GELB}">VIDEO / FOTO</div>'
+            f'<div style="font-size:26px;font-weight:700">[Name {j}]</div><div style="font-size:20px;color:{MINT}">[Ergebnis in einem Satz]</div></div>')
+
+
+neu("Social Proof früh", "A", "Social Proof gleich am Anfang. Diese Menschen saßen vor einigen Monaten genau da, wo du heute sitzt. Über 250 Selbstständige haben mit uns ihre Kundengewinnung aufgebaut.",
+    eyebrow("Bevor es losgeht") + h2(f"Über {m('250 Selbstständige')} haben mit uns ihre Kundengewinnung aufgebaut.", 70)
+    + sub("Viele von ihnen saßen vor ein paar Monaten genau da, wo du heute sitzt.", 32, 20)
+    + f'<div style="margin-top:36px;flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:20px">{"".join(stimme(j) for j in range(1, 6))}</div>'
+    + f'<div style="margin-top:22px;display:flex">{offen("5 Stimmen mit Foto oder Video-Screenshot und Freigabe · Formulierung zu 250+ bestätigen", "1", 18)}</div>')
 
 neu("Umfrage 1", "M", "Umfrage im Chat. Antworten vorlesen.",
     eyebrow("Umfrage im Chat")
@@ -207,18 +256,17 @@ stufen("Stell dir vor", "M", "Zielbild. Ein System, das dir die richtigen Person
        + f'<div style="margin-top:40px;{"" if k >= 3 else "visibility:hidden"}">' + pille("Es liegt nicht an dir. Es liegt am System.") + '</div>')
 
 
-def liste_karte(titel, punkte, art):
-    farbe = MINT if art == "mint" else CORAL
-    zeilen = "".join(f'<div style="display:flex;gap:18px;align-items:flex-start;font-size:38px;line-height:1.3">'
-                     f'<span style="width:12px;height:12px;border-radius:50%;background:{farbe};margin-top:18px;flex-shrink:0"></span>{p}</div>' for p in punkte)
-    return karte(f'<div style="display:flex;flex-direction:column;gap:26px;font-weight:500">{zeilen}</div>', art=art, label=titel)
-
-
-neu("Für wen das ist", "A", "Filtern. Coaches, Berater, Freelancer, Webdesigner, Agenturen, Interim-Manager: alle mit demselben Problem, fehlenden Anschlussprojekten. Wer hier falsch ist, darf gehen.",
-    eyebrow("Für wen das ist") + h2(f"Heute ist für dich, wenn du {m('nach vorne willst.')}", 76)
-    + reihe(liste_karte("Für dich", ["Coach, Berater, Freelancer, Agentur oder Interim-Manager.", "Dein Angebot verkauft sich schon.", "Dir fehlen planbare Anschlussprojekte."], "mint"),
-            liste_karte("Nicht für dich", ["Du willst vor allem weg von etwas.", "Du wartest auf den perfekten Moment.", "Du suchst Ergebnisse ohne eigenen Einsatz."], "coral"), gap=40)
-    + f'<div style="margin-top:22px;display:flex">{offen("Wortlaut gemeinsam final machen", "1", 18)}</div>')
+d.folien = [alt["Für wen das ist"]]
+d.ed("Für wen das ist", "Experte, Trainer, Coach oder Berater mit einem funktionierenden Angebot bist",
+     "Coach, Berater, Freelancer, Agentur oder Interim-Manager mit einem funktionierenden Angebot bist")
+d.ed("Für wen das ist", "bereits Kontakte oder frühere Gespräche hast, aus denen du konsequenter qualifizierte Gespräche entwickeln willst",
+     "planbar Anschlussprojekte statt Zufall willst")
+d.ed("Für wen das ist", "2026 auf ein persönliches, KI-gestütztes Akquise-System setzen und regelmäßig umsetzen willst",
+     "2027 auf ein persönliches LinkedIn-System setzen und regelmäßig umsetzen willst")
+d.ed("Für wen das ist", "nicht bereit bist, Kontakte konsequent zu priorisieren, nachzufassen und das System regelmäßig zu nutzen",
+     "nicht bereit bist, regelmäßig Gespräche zu führen und nachzufassen")
+d.notes("Für wen das ist", "Filtern, wie im letzten Webinar. Wer hier falsch ist, darf gehen. Wer bleibt, ist richtig.")
+FOLGE.append((d.folien[0], "A"))
 
 neu("Warum jetzt · Jahresende", "M", "Wer im Januar sicher ins neue Jahr starten will, baut sein System jetzt. Bis Weihnachten steht es. Nicht im Januar, wenn alle Vorsätze fassen.",
     eyebrow("Warum jetzt") + h2(f"Bis Weihnachten bauen. Im Januar {m('sicher starten.')}", 84)
@@ -233,6 +281,33 @@ stufen("Warum jetzt · KI", "M", "1998 das Internet, 2010 Social Media, jetzt KI
                        "mint" if j == 2 else "neutral", sichtbar=k > j) for j, (jahr, was) in enumerate(aeren)])
        + f'<div style="margin-top:40px;{"" if k >= 4 else "visibility:hidden"}">'
        + pille("Umfrage: Wie groß siehst du die Chance, die LinkedIn mit KI deinem Business bringt?") + '</div>')
+
+neu("Opportunity LinkedIn", "A", "Der Schwenk: Die größte Chance für Selbstständige mit einem Angebot, das verkauft, ist 2027 LinkedIn. Deine Kunden sind schon da. Die meisten nutzen es nur falsch.",
+    eyebrow("Die größte Chance 2027") + h2(f"Deine Kunden sind schon da. Auf {m('LinkedIn.')}", 110, 30)
+    + sub("Die meisten Selbstständigen nutzen es nur falsch.", 44, 40), GRUEN)
+
+denken = ["Ich muss mehr Content posten.", "Ich muss überall kommentieren.", "Ich brauche mehr Reichweite und Follower."]
+wirklich = [("Die Richtigen kennen", "Wer genau kauft bei dir, und wo ist diese Person gerade aktiv?"),
+            ("Ins Gespräch kommen", "Persönliche Direktnachricht statt noch ein Beitrag."),
+            ("Gespräch in Termin verwandeln", "2 bis 3 Nachrichten, dann ein Termin im Kalender.")]
+
+
+def denkfehler(k):
+    rechts = "".join(f'<div style="{"" if k > j else "visibility:hidden;"}display:flex;gap:20px;align-items:flex-start">'
+                     f'<div style="width:52px;height:52px;border-radius:14px;background:{MINT};color:#10241A;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700">{j + 1}</div>'
+                     f'<div><div style="font-size:36px;font-weight:600">{t}</div><div style="font-size:26px;color:#B4AFA6;margin-top:6px">{x}</div></div></div>'
+                     for j, (t, x) in enumerate(wirklich))
+    return (eyebrow("Auf LinkedIn") + h2(f"Der größte {c('Denkfehler')} bei fast allen Selbstständigen.", 72)
+            + reihe(f'<div style="flex:1;background:#131312;border:1px solid #34322F;border-radius:26px;padding:44px;display:flex;flex-direction:column;justify-content:center;gap:30px">'
+                    f'<div style="{MONO}font-size:18px;letter-spacing:.14em;color:#8C8780">WAS DIE MEISTEN DENKEN</div>{haken(denken, CORAL, "✕")}</div>',
+                    f'<div style="flex:1.25;background:linear-gradient(160deg,#10241A,#152C20);border:1.5px solid {MINT};border-radius:26px;padding:44px;display:flex;flex-direction:column;justify-content:center;gap:30px">'
+                    f'<div style="{MONO}font-size:18px;letter-spacing:.14em;color:{MINT}">WIE ES WIRKLICH IST</div>{rechts}</div>', gap=36, top=40)
+            + f'<div style="margin-top:30px;text-align:center;{"" if k >= 4 else "visibility:hidden"}">'
+            + f'<div style="font-size:34px;font-weight:600">Du musst nicht mehr posten.</div>'
+            + f'<div style="font-size:34px;color:{MINT};margin-top:8px">Du musst wissen, welche einkommensproduzierenden Aktivitäten deinen Kalender füllen.</div></div>')
+
+
+stufen("Denkfehler", "A", "Was die meisten denken: mehr Content, mehr Kommentare, mehr Reichweite. Wie es wirklich ist: die Richtigen kennen, ins Gespräch kommen, Gespräch in Termin verwandeln. Du musst nur wissen, welche EPAs, also einkommensproduzierende Aktivitäten, deinen Kalender füllen.", 4, denkfehler)
 
 neu("Case-Teaser · [Case 1]", "A", "Nur einer, als Vorgriff. Die volle Auflösung kommt vor dem Pitch: Am Ende zeig ich euch, was sich bei denen konkret verändert hat. Nicht Motivation. Steuerung.",
     eyebrow("Ein Vorgriff") + f'<div style="margin-top:40px;display:flex;align-items:center;gap:60px;flex:1">{foto("case1", 300)}'
@@ -302,6 +377,18 @@ neu("Zufall statt System", "A", "Im Oktober hattet ihr vielleicht sechs gute Ges
     + f'<div style="flex:1;display:flex;align-items:flex-end;justify-content:center;gap:120px;margin-top:30px">'
     + balken("OKTOBER", "6", 420, MINT) + balken("NOVEMBER", "0", 8, CORAL) + "</div>")
 
+neu("Wie deine Kunden entstehen", "A", "Vergiss das Bild, das du im Kopf hast. Das alles brauchst du nicht. So machen es unsere Kunden. Du schreibst seit Jahren Nachrichten. Genau damit gewinnst du deine Kunden.",
+    eyebrow("Wie deine Kunden auf LinkedIn entstehen") + h2(f"Vergiss das Bild, {m('das du im Kopf hast.')}", 72)
+    + f'<div style="margin-top:34px;background:#131312;border:1px solid #34322F;border-radius:24px;padding:30px 44px">'
+      f'<div style="{MONO}font-size:17px;letter-spacing:.14em;color:#8C8780;margin-bottom:18px">DAS BRAUCHST DU ALLES NICHT</div>'
+      f'<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 60px">{gestrichen(["Jeden Tag posten", "Viral gehen", "Hunderte Kommentare", "Massen-Anfragen verschicken"])}</div></div>'
+    + f'<div style="margin-top:22px;text-align:center;{MONO}font-size:18px;letter-spacing:.14em;color:{MINT}">↓ SO MACHEN ES UNSERE KUNDEN</div>'
+    + reihe(karte("[Name 1]", "Gewinnt Kunden aus seinem bestehenden Netzwerk.", "mint", "Netzwerk", size=36),
+            karte("[Name 2]", "Gewinnt Kunden über Empfehlungen, die er gezielt anstößt.", "mint", "Empfehlung", size=36),
+            karte("[Name 3]", "Gewinnt Kunden über gezielte Direktnachrichten.", "mint", "Direktansprache", size=36), top=18)
+    + f'<div style="margin-top:22px;display:flex;align-items:center;gap:24px"><div style="font-size:30px">Du schreibst seit Jahren Nachrichten. {m("Genau damit gewinnst du deine Kunden.")}</div>'
+    + offen("3 echte Beispiele, Namen mit Freigabe", "1", 16) + "</div>")
+
 zeilen = [("Content", "1 bis 2 Stunden pro Beitrag, allein", "KI im Sparring, Beitrag in deiner Stimme"),
           ("Outreach", "Manuell, nach Gefühl", "KI schlägt dir die Richtigen vor")]
 
@@ -316,7 +403,7 @@ def vergleich(k):
             + f'<div style="margin-top:44px;flex:1;display:flex;flex-direction:column;gap:24px">{kopf}{rows}</div>')
 
 
-stufen("Content und Outreach", "M", "Zwei Hebel: Content und Outreach. Beide funktionieren isoliert schlecht. Alte Welt gegen neue Welt.", 2, vergleich)
+stufen("Content und Outreach", "A", "Zwei Hebel: Content und Outreach. Beide funktionieren isoliert schlecht. Alte Welt gegen neue Welt.", 2, vergleich)
 
 quellen = [("Empfehlungen", "Systematisiert statt dem Zufall überlassen. Gute Kunden kennen andere gute Kunden."),
            ("Dein Netzwerk", "Aktiviert statt ignoriert."),
@@ -337,7 +424,7 @@ def trichter(k, label_stufen=4):
     return f'<div style="margin-top:40px;flex:1;display:flex;flex-direction:column;gap:16px">{zeilen_}</div>'
 
 
-stufen("Rechenbeispiel", "M", "Runterrechnen auf Termine. Aus 100 Nachrichten werden 3 bis 4 Termine. Jede Stufe mit Begründung, nicht in die Einzelschritte gehen.", 4,
+stufen("Rechenbeispiel", "A", "Runterrechnen auf Termine. Aus 100 Nachrichten werden 3 bis 4 Termine. Jede Stufe mit Begründung, nicht in die Einzelschritte gehen.", 4,
        lambda k: eyebrow("Rechenbeispiel, konservativ") + h2(f"Aus 100 Nachrichten werden {m('3 bis 4 Termine.')}", 72)
        + trichter(k) + f'<div style="margin-top:18px;display:flex">{offen("Eure Erfahrungswerte für Antworten und Gespräche, jede Zahl begründet", "1", 18)}</div>')
 
@@ -346,10 +433,18 @@ neu("KI-Moment · Kontext", "A", "Bevor du jemanden ansprichst: eine Minute Kont
     + reihe(karte(f'<span style="font-size:110px;color:{CORAL}">20</span> generische Nachrichten', "Die Plattform bestraft Volumen.", "coral"),
             karte(f'<span style="font-size:110px;color:{MINT}">5</span> passende Nachrichten', "Eine Minute KI-Kontext pro Person.", "mint"), gap=40))
 
-neu("Der Weg zum Gespräch", "A", "Das DM-Framework nicht im Detail zeigen. Nur den Weg dorthin: vernetzen, ins Gespräch kommen, Termin. Wie genau, bauen wir auf deine Situation.",
-    eyebrow("Der Weg") + h2(f"Das Gespräch entsteht in der {m('Direktnachricht.')}", 80)
-    + reihe(karte("Vernetzen", label="01"), karte("Ins Gespräch kommen", label="02"), karte("Termin", "In 2 bis 3 Nachrichten.", "mint", "03"))
-    + f'<div style="margin-top:40px">' + pille("Wie genau, bauen wir auf deine Situation. Nicht von der Stange.") + "</div>")
+saeulen = [("Zielgruppe", "Positionierung", "Wem hilfst du, womit, warum du?"),
+           ("Signale", "Recherche", "Wer ist gerade relevant? KI-Recherche aus Event- und Profildaten."),
+           ("Nachricht", "Signature-Framework", "2 bis 3 persönliche Nachrichten in deiner Stimme."),
+           ("Termin", "Kaufsignal", "Kaufsignale erkennen, nächster Schritt, Termin im Kalender.")]
+stufen("Framework", "A", "Unser Framework für einen vollen Kalender, Säule für Säule. Nicht jedes Detail, aber die Reihenfolge.", 4,
+       lambda k: eyebrow("Das Framework") + h2(f"Vier Säulen für einen {m('vollen Kalender.')}", 80)
+       + reihe(*[f'<div style="{"" if k > j else "visibility:hidden;"}flex:1;background:linear-gradient(170deg,#10241A,#131312);border:1.5px solid {MINT if j == 3 else "#2C4A3A"};'
+                 f'border-radius:26px;padding:40px 32px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:22px">'
+                 f'<div style="{MONO}font-size:16px;letter-spacing:.14em;color:{MINT};border:1px solid #2C4A3A;border-radius:999px;padding:8px 18px">{tag}</div>'
+                 f'<div style="font-family:Newsreader,serif;font-style:italic;font-size:54px">{name}</div>'
+                 f'<div style="margin-top:auto;font-size:26px;line-height:1.4;color:#B4AFA6">{txt}</div></div>' for j, (name, tag, txt) in enumerate(saeulen)], gap=24, top=44)
+       + f'<div style="margin-top:22px;display:flex">{offen("Säulen-Namen mit eurem echten DM-Framework abgleichen", "1", 18)}</div>')
 
 # =====================================================================================================
 # TEIL 4 · DEAL CLOSEN
@@ -429,10 +524,22 @@ neu("Zwei Welten", "A/M", "Wir kommen aus zwei Welten. Business und Leistungsspo
 # =====================================================================================================
 # TEIL 6 · PITCH
 # =====================================================================================================
-stufen("Zwei Optionen", "A", "Wir könnten dich jetzt allein lassen. Option 1: allein weitermachen. Option 2: gemeinsam, in 90 Tagen.", 2,
+jahr = ["Zwölf Monate, in denen dein Kalender vom Zufall abhängt.", "Wieder posten und hoffen, statt die Richtigen anzuschreiben.",
+        "Wieder auf Empfehlungen warten.", "Wieder ein Monat voll, der nächste leer.",
+        "Wieder zusehen, wie andere über LinkedIn Kunden gewinnen.", "Und im Dezember 2027 stehst du genau da, wo du heute stehst."]
+stufen("Ein weiteres Jahr", "A", "Was dich ein weiteres Jahr ohne System kostet. Punkt für Punkt, ruhig vorlesen.", 3,
+       lambda k: eyebrow("Ehrlich gerechnet", CORAL) + h2(f"Was dich ein {c('weiteres Jahr')} kostet.", 84) + nummern(jahr, 2 * k, CORAL))
+
+stufen("Zwei Optionen", "A", "Wir könnten dich jetzt allein lassen. Option 1: allein weitermachen. Option 2: die Abkürzung, mit der Reihenfolge, die bei über 250 Selbstständigen funktioniert hat.", 2,
        lambda k: eyebrow("Du hast zwei Optionen") + h2(f"Allein weiter. Oder {m('gemeinsam in 90 Tagen.')}", 80)
        + reihe(karte("Allein weitermachen", "Mit allem, was du heute gesehen hast. Auf eigene Faust.", "neutral", "Option 1", size=48),
-               karte("Gemeinsam in 90 Tagen", "Wir bauen dein System mit dir.", "mint", "Option 2", sichtbar=k >= 2, size=48), gap=40))
+               karte("Die Abkürzung", "Die Reihenfolge, die bei über 250 Selbstständigen funktioniert hat. In 90 Tagen, gemeinsam.", "mint", "Option 2", sichtbar=k >= 2, size=48), gap=40))
+
+scheitern = ["Wissen sammeln statt Reihenfolge: noch ein Kurs, noch ein Tool.", "Posten statt Gespräche führen.",
+             "Keine klare Zielgruppe, kein klares Angebot.", "Alles gleichzeitig probieren und nichts durchziehen.",
+             "Die erste Nachricht verschieben: aus nächster Woche wird nie.", "Allein: niemand sagt dir, wo du falsch abbiegst."]
+stufen("Woran es scheitert", "A", "Woran es meistens scheitert. Jeder Punkt ist ein Grund für Option 2.", 3,
+       lambda k: eyebrow("Aus über 250 Begleitungen", CORAL) + h2(f"Woran es {c('meistens scheitert.')}", 84) + nummern(scheitern, 2 * k, CORAL))
 
 neu("Ergebnis zuerst", "A", "Ergebnis vor Weg. In 90 Tagen qualifizierte Termine im Kalender. Wie viele für dich realistisch sind, rechnen wir im Strategie-Call aus.",
     eyebrow("Das Ergebnis") + h2(f"In 90 Tagen {m('qualifizierte Termine')} im Kalender.", 110, 30)
@@ -449,6 +556,12 @@ stufen("Der Weg", "M", "Erst jetzt der Weg. Die Bausteine einzeln, mit Wert dahi
        lambda k: eyebrow("Der Weg in 90 Tagen") + h2(f"Vier Bausteine. {m('Ein Ziel.')}", 80)
        + reihe(*[karte(tt, tx, "mint" if j == 3 else "neutral", f"Baustein 0{j + 1}", sichtbar=k > j, size=36) for j, (tt, tx) in enumerate(bausteine)], gap=24)
        + f'<div style="margin-top:22px;display:flex;gap:20px">{offen("Workshop gemeinsam oder Fragebogen + Voice-Onboarding?", "1", 18)}{offen("Monat 1 bis 3 und Wochenablauf", "1", 18)}</div>')
+
+neu("Einmal aufbauen", "A", "Das Beste daran: Du baust dieses System einmal auf und nutzt es für den Rest deiner Selbstständigkeit. Etwas, das dir niemand mehr wegnehmen kann.",
+    f'<div style="text-align:center">{eyebrow("Das Beste daran")}</div>'
+    + f'<div style="margin-top:30px;text-align:center;font-size:96px;font-weight:700;letter-spacing:-0.03em;line-height:1.08">Du baust dieses System {m("einmal")} auf<br>und nutzt es für den Rest deiner Selbstständigkeit.</div>'
+    + sub("Etwas, das dir niemand mehr wegnehmen kann. Kein Algorithmus, keine Krise, keine Plattform-Änderung.", 38, 50).replace("max-width:1500px", "max-width:1500px;text-align:center;margin-left:auto;margin-right:auto"),
+    GRUEN.replace("justify-content:center", "justify-content:center;align-items:center"))
 
 cases = [("[Case 1]", "Sichtbarkeit war das Thema. Mehrere Jahre gemeinsam."), ("[Case 2]", "Kalt über eine Anzeige. Kein Vertrauensvorschuss."),
          ("[Case 3]", "Neu, mit klaren Zielen. Ein Hebel, drei Monate.")]
@@ -493,6 +606,39 @@ neu("Referenz nach Invest", "A", "Denkst du, für ihn hat es sich gelohnt?",
     + f'<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:30px">{foto("proof-invest", 200)}{h2(f"Denkst du, für [Name] hat es sich {m("gelohnt?")}", 64, 0)}</div>'
     + offen("Welcher Fall? Screenshot mit Ergebnis", "1") + "</div>")
 
+nicht = ["… du nur mal gucken willst, was es kostet.", "… du keine [X] Stunden pro Woche investieren kannst.",
+         "… du keine Ratschläge annehmen willst.", "… du nicht bereit bist, in dich selbst zu investieren.",
+         "… du erst perfekt sein willst, bevor du loslegst.", "… du dir sicher bist, dass du es allein besser kannst."]
+neu("Buch dir keinen Call, wenn", "A", "Ganz klare Qualifizierung. Wir nehmen nicht jeden.",
+    eyebrow("Ehrlich gesagt") + h2(f"Buch dir bitte {c('keinen Call')}, wenn …", 84) + nummern(nicht, 99, CORAL)
+    + f'<div style="margin-top:20px;display:flex">{offen("Stunden pro Woche festlegen", "1", 18)}</div>')
+
+schritte = [("01", "Termin wählen", "Du suchst dir einen passenden Termin aus."),
+            ("02", "Fragen beantworten", "Ein paar kurze Fragen, damit wir vorbereitet ins Gespräch gehen."),
+            ("03", "Das Gespräch", "Alex oder Michi schauen mit dir, wo du stehst, wohin du willst und ob es passt. Wir arbeiten mit Machern.")]
+
+
+def kalender_mock():
+    return (f'<div style="flex:1;background:#F0EEE6;color:#141413;border-radius:28px;padding:36px;display:flex;flex-direction:column;gap:20px">'
+            f'<div style="display:flex;justify-content:space-between;font-size:26px;font-weight:700"><span>Oktober 2026</span><span style="{MONO}font-size:16px;color:#6B665F">WOCHE</span></div>'
+            f'<div style="flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">'
+            + "".join(f'<div style="display:flex;flex-direction:column;gap:12px"><div style="{MONO}font-size:16px;color:#6B665F;text-align:center">{tag}</div>{inhalt}</div>'
+                      for tag, inhalt in [("MO", '<div style="height:120px;border-radius:12px;background:#DCE3EA"></div>'),
+                                          ("DI", f'<div style="margin-top:60px;border-radius:14px;background:linear-gradient(160deg,#57C98C,#2E8B5A);color:#fff;padding:22px;font-size:22px;font-weight:700;line-height:1.3">Dein Strategie-Call<br><span style="font-weight:400;font-size:18px">mit Alex oder Michi</span></div>'),
+                                          ("MI", '<div style="margin-top:160px;height:100px;border-radius:12px;background:#DCE3EA"></div>')])
+            + "</div></div>")
+
+
+neu("So läuft dein Call ab", "A/M", "Auch wenn es selbsterklärend wirkt: einmal klar benennen, wie der Strategie-Call abläuft.",
+    eyebrow("Der nächste Schritt") + h2(f"So läuft dein {m('Strategie-Call')} ab.", 84)
+    + f'<div style="margin-top:44px;flex:1;display:flex;gap:56px">'
+    + '<div style="flex:1.1;display:flex;flex-direction:column;gap:22px">'
+    + "".join(f'<div style="flex:1;display:flex;gap:30px;align-items:center;padding:0 34px;border-radius:24px;{"background:#131312;border:1.5px solid " + MINT if nr == "03" else "border:1px solid #34322F"}">'
+              f'<div style="font-family:Newsreader,serif;font-style:italic;font-size:72px;color:{MINT if nr == "03" else "#2C4A3A"}">{nr}</div>'
+              f'<div><div style="font-size:36px;font-weight:700">{t}</div><div style="font-size:24px;color:#B4AFA6;margin-top:6px;line-height:1.4">{x}</div></div></div>'
+              for nr, t, x in schritte)
+    + "</div>" + kalender_mock() + "</div>")
+
 d.folien = [alt["Kalender offen"]]
 d.ed("Kalender offen", "Nur 5 Plätze", "Nur [N] Plätze")
 d.ed("Kalender offen", "250+ Kunden Erfahrung · unternehmensathleten × DigiUp", "250+ Kunden Erfahrung · unternehmensathleten")
@@ -506,10 +652,35 @@ d.folien = [kal]
 d.notes("Kalender offen", "QR-Code zum ersten Mal, vor den Boni. Ab sofort ist unser Kalender offen. Wir nehmen nicht jeden. Im Strategie-Call rechnen wir dein Ergebnis und klären, ob es passt.")
 FOLGE.append((d.folien[0], "A"))
 
-neu("Boni", "M", "Boni einzeln, ausführlich, mit Geschichte. Danach: und das ist noch nicht alles.",
-    eyebrow("Und das ist noch nicht alles") + h2(f"Deine {m('Boni.')}", 96)
-    + reihe(offen("Bonus 1 · Kandidat: Geschenk mit Proof-of-Concept", "1"), offen("Bonus 2 · Kandidat: Athleten-Call für Kopf und Körper", "1"),
-            offen("Bonus 3", "1"), top=44))
+def bonus_karte(nr, titel, text):
+    return (f'<div style="flex:1;background:#F0EEE6;color:#141413;border-radius:24px;padding:34px 28px;display:flex;flex-direction:column;gap:16px;'
+            f'transform:rotate({(-3, 2, -1, 3, -2)[nr - 1]}deg);box-shadow:0 30px 60px -25px #000">'
+            f'<div style="align-self:flex-end;{MONO}font-size:14px;letter-spacing:.12em;background:#141413;color:#F0EEE6;border-radius:8px;padding:6px 12px">BONUS {nr}</div>'
+            f'<div style="font-size:34px;font-weight:700;line-height:1.15">{titel}</div><div style="font-size:22px;line-height:1.4;color:#5A564F">{text}</div></div>')
+
+
+neu("Bonus erste [N]", "M", "Boni einzeln, ausführlich, mit Geschichte. Nur für die ersten [N], die heute buchen. Danach der Gesamtvorteil.",
+    '<div style="text-align:center">' + h2(f"Bonus nur für die {m('ersten [N].')}", 92, 0) + "</div>"
+    + f'<div style="margin-top:56px;flex:1;display:flex;gap:26px;padding:0 20px">'
+    + bonus_karte(1, "Strategie-Call", "Analyse deiner Situation mit Alex oder Michi.")
+    + bonus_karte(2, "[Masterclass?]", "Kandidat. Gibt es noch nicht.")
+    + bonus_karte(3, "[Bonus 3]", "Kandidat: Athleten-Call für Kopf und Körper.")
+    + bonus_karte(4, "[Bonus 4]", "Kandidat: Geschenk mit Proof-of-Concept.")
+    + "</div>"
+    + f'<div style="margin-top:40px;display:flex;justify-content:center"><div style="background:{CORAL};color:#3A1B12;border-radius:20px;padding:22px 60px;text-align:center">'
+      f'<div style="{MONO}font-size:16px;letter-spacing:.16em">DEIN GESAMTVORTEIL</div><div style="font-size:64px;font-weight:700">[Betrag] €</div></div></div>'
+    + f'<div style="margin-top:18px;display:flex">{offen("Boni, Werte, Zahl [N] und Gesamtvorteil festlegen", "1", 18)}</div>',
+    "padding:70px 96px;background:radial-gradient(1200px 700px at 50% 40%, #152C20, #0D0D0D);display:flex;flex-direction:column")
+
+neu("Webinar-Code", "A", "Exklusiv für die Teilnehmer heute: euer Webinar-Code. Nennt ihn im Strategie-Call.",
+    f'<div style="text-align:center">{eyebrow("Nur für dich als Teilnehmer")}</div>'
+    + f'<div style="margin:40px auto 0;background:#131312;border:1.5px solid #2C4A3A;border-radius:30px;padding:60px 140px;text-align:center">'
+      f'<span style="font-family:Newsreader,serif;font-size:140px;color:{MINT}">“</span>'
+      f'<span style="font-size:150px;font-weight:700;letter-spacing:.02em">[CODE]</span>'
+      f'<span style="font-family:Newsreader,serif;font-size:140px;color:{MINT}">”</span></div>'
+    + sub("Nenn ihn im Strategie-Call. Dein Vorteil als Webinar-Teilnehmer.", 38, 44).replace("max-width:1500px", "max-width:1500px;text-align:center;margin-left:auto;margin-right:auto")
+    + f'<div style="margin-top:30px;display:flex;justify-content:center">{offen("Name des Codes und was er bringt", "0 0 auto", 18)}</div>',
+    GRUEN.replace("justify-content:center", "justify-content:center;align-items:center"))
 
 neu("Knappheit", "A", "Die Crew startet am [Datum] mit der Foundation. Wir nehmen [N] Leute auf. Nicht wegen Marketing, sondern weil Hot Seats nur funktionieren, wenn jeder in jedem Call wirklich drankommt. Wer bis [Datum] startet, hat den Roadmap-Call noch vor Weihnachten.",
     eyebrow("Warum die Plätze begrenzt sind", CORAL) + h2(f"Hot Seats funktionieren nur, wenn {c('jeder drankommt.')}", 80)

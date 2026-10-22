@@ -130,6 +130,19 @@ Alles, was am Copiloten und an Simons Live-Demo hängt: Mini-Demo, Drei Fragen, 
 So arbeitet der Copilot, Schritt 1 bis 4, Brand Voice, Follow-up-Framework, Live-Demo Copilot,
 Touchpoints, Zusammenspiel, 97 % → 20 %, Arten von Follow-ups, Masterclass-Bonus.
 
+## Anpassungen 22.10.2026 (angelehnt an Webinar-Aufbau Tim Krasenbrink)
+
+Struktur übernommen, Texte und Look eigene. Neu im Deck:
+
+- Folie 3 „In den meisten Webinaren geht es den Teilnehmern so“ mit Versprechen „klare Reihenfolge“ und Q&A-Hinweis (⚠ OFFEN: eigenes Bild oder GIF, Rechte).
+- Folie 4 Social Proof früh: „Über 250 Selbstständige haben mit uns ihre Kundengewinnung aufgebaut“ plus 5 Stimmen (⚠ OFFEN: Stimmen, Fotos, Freigaben, Formulierung 250+).
+- „Für wen das ist und für wen nicht“ jetzt aus dem Akquise-Copilot-Webinar übernommen und auf LinkedIn 2027 angepasst.
+- Schwenk „Die größte Chance 2027: LinkedIn“ und „Der größte Denkfehler“: mehr Content, mehr Kommentare, mehr Reichweite gegen die Richtigen kennen, ins Gespräch kommen, Termin. Schluss: EPAs statt posten.
+- Kapitel 2 (Alex): „Vergiss das Bild, das du im Kopf hast“ mit 3 Kundenbeispielen (⚠ OFFEN: Namen mit Freigabe) und „Vier Säulen für einen vollen Kalender“ als Framework (⚠ OFFEN: mit echtem DM-Framework abgleichen). Ersetzt „Der Weg zum Gespräch“. Alle Kapitel-2-Folien Sprecher A.
+- Pitch: „Was dich ein weiteres Jahr kostet“, Zwei Optionen mit „Die Abkürzung, Reihenfolge bei über 250 Selbstständigen“, „Woran es meistens scheitert“, „Einmal aufbauen, für den Rest deiner Selbstständigkeit“, „Buch dir bitte keinen Call, wenn …“ (⚠ OFFEN: Stunden pro Woche), „So läuft dein Strategie-Call ab“.
+- Boni: „Bonus nur für die ersten [N]“ mit Gesamtvorteil (⚠ OFFEN: Boni, Masterclass existiert noch nicht, Werte, N).
+- Webinar-Code für Teilnehmer, im Strategie-Call nennen (⚠ OFFEN: Name, Vorteil. Passt ein Rabatt zur Selektions-Logik ohne Zahlungserleichterung?).
+
 ## Review 21.10.2026 (eingearbeitet in build.py)
 
 Die Tabellen oben zeigen den ersten Stand. Gültig ist ab jetzt die Reihenfolge in `build.py` und `deck.html`. Geändert wurde:
