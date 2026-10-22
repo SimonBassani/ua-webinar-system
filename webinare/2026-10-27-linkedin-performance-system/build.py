@@ -134,7 +134,9 @@ def proof(label, wer, notiz, key, eyebrow_text, kopf=""):
     neu(label, wer, notiz,
         f'<div style="flex:1;display:flex;align-items:center;gap:90px">'
         f'<div style="flex:1">{eyebrow(eyebrow_text)}{h2(kopf, 64, 24) if kopf else ""}'
-        f'<div style="margin-top:30px;font-size:150px;font-weight:700;letter-spacing:-0.04em;line-height:.95;color:{MINT}">{r(key, "ergebnis")}</div>'
+        # Peer-Identität: die Referenz stand dort, wo der Zuschauer heute steht
+        + (f'<div style="margin-top:18px;font-size:30px;color:#B4AFA6">Stand genau da, wo du heute stehst.</div>' if not kopf else "")
+        + f'<div style="margin-top:30px;font-size:150px;font-weight:700;letter-spacing:-0.04em;line-height:.95;color:{MINT}">{r(key, "ergebnis")}</div>'
         f'<div style="margin-top:12px;font-size:40px;font-weight:600">{r(key, "zusatz")}</div>'
         + (f'<div style="margin-top:40px;font-size:36px;line-height:1.4;color:#E4E0D8">„{r(key, "zitat")}“</div>' if r(key, "zitat") else "")
         + (f'<div style="margin-top:34px;padding-top:22px;border-top:1px solid #34322F"><div style="{MONO}font-size:16px;letter-spacing:.14em;color:{MINT}">DER HEBEL</div>'
@@ -438,8 +440,8 @@ neu("Wie deine Kunden entstehen", "A", "Vergiss das Bild, das du im Kopf hast. D
     + reihe(karte("[Name 1]", "Gewinnt Kunden aus seinem bestehenden Netzwerk.", "mint", "Netzwerk", size=36),
             karte("[Name 2]", "Gewinnt Kunden über Empfehlungen, die er gezielt anstößt.", "mint", "Empfehlung", size=36),
             karte("[Name 3]", "Gewinnt Kunden über gezielte Direktnachrichten.", "mint", "Direktansprache", size=36), top=18)
-    + f'<div style="margin-top:22px;display:flex;align-items:center;gap:24px"><div style="font-size:30px">Du schreibst seit Jahren Nachrichten. {m("Genau damit gewinnst du deine Kunden.")}</div>'
-    + offen("3 echte Beispiele, Namen mit Freigabe", "1", 16) + "</div>")
+    + f'<div style="margin-top:22px;display:flex;align-items:center;gap:24px"><div style="flex:1;font-size:30px">Du denkst, du bist nicht der Typ für Direktnachrichten? Du schreibst seit Jahren Nachrichten. {m("Genau damit gewinnst du deine Kunden.")}</div>'
+    + offen("3 echte Beispiele, Namen mit Freigabe", "0 0 440px", 16) + "</div>")
 
 zeilen = [("Content", "1 bis 2 Stunden pro Beitrag, allein", "KI im Sparring, Beitrag in deiner Stimme"),
           ("Outreach", "Manuell, nach Gefühl", "KI schlägt dir die Richtigen vor")]
@@ -586,9 +588,9 @@ stufen("Ein weiteres Jahr", "A", "Was dich ein weiteres Jahr ohne System kostet.
        lambda k: eyebrow("Ehrlich gerechnet", CORAL) + h2(f"Was dich ein {c('weiteres Jahr')} kostet.", 84) + nummern(jahr, 2 * k, CORAL))
 
 stufen("Zwei Optionen", "A", "Wir könnten dich jetzt allein lassen. Option 1: allein weitermachen. Option 2: die Abkürzung, mit der Reihenfolge, die bei über 250 Selbstständigen funktioniert hat.", 2,
-       lambda k: eyebrow("Du hast zwei Optionen") + h2(f"Allein weiter. Oder {m('gemeinsam in 90 Tagen.')}", 80)
-       + reihe(karte("Allein weitermachen", "Mit allem, was du heute gesehen hast. Auf eigene Faust.", "neutral", "Option 1", size=48),
-               karte("Die Abkürzung", "Die Reihenfolge, die bei über 250 Selbstständigen funktioniert hat. In 90 Tagen, gemeinsam.", "mint", "Option 2", sichtbar=k >= 2, size=48), gap=40))
+       lambda k: eyebrow("Du hast zwei Optionen") + h2(f"Wer willst du {m('2027')} sein?", 84)
+       + reihe(karte("Du bleibst jemand, dessen Kalender vom Zufall abhängt.", "Allein weiter, auf eigene Faust.", "neutral", "Option 1", size=46),
+               karte("Du wirst jemand, der im Oktober weiß, wie der Januar aussieht.", "Die Reihenfolge, die bei über 250 Selbstständigen funktioniert hat. In 90 Tagen, gemeinsam.", "mint", "Option 2", sichtbar=k >= 2, size=46), gap=40))
 
 scheitern = ["Wissen sammeln statt Reihenfolge: noch ein Kurs, noch ein Tool.", "Posten statt Gespräche führen.",
              "Keine klare Zielgruppe, kein klares Angebot.", "Alles gleichzeitig probieren und nichts durchziehen.",
