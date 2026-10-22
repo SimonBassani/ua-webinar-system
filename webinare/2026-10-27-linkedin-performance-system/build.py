@@ -10,6 +10,9 @@ müssen alle verschwunden sein. Echte Kundennamen und Zahlen stehen nur lokal in
     uv run python webinare/2026-10-27-linkedin-performance-system/build.py
 """
 import base64
+import json
+import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -18,7 +21,8 @@ sys.path.insert(0, str(WURZEL / "deck"))
 from folien_lib import *  # noqa: E402,F401,F403
 
 AUSGANG = WURZEL / "deck" / "Akquise-Copilot.html"
-ZIEL = Path(__file__).resolve().parent / "deck.html"
+PRIVAT = os.environ.get("LPS_PRIVAT") == "1"
+ZIEL = (WURZEL / "deck" / "referenzen" / "lps-2026-10-27" / "deck.html") if PRIVAT else Path(__file__).resolve().parent / "deck.html"
 
 d = Deck(AUSGANG)
 alt = {l: d.folien[d._index(l)] for l in ("Titel", "Für wen das ist", "Kalender offen", "Live Q&A")}
@@ -76,7 +80,7 @@ def zitat(t, size=88):
 
 
 def foto(name, px=190, rand=MINT):
-    for ordner in (FOTOS, REFERENZEN):
+    for ordner in ((FOTOS, REFERENZEN) if PRIVAT else (FOTOS,)):
         for endung in ("jpg", "png"):
             datei = ordner / f"{name}.{endung}"
             if datei.exists():
@@ -92,6 +96,52 @@ def live_badge(t="Live-Demo"):
     return (f'<div style="align-self:flex-start;display:inline-flex;align-items:center;gap:10px;padding:13px 26px;border-radius:999px;'
             f'background:{CORAL};color:#3A1B12;{MONO}font-size:15px;font-weight:700;letter-spacing:.16em;text-transform:uppercase">'
             f'<span style="width:9px;height:9px;border-radius:50%;background:#3A1B12;animation:mintPulse 1.4s infinite"></span>{t}</div>')
+
+
+# ---- Referenzen ---------------------------------------------------------------------------------------
+# Echte Namen, Zahlen, Zitate und Fotos liegen nur lokal in deck/referenzen/ (nie im Repo).
+# Öffentlicher Bau: Platzhalter. Privater Bau (LPS_PRIVAT=1): echte Referenzen, Ausgabe in deck/referenzen/.
+REF_DATEI = WURZEL / "deck" / "referenzen" / "lps-referenzen.json"
+REF_REIHE = ["florian", "rebecca", "bettina", "caro_moritz", "barbara", "christine", "thorsten", "sandra_dirk", "chat"]
+if PRIVAT:
+    REF = json.loads(REF_DATEI.read_text(encoding="utf-8"))
+else:
+    REF = {k: {"name": f"[Referenz {i}]", "rolle": "[Rolle]", "ergebnis": "[Ergebnis]", "zusatz": "[Zeitraum]",
+               "zitat": "[Zitat]", "hebel": "[Der Hebel]", "vorher": "[vorher]", "heute": "[heute]", "nachsatz": "[Nachsatz]"}
+           for i, k in enumerate(REF_REIHE, 1)}
+
+
+def r(key, feld):
+    return REF[key].get(feld, "")
+
+
+def ref_foto(key, px=190, rand=MINT):
+    return foto(REF[key].get("foto", "_keins"), px, rand)
+
+
+def screen(key, hoehe=300):
+    name = REF[key].get("screen")
+    datei = WURZEL / "deck" / "referenzen" / "screens" / f"{name}.png" if (PRIVAT and name) else None
+    if datei and datei.exists():
+        b64 = base64.b64encode(datei.read_bytes()).decode()
+        return f'<img src="data:image/png;base64,{b64}" style="height:{hoehe}px;width:auto;border-radius:22px;box-shadow:0 30px 60px -25px #000">'
+    return (f'<div style="height:{hoehe}px;width:{int(hoehe * 1.7)}px;border:3px dashed {GELB};border-radius:22px;display:flex;align-items:center;'
+            f'justify-content:center;{MONO}font-size:20px;color:{GELB}">SCREENSHOT</div>')
+
+
+def proof(label, wer, notiz, key, eyebrow_text, kopf=""):
+    """Referenz-Folie im Stil des Akquise-Copilot: große Zahl, Zitat, Hebel, Foto rechts."""
+    neu(label, wer, notiz,
+        f'<div style="flex:1;display:flex;align-items:center;gap:90px">'
+        f'<div style="flex:1">{eyebrow(eyebrow_text)}{h2(kopf, 64, 24) if kopf else ""}'
+        f'<div style="margin-top:30px;font-size:150px;font-weight:700;letter-spacing:-0.04em;line-height:.95;color:{MINT}">{r(key, "ergebnis")}</div>'
+        f'<div style="margin-top:12px;font-size:40px;font-weight:600">{r(key, "zusatz")}</div>'
+        + (f'<div style="margin-top:40px;font-size:36px;line-height:1.4;color:#E4E0D8">„{r(key, "zitat")}“</div>' if r(key, "zitat") else "")
+        + (f'<div style="margin-top:34px;padding-top:22px;border-top:1px solid #34322F"><div style="{MONO}font-size:16px;letter-spacing:.14em;color:{MINT}">DER HEBEL</div>'
+           f'<div style="margin-top:10px;font-size:28px;color:#B4AFA6">{r(key, "hebel")}</div></div>' if r(key, "hebel") else "")
+        + f'</div><div style="display:flex;flex-direction:column;align-items:center;gap:18px">{ref_foto(key, 380)}'
+        f'<div style="font-size:44px;font-weight:700">{r(key, "name")}</div><div style="font-size:24px;color:#8C8780">{r(key, "rolle")}</div></div></div>',
+        GRUEN)
 
 
 FOLGE = []   # (html, kürzel)
@@ -185,17 +235,17 @@ neu("Wie es den meisten geht", "A", "In den meisten Webinaren werden die Teilneh
     + "</div></div>")
 
 
-def stimme(j):
-    return (f'<div style="background:#131312;border:1px solid #34322F;border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:14px">'
-            f'<div style="height:150px;border-radius:14px;border:2px dashed {GELB};display:flex;align-items:center;justify-content:center;{MONO}font-size:16px;color:{GELB}">VIDEO / FOTO</div>'
-            f'<div style="font-size:26px;font-weight:700">[Name {j}]</div><div style="font-size:20px;color:{MINT}">[Ergebnis in einem Satz]</div></div>')
+def stimme(key):
+    return (f'<div style="background:#131312;border:1px solid #34322F;border-radius:24px;padding:30px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:20px">'
+            f'{ref_foto(key, 190)}<div style="font-size:36px;font-weight:700">{r(key, "name")}</div>'
+            f'<div style="font-size:32px;font-weight:600;color:{MINT};line-height:1.25">{r(key, "ergebnis")}</div>'
+            f'<div style="font-size:24px;color:#8C8780">{r(key, "zusatz") or r(key, "rolle")}</div></div>')
 
 
-neu("Social Proof früh", "A", "Social Proof gleich am Anfang. Diese Menschen saßen vor einigen Monaten genau da, wo du heute sitzt. Über 250 Selbstständige haben mit uns ihre Kundengewinnung aufgebaut.",
+neu("Social Proof früh", "A", f"Social Proof gleich am Anfang. Über 250 Selbstständige haben mit uns ihre Kundengewinnung aufgebaut. Ein paar davon: {r('florian', 'name')}, {r('rebecca', 'name')}, {r('bettina', 'name')}, {r('caro_moritz', 'name')}, {r('barbara', 'name')}. Sie saßen vor einigen Monaten genau da, wo du heute sitzt.",
     eyebrow("Bevor es losgeht") + h2(f"Über {m('250 Selbstständige')} haben mit uns ihre Kundengewinnung aufgebaut.", 70)
     + sub("Viele von ihnen saßen vor ein paar Monaten genau da, wo du heute sitzt.", 32, 20)
-    + f'<div style="margin-top:36px;flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:20px">{"".join(stimme(j) for j in range(1, 6))}</div>'
-    + f'<div style="margin-top:22px;display:flex">{offen("5 Stimmen mit Foto oder Video-Screenshot und Freigabe · Formulierung zu 250+ bestätigen", "1", 18)}</div>')
+    + f'<div style="margin-top:40px;flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:20px">{"".join(stimme(k) for k in ("florian", "rebecca", "bettina", "caro_moritz", "barbara"))}</div>')
 
 neu("Umfrage 1", "M", "Umfrage im Chat. Antworten vorlesen.",
     eyebrow("Umfrage im Chat")
@@ -309,11 +359,13 @@ def denkfehler(k):
 
 stufen("Denkfehler", "A", "Was die meisten denken: mehr Content, mehr Kommentare, mehr Reichweite. Wie es wirklich ist: die Richtigen kennen, ins Gespräch kommen, Gespräch in Termin verwandeln. Du musst nur wissen, welche EPAs, also einkommensproduzierende Aktivitäten, deinen Kalender füllen.", 4, denkfehler)
 
-neu("Case-Teaser · [Case 1]", "A", "Nur einer, als Vorgriff. Die volle Auflösung kommt vor dem Pitch: Am Ende zeig ich euch, was sich bei denen konkret verändert hat. Nicht Motivation. Steuerung.",
-    eyebrow("Ein Vorgriff") + f'<div style="margin-top:40px;display:flex;align-items:center;gap:60px;flex:1">{foto("case1", 300)}'
-    f'<div style="flex:1">{h2(f"[Case 1]: von [vorher] auf {m("[heute]")} im Monat.", 76, 0)}'
-    + sub("Am Ende zeig ich euch, was sich konkret verändert hat. Nicht Motivation. Steuerung.", 34)
-    + f'<div style="margin-top:36px;display:flex">{offen("Freigabe, Foto, Zahlen (nur lokal einsetzen)", "1", 18)}</div></div></div>')
+neu("Case-Teaser", "A", f"Nur einer, als Vorgriff. {r('caro_moritz', 'name')} kamen mit {r('caro_moritz', 'vorher')} im Monat zu uns. Heute sind es {r('caro_moritz', 'heute')}. Am Ende zeig ich euch, was sich konkret verändert hat. Nicht Motivation. Steuerung.",
+    eyebrow("Ein Vorgriff") + f'<div style="margin-top:30px;display:flex;align-items:center;gap:70px;flex:1">{ref_foto("caro_moritz", 340)}'
+    f'<div style="flex:1">{h2(r("caro_moritz", "name"), 64, 0)}'
+    f'<div style="margin-top:26px;display:flex;align-items:baseline;gap:30px;font-weight:700"><span style="font-size:80px;color:#8C8780">{r("caro_moritz", "vorher")}</span>'
+    f'<span style="font-size:60px;color:{MINT}">→</span><span style="font-size:120px;color:{MINT}">{r("caro_moritz", "heute")}</span></div>'
+    f'<div style="margin-top:8px;font-size:30px;color:#B4AFA6">Umsatz im Monat</div>'
+    + sub("Am Ende zeig ich dir, was sich konkret verändert hat. Nicht Motivation. Steuerung.", 34, 36) + "</div></div>")
 
 agenda = [("01", "Foundation", "Wo du wirklich stehst und was du verkaufst."),
           ("02", "Voller Kalender", "Qualifizierte Gespräche mit Framework, geplant statt erhofft."),
@@ -324,15 +376,15 @@ stufen("Heute", "M", "Drei Dinge heute. Wörtlich wie im Event-Text.", 3,
        + f'<div style="margin-top:22px;display:flex">{offen("Kapitelnamen und Überschrift sind Arbeitstitel, Brainstorming läuft", "1", 18)}</div>')
 
 
+KAPITEL_CASE = {"01": "sandra_dirk", "02": "bettina", "03": "florian"}
+
+
 def case_einstieg(nr, wer, notiz):
-    neu(f"Case · Kapitel {nr}", wer, notiz,
-        eyebrow("Aus der Praxis") + f'<div style="margin-top:36px;flex:1;display:flex;gap:48px">'
-        + f'<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:30px">{foto(f"case-kapitel{nr}", 200)}{h2("[Name]", 64, 0)}'
-        + sub("[vorher] → [ein Hebel] → [Ergebnis]", 32, 0) + "</div>"
-        + offen("Welcher Case leitet dieses Kapitel ein? Screenshot statt Zitat", "1.4") + "</div>")
-# =====================================================================================================
-# TEIL 2 · FOUNDATION
-# =====================================================================================================
+    key = KAPITEL_CASE[nr]
+    proof(f"Case · Kapitel {nr}", wer, f"{notiz} {r(key, 'name')}: {r(key, 'ergebnis')} {r(key, 'zusatz')}. {r(key, 'zitat')}", key, "Aus der Praxis")
+    if r(key, "ergebnis").startswith("["):
+        FOLGE[-1] = (FOLGE[-1][0].replace("</section>", f'<div style="position:absolute;left:96px;bottom:40px;width:900px;display:flex">{offen("Ergebnis in Zahlen und Foto fehlen", "1", 18)}</div></section>'), FOLGE[-1][1])
+
 kapitel("01", "Foundation", "Wo stehst du, was verkaufst du, an wen.", "A", "Kapitel 1. Kurz, als Voraussetzung für alles andere.")
 case_einstieg("01", "A", "Jedes Kapitel startet mit einem echten Fall.")
 
@@ -511,23 +563,18 @@ neu("Mühelos", "A", "Echte Performance sieht mühelos aus, weil das System dahi
     zitat(f"Echte Performance sieht {m('mühelos')} aus, weil das System dahinter stimmt."), STIL_MITTE)
 
 
-def founder(name, satz, fakten, bild, eb):
-    return (eyebrow(eb) + f'<div style="margin-top:40px;flex:1;display:flex;align-items:center;gap:80px">{bild}'
-            f'<div style="flex:1">{h2(name, 130, 0)}{sub(satz, 46, 24)}'
-            + "".join(f'<div style="margin-top:26px;font-size:40px;display:flex;gap:18px"><span style="color:{MINT}">●</span>{f}</div>' for f in fakten)
+def gruender(name, rolle, fakten, bild):
+    return (f'<div style="flex:1;background:#131312;border:1px solid #34322F;border-radius:28px;padding:48px;display:flex;align-items:center;gap:44px">{bild}'
+            f'<div><div style="font-size:54px;font-weight:700">{name}</div><div style="{MONO}font-size:17px;letter-spacing:.14em;color:{MINT};margin-top:8px">{rolle}</div>'
+            + "".join(f'<div style="margin-top:18px;font-size:30px;display:flex;gap:14px"><span style="color:{MINT}">●</span>{f}</div>' for f in fakten)
             + "</div></div>")
 
 
-neu("Founder · Michi", "M", "Michael, kurz: Skalierung, mehrfach gegründet, zuletzt ein Medienhaus auf über 400 Mitarbeiter.",
-    founder("Michael", "Business und Skalierung.", ["Mehrfach gegründet", "Zuletzt ein Medienhaus auf über 400 Mitarbeiter"], foto("michi", 460), "Wer wir sind"))
-
-neu("Founder · Alex", "A", "Alex, kurz: Sportökonom, über 100 Gespräche mit Leistungssportlern, Trainingstherapeut.",
-    founder("Alex", "Leistungssport und Performance.", ["Sportökonom und Trainingstherapeut", "Über 100 Gespräche mit Leistungssportlern"], foto("alex", 460), "Wer wir sind"))
-
-neu("Zwei Welten", "A/M", "Wir kommen aus zwei Welten. Business und Leistungssport. Und genau da liegt der Unterschied zu jedem, der euch nur mehr Vertrieb beibringt.",
-    eyebrow("Warum wir") + h2(f"Zwei Welten. {m('Ein System.')}", 96)
-    + reihe(karte("Business", "Skalierung, Vertrieb, Gründung.", size=80), karte("Leistungssport", "Energie, Steuerung, Regeneration.", size=80), gap=40)
-    + '<div style="margin-top:36px">' + pille("250+ Kunden aus verschiedenen Branchen · unternehmensathleten") + "</div>")
+neu("Wer wir sind", "A/M", "Bevor wir zeigen, wie wir mit Leuten arbeiten: kurz, wer wir sind. Michael: Skalierung, mehrfach gegründet, zuletzt ein Medienhaus auf über 400 Mitarbeiter. Alex: Sportökonom, über 100 Gespräche mit Leistungssportlern, Trainingstherapeut. Zwei Welten, Business und Leistungssport. Genau da liegt der Unterschied zu jedem, der euch nur mehr Vertrieb beibringt.",
+    eyebrow("Wer wir sind") + h2(f"Zwei Welten. {m('Ein System.')}", 84)
+    + reihe(gruender("Michael", "BUSINESS & SKALIERUNG", ["Mehrfach gegründet", "Medienhaus auf über 400 Mitarbeiter"], foto("michi", 230)),
+            gruender("Alex", "LEISTUNGSSPORT & PERFORMANCE", ["Sportökonom, Trainingstherapeut", "Über 100 Gespräche mit Leistungssportlern"], foto("alex", 230)), gap=36, top=44)
+    + '<div style="margin-top:32px">' + pille("250+ Kunden aus verschiedenen Branchen · unternehmensathleten") + "</div>")
 
 # =====================================================================================================
 # TEIL 6 · PITCH
@@ -565,30 +612,45 @@ stufen("Der Weg", "M", "Erst jetzt der Weg. Die Bausteine einzeln, mit Wert dahi
        + reihe(*[karte(tt, tx, "mint" if j == 3 else "neutral", f"Baustein 0{j + 1}", sichtbar=k > j, size=36) for j, (tt, tx) in enumerate(bausteine)], gap=24)
        + f'<div style="margin-top:22px;display:flex;gap:20px">{offen("Workshop gemeinsam oder Fragebogen + Voice-Onboarding?", "1", 18)}{offen("Monat 1 bis 3 und Wochenablauf", "1", 18)}</div>')
 
+def stimme_gross(key):
+    return (f'<div style="flex:1;background:#131312;border:1px solid #34322F;border-radius:28px;padding:48px;display:flex;flex-direction:column;gap:28px">'
+            f'<div style="display:flex;align-items:center;gap:26px">{ref_foto(key, 140)}<div><div style="font-size:40px;font-weight:700">{r(key, "name")}</div>'
+            f'<div style="{MONO}font-size:16px;letter-spacing:.14em;color:{MINT};margin-top:6px;text-transform:uppercase">{r(key, "rolle")}</div></div></div>'
+            f'<div style="flex:1;display:flex;align-items:center;font-size:40px;font-weight:600;line-height:1.3">„{r(key, "zitat")}“</div>'
+            f'<div style="padding-top:20px;border-top:1px solid #34322F;font-size:22px;color:#8C8780">{r(key, "nachsatz")}</div></div>')
+
+
+neu("Stimmen · Umsetzungsbegleitung", "A", f"Zwei Stimmen aus unserer Umsetzungsbegleitung. {r('barbara', 'name')}: {r('barbara', 'zitat')} {r('christine', 'name')}: {r('christine', 'zitat')} Und die Erkenntnis von beiden: Der Fahrplan ist bei uns allen der gleiche.",
+    eyebrow("Stimmen aus der Umsetzungsbegleitung") + h2(f"„Der Fahrplan ist bei uns {m('allen der gleiche.')}“", 76)
+    + reihe(stimme_gross("barbara"), stimme_gross("christine"), gap=36, top=44))
+
+neu("Proof · Gruppen-Chat", "A", f"Aus unseren Umsetzungsbegleitungen: {r('chat', 'ergebnis')}. {r('chat', 'zusatz')} Die Zahlen aus dem Trichter sind kein Wunschdenken.",
+    f'<div style="flex:1;display:flex;align-items:center;gap:90px"><div style="flex:1">{eyebrow("Aus unseren Umsetzungsbegleitungen")}'
+    f'<div style="margin-top:30px;font-size:110px;font-weight:700;letter-spacing:-0.03em;line-height:1">{m(r("chat", "ergebnis"))}</div>'
+    + sub(f'{r("chat", "zusatz")} Die Termine aus dem Trichter sind {w("kein Wunschdenken.")}', 38, 36) + f'</div>{screen("chat", 420)}</div>', GRUEN)
+
 neu("Einmal aufbauen", "A", "Das Beste daran: Du baust dieses System einmal auf und nutzt es für den Rest deiner Selbstständigkeit. Etwas, das dir niemand mehr wegnehmen kann.",
     f'<div style="text-align:center">{eyebrow("Das Beste daran")}</div>'
     + f'<div style="margin-top:30px;text-align:center;font-size:96px;font-weight:700;letter-spacing:-0.03em;line-height:1.08">Du baust dieses System {m("einmal")} auf<br>und nutzt es für den Rest deiner Selbstständigkeit.</div>'
     + sub("Etwas, das dir niemand mehr wegnehmen kann. Kein Algorithmus, keine Krise, keine Plattform-Änderung.", 38, 50).replace("max-width:1500px", "max-width:1500px;text-align:center;margin-left:auto;margin-right:auto"),
     GRUEN.replace("justify-content:center", "justify-content:center;align-items:center"))
 
-cases = [("[Case 1]", "Sichtbarkeit war das Thema. Mehrere Jahre gemeinsam."), ("[Case 2]", "Kalt über eine Anzeige. Kein Vertrauensvorschuss."),
-         ("[Case 3]", "Neu, mit klaren Zielen. Ein Hebel, drei Monate.")]
+DREI = ["caro_moritz", "thorsten", "sandra_dirk"]
 
 
-def case_karte(j, sichtbar):
-    name, text = cases[j]
-    return (f'<div style="{"" if sichtbar else "visibility:hidden;"}flex:1;background:#131312;border:1px solid #34322F;border-radius:26px;padding:40px;'
-            f'display:flex;flex-direction:column;align-items:center;text-align:center;gap:22px">{foto(f"case{j + 1}", 170)}'
-            f'<div style="font-size:40px;font-weight:700">{name}</div><div style="font-size:24px;line-height:1.45;color:#B4AFA6">{text}</div>'
-            f'<div style="{MONO}font-size:22px;color:{MINT}">[vorher] → [heute]</div></div>')
+def case_karte(key):
+    return (f'<div style="flex:1;background:#131312;border:1px solid #34322F;border-radius:26px;padding:40px;'
+            f'display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px">{ref_foto(key, 180)}'
+            f'<div style="font-size:42px;font-weight:700">{r(key, "name")}</div><div style="font-size:24px;color:#8C8780">{r(key, "rolle")}</div>'
+            f'<div style="font-size:52px;font-weight:700;color:{MINT}">{r(key, "ergebnis")}</div>'
+            f'<div style="font-size:24px;line-height:1.45;color:#B4AFA6">{r(key, "hebel")}</div></div>')
 
 
-stufen("Drei Cases", "A", "Drei völlig unterschiedliche Ausgangslagen. Ein identischer Mechanismus: der Moment, in dem jemand sieht, wo er wirklich steht und was als Nächstes dran ist.", 4,
-       lambda k: eyebrow("Drei Ausgangslagen") + h2(f"Drei Wege. {m('Ein Mechanismus.')}", 76)
-       + reihe(*[case_karte(j, k > j) for j in range(3)], top=40)
-       + f'<div style="margin-top:28px;display:flex;gap:20px;align-items:center;{"" if k >= 4 else "visibility:hidden"}">'
-       + pille("Der Moment, in dem jemand sieht, wo er steht und was als Nächstes dran ist.") + "</div>"
-       + f'<div style="margin-top:14px;display:flex">{offen("Freigaben, Fotos, Zahlen lokal einsetzen (Zuordnung in deck/referenzen/)", "1", 16)}</div>')
+neu("Drei Cases", "A", "Drei völlig unterschiedliche Ausgangslagen. Ein identischer Mechanismus: der Moment, in dem jemand sieht, wo er wirklich steht und was als Nächstes dran ist.",
+    eyebrow("Drei Ausgangslagen") + h2(f"Drei Wege. {m('Ein Mechanismus.')}", 76)
+    + reihe(*[case_karte(k) for k in DREI], top=40)
+    + '<div style="margin-top:28px">' + pille("Der Moment, in dem jemand sieht, wo er steht und was als Nächstes dran ist.") + "</div>"
+    + f'<div style="margin-top:14px;display:flex">{offen(f"Fotos {r('thorsten', 'name')} und {r('sandra_dirk', 'name')} · Ergebnis {r('sandra_dirk', 'name')} · Freigaben", "1", 16)}</div>')
 
 neu("Marktanker", "A", "Was vergleichbare Programme kosten. Monatlich ankern, nicht den Gesamtbetrag nennen.",
     eyebrow("Was vergleichbare Programme kosten") + h2(f"Was ist es wert, zu wissen, woher dein {m('nächster Kunde')} kommt?", 72)
@@ -609,10 +671,8 @@ neu("Garantie", "A", "Wir lassen niemanden am Anfang stehen. Kein ROI nach 90 Ta
 neu("Return", "M", "Der Trichter von vorhin. Gleiche Optik, gleiche Werte.",
     eyebrow("Zur Erinnerung") + h2(f"Aus 100 Nachrichten werden {m('3 bis 4 Termine.')}", 72) + trichter(4))
 
-neu("Referenz nach Invest", "A", "Denkst du, für ihn hat es sich gelohnt?",
-    eyebrow("Hat es sich gelohnt?") + f'<div style="margin-top:36px;flex:1;display:flex;gap:48px">'
-    + f'<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:30px">{foto("proof-invest", 200)}{h2(f"Denkst du, für [Name] hat es sich {m("gelohnt?")}", 64, 0)}</div>'
-    + offen("Welcher Fall? Screenshot mit Ergebnis", "1") + "</div>")
+proof("Referenz nach Invest", "A", f"Erinnerst du dich an {r('florian', 'name')}? {r('florian', 'ergebnis')} {r('florian', 'zusatz')}. Denkst du, für ihn hat es sich gelohnt? Danach Kalender öffnen.",
+      "florian", f"Erinnerst du dich an {r('florian', 'name')}?", f"Denkst du, für ihn {m('hat es sich gelohnt?')}")
 
 nicht = ["… du nur mal gucken willst, was es kostet.", "… du keine [X] Stunden pro Woche investieren kannst.",
          "… du keine Ratschläge annehmen willst.", "… du nicht bereit bist, in dich selbst zu investieren.",
@@ -709,7 +769,55 @@ neu("Finaler CTA", "A", "Der Link steht im Chat. Nehmt euch zwei Minuten, wir wa
     eyebrow("Jetzt") + h2(f"Der Link steht im Chat. {m('Wir warten.')}", 120, 30)
     + sub("Nimm dir zwei Minuten. Wer heute bucht, ist vor Weihnachten startklar.", 40, 40), GRUEN)
 
-# ---- zusammensetzen ---------------------------------------------------------------------------------
-d.folien = [f for f, _ in FOLGE]
-d.kuerzel([(n, n, wer) for n, (_, wer) in enumerate(FOLGE, 1)])
+# ---- Ablauf: verkaufspsychologisch gestrafft (22.10.2026) -------------------------------------------
+# Jede Zeile: Folienname und welche Stufen gezeigt werden. "alle" = jede Aufbaustufe, "letzte" = nur die fertige Folie,
+# Liste = genau diese Stufen (1-basiert). Folien, die hier fehlen, werden gebaut, aber nicht gezeigt.
+ABLAUF = [
+    # 1. Aufmerksamkeit und Vertrauen
+    ("Titel", "alle"), ("Video · Unternehmensathlet", "alle"), ("Wie es den meisten geht", "alle"), ("Social Proof früh", "alle"),
+    ("Umfrage 1", "alle"), ("Umfrage 2", "alle"),
+    # 2. Problem und Zuspitzung
+    ("LinkedIn ist tot?", "alle"), ("Du hast viel probiert", "alle"), ("Vertrauenskrise", "letzte"), ("Marktlage", "alle"),
+    ("Der Ausfall", "letzte"), ("Kein System", "alle"), ("Empfehlungen", "alle"),
+    # 3. Zielbild, Filter, Dringlichkeit
+    ("Stell dir vor", "letzte"), ("Für wen das ist", "alle"), ("Warum jetzt · Jahresende", "alle"), ("Warum jetzt · KI", "letzte"),
+    # 4. Glaubenssatz brechen, Beweis, Versprechen
+    ("Opportunity LinkedIn", "alle"), ("Denkfehler", [1, 4]), ("Case-Teaser", "alle"), ("Heute", "letzte"),
+    # 5. Kapitel 1 · Foundation
+    ("Kapitel 01", "alle"), ("Case · Kapitel 01", "alle"), ("Alte Welt, neue Welt", "letzte"), ("KI-Moment · Kundensprache", "letzte"),
+    # 6. Kapitel 2 · Voller Kalender (Alex)
+    ("Kapitel 02", "alle"), ("Case · Kapitel 02", "alle"), ("Wie deine Kunden entstehen", "alle"), ("Drei Quellen", "letzte"),
+    ("Framework", "letzte"), ("Rechenbeispiel", "alle"), ("KI-Moment · Kontext", "alle"),
+    # 7. Kapitel 3 · Deal closen
+    ("Kapitel 03", "alle"), ("Case · Kapitel 03", "alle"), ("Wer fragt, führt", "alle"), ("Kein Geld gerade", "alle"),
+    ("Messung", "alle"), ("Zwischenfazit", "letzte"), ("Stell dir mal vor", "alle"),
+    # 8. Kapazität und Vertrauensbrücke
+    ("System muss gefahren werden", "alle"), ("Kapazität", "alle"), ("Wer wir sind", "alle"),
+    # 9. Pitch: Schmerz des Nichthandelns, Wahl, Ergebnis vor Weg
+    ("Ein weiteres Jahr", "letzte"), ("Zwei Optionen", "alle"), ("Woran es scheitert", "letzte"), ("Ergebnis zuerst", "alle"),
+    ("Was ist das konkret", "alle"), ("Der Weg", "letzte"), ("Stimmen · Umsetzungsbegleitung", "alle"), ("Einmal aufbauen", "alle"),
+    # 10. Beweis, Anker, Invest, Risiko raus, Return
+    ("Drei Cases", "alle"), ("Marktanker", "alle"), ("Dein Invest", "alle"), ("Garantie", "alle"), ("Return", "alle"),
+    ("Proof · Gruppen-Chat", "alle"), ("Referenz nach Invest", "alle"),
+    # 11. Qualifizieren, Kalender vor Boni, Bonus, Knappheit, Abschluss
+    ("Buch dir keinen Call, wenn", "alle"), ("So läuft dein Call ab", "alle"), ("Kalender offen", "alle"), ("Bonus erste [N]", "alle"),
+    ("Webinar-Code", "alle"), ("Knappheit", "alle"), ("Einwände", "alle"), ("Live Q&A", "alle"), ("Finaler CTA", "alle"),
+]
+
+alle_stufen = {}
+for html, wer in FOLGE:
+    alle_stufen.setdefault(Deck._label(html), []).append((html, wer))
+auswahl = []
+for label, modus in ABLAUF:
+    if label not in alle_stufen:
+        raise SystemExit(f"Folie „{label}“ steht im Ablauf, wird aber nicht gebaut.")
+    s = alle_stufen[label]
+    auswahl += s if modus == "alle" else [s[-1]] if modus == "letzte" else [s[k - 1] for k in modus]
+
+d.folien = [f for f, _ in auswahl]
+d.kuerzel([(n, n, wer) for n, (_, wer) in enumerate(auswahl, 1)])
 d.speichern(ZIEL, titel="LinkedIn Performance System 2027")
+
+# Privater Bau mit echten Referenzen, nur wenn die lokale Datei existiert
+if not PRIVAT and REF_DATEI.exists():
+    subprocess.run([sys.executable, __file__], env={**os.environ, "LPS_PRIVAT": "1"}, check=True)

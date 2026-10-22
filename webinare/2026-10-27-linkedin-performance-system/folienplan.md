@@ -130,6 +130,24 @@ Alles, was am Copiloten und an Simons Live-Demo hängt: Mini-Demo, Drei Fragen, 
 So arbeitet der Copilot, Schritt 1 bis 4, Brand Voice, Follow-up-Framework, Live-Demo Copilot,
 Touchpoints, Zusammenspiel, 97 % → 20 %, Arten von Follow-ups, Masterclass-Bonus.
 
+## Straffung und Referenzen 22.10.2026 (gilt ab jetzt)
+
+114 → **72 Folien**. Die Reihenfolge steht als Liste `ABLAUF` am Ende von `build.py`, Abschnitt für Abschnitt kommentiert:
+
+1. Aufmerksamkeit und Vertrauen: Titel, Video, „Wie es den meisten geht“, Social Proof (5 echte Referenzen), 2 Umfragen
+2. Problem und Zuspitzung: LinkedIn tot?, viel probiert, Vertrauenskrise, Marktlage, Ausfall, kein System, Empfehlungen
+3. Zielbild, Filter, Dringlichkeit: Stell dir vor, Für wen, Warum jetzt (Jahresende, KI)
+4. Glaubenssatz brechen und Versprechen: Chance LinkedIn, Denkfehler, Case-Teaser, Agenda
+5. Kapitel 1 bis 3, jedes startet mit einer echten Referenz
+6. Kapazität und Vertrauensbrücke: System fahren, Kapazität, „Wer wir sind“ (eine Folie statt drei)
+7. Pitch: weiteres Jahr, zwei Optionen, Scheitern, Ergebnis, Produkt, Weg, Stimmen, einmal aufbauen, drei Cases, Anker, Invest, Garantie, Return, Gruppen-Chat, Referenz nach Invest, Qualifizierung, Call-Ablauf, Kalender, Boni, Code, Knappheit, Einwände, Q&A, CTA
+
+Gestrichen aus dem Ablauf (Code bleibt, falls ihr sie zurückwollt): Gleicher Aufwand, Zufall statt System, Content und Outreach, KI-Moment Muster, Mühelos (Satz steht in der Notiz zu Kapazität), Founder einzeln, Zwei Welten. Aufbaustufen nur noch bei Denkfehler, Rechenbeispiel, Stell dir mal vor und Zwei Optionen.
+
+**Referenzen:** echte Namen, Zahlen, Zitate und Fotos stammen aus dem Akquise-Copilot-Deck und dem Notion. Sie liegen nur lokal in `deck/referenzen/` (`lps-referenzen.json`, `fotos/`, `screens/`). `build.py` baut zwei Fassungen: `deck.html` hier im Repo mit Platzhaltern und die Präsentationsfassung mit echten Referenzen in `deck/referenzen/lps-2026-10-27/` (nie im Repo).
+
+⚠ OFFEN: Freigaben aller Referenzen für dieses Webinar · Fotos und Ergebnis für zwei Cases ohne Material · Einheit der großen Zahl bei einem Case · Kapitel-1-Case hat noch kein Ergebnis in Zahlen.
+
 ## Anpassungen 22.10.2026 (angelehnt an Webinar-Aufbau Tim Krasenbrink)
 
 Struktur übernommen, Texte und Look eigene. Neu im Deck:
