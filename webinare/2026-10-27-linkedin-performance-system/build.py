@@ -433,18 +433,26 @@ neu("KI-Moment · Kontext", "A", "Bevor du jemanden ansprichst: eine Minute Kont
     + reihe(karte(f'<span style="font-size:110px;color:{CORAL}">20</span> generische Nachrichten', "Die Plattform bestraft Volumen.", "coral"),
             karte(f'<span style="font-size:110px;color:{MINT}">5</span> passende Nachrichten', "Eine Minute KI-Kontext pro Person.", "mint"), gap=40))
 
-saeulen = [("Zielgruppe", "Positionierung", "Wem hilfst du, womit, warum du?"),
-           ("Signale", "Recherche", "Wer ist gerade relevant? KI-Recherche aus Event- und Profildaten."),
-           ("Nachricht", "Signature-Framework", "2 bis 3 persönliche Nachrichten in deiner Stimme."),
-           ("Termin", "Kaufsignal", "Kaufsignale erkennen, nächster Schritt, Termin im Kalender.")]
-stufen("Framework", "A", "Unser Framework für einen vollen Kalender, Säule für Säule. Nicht jedes Detail, aber die Reihenfolge.", 4,
-       lambda k: eyebrow("Das Framework") + h2(f"Vier Säulen für einen {m('vollen Kalender.')}", 80)
-       + reihe(*[f'<div style="{"" if k > j else "visibility:hidden;"}flex:1;background:linear-gradient(170deg,#10241A,#131312);border:1.5px solid {MINT if j == 3 else "#2C4A3A"};'
-                 f'border-radius:26px;padding:40px 32px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:22px">'
-                 f'<div style="{MONO}font-size:16px;letter-spacing:.14em;color:{MINT};border:1px solid #2C4A3A;border-radius:999px;padding:8px 18px">{tag}</div>'
-                 f'<div style="font-family:Newsreader,serif;font-style:italic;font-size:54px">{name}</div>'
-                 f'<div style="margin-top:auto;font-size:26px;line-height:1.4;color:#B4AFA6">{txt}</div></div>' for j, (name, tag, txt) in enumerate(saeulen)], gap=24, top=44)
-       + f'<div style="margin-top:22px;display:flex">{offen("Säulen-Namen mit eurem echten DM-Framework abgleichen", "1", 18)}</div>')
+schritte_dm = ["Qualifizieren", "Nach-<br>Qualifizieren", "Problem-<br>bewusstsein", "Hilfs-<br>bereitschaft", "Termin"]
+
+
+def dm_kette(k):
+    teile = []
+    for j, s in enumerate(schritte_dm):
+        letzter = j == len(schritte_dm) - 1
+        vis = "" if k > j else "visibility:hidden;"
+        if j:
+            teile.append(f'<div style="{vis}font-size:48px;color:{MINT};flex-shrink:0">→</div>')
+        teile.append(f'<div style="{vis}flex:1;min-height:300px;border-radius:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;'
+                     f'{"background:linear-gradient(160deg,#10241A,#1a4231);border:1.5px solid " + MINT + ";box-shadow:0 0 80px -30px rgba(125,219,166,.7)" if letzter else "background:#131312;border:1px solid #34322F"}">'
+                     f'<div style="{MONO}font-size:20px;color:{MINT}">0{j + 1}</div>'
+                     f'<div style="font-size:{44 if letzter else 32}px;font-weight:700;text-align:center;line-height:1.2;color:{MINT if letzter else "#F4F2EC"}">{s}</div></div>')
+    return f'<div style="margin-top:70px;display:flex;align-items:center;gap:16px">{"".join(teile)}</div>'
+
+
+stufen("Framework", "A", "Unser DM-Framework: fünf Schritte vom Kontakt zum Termin. Nur die Namen nennen, nicht die Formulierungen. Kein Pitch, nur Fragen, bis klar ist, ob es passt.", 5,
+       lambda k: eyebrow("Das Framework") + h2(f"In 5 Schritten vom Kontakt {m('zum Termin.')}", 84) + dm_kette(k)
+       + f'<div style="margin-top:60px;{"" if k >= 5 else "visibility:hidden"}">' + pille("Kein Pitch. Nur Fragen, bis klar ist, ob es passt.") + "</div>", STIL_MITTE)
 
 # =====================================================================================================
 # TEIL 4 · DEAL CLOSEN
