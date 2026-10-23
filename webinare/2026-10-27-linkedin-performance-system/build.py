@@ -771,39 +771,291 @@ neu("Finaler CTA", "A", "Der Link steht im Chat. Nehmt euch zwei Minuten, wir wa
     eyebrow("Jetzt") + h2(f"Der Link steht im Chat. {m('Wir warten.')}", 120, 30)
     + sub("Nimm dir zwei Minuten. Wer heute bucht, ist vor Weihnachten startklar.", 40, 40), GRUEN)
 
-# ---- Ablauf: verkaufspsychologisch gestrafft (22.10.2026) -------------------------------------------
+# =====================================================================================================
+# SKRIPT 23.10.2026 · Einleitung, Teil 1 Vertrauen, Pipeline-Umbau, iPhone-Effekt, Boni nach Einwand
+# Quelle: Notion „Webinar-Aufbau LinkedIn Performance System 2027 – Script“ und Skript-Review vom 23.10.
+# =====================================================================================================
+neu("Hook", "A", "Bevor wir loslegen: Heute geht es um eine Sache. Wir schauen uns gemeinsam an, warum deine Kundengewinnung auf LinkedIn 2026 nicht mehr funktioniert und wieso 2027 noch herausfordernder wird, wenn du eine Sache nicht für dich meisterst.",
+    eyebrow("Heute geht es um eine Sache")
+    + h2(f"Warum deine Kundengewinnung auf LinkedIn 2026 {c('nicht mehr funktioniert.')}", 84, 30)
+    + sub(f"Und wieso 2027 noch herausfordernder wird, {w('wenn du eine Sache nicht meisterst.')}", 42, 40), STIL_MITTE)
+
+neu("Gib uns eine Chance", "M", "Doch bevor wir starten: Gib uns eine Chance. Wir wissen, du warst schon bei vielen Webinaren. Du hörst oft das Gleiche und gehst mit mehr Fragezeichen raus als rein. Und gefühlt jeder hat schon mal bei einem Coach gekauft und war enttäuscht. Deshalb zeigen wir dir heute vor allem die Menschen, die mit uns in den letzten 5 Jahren ihr Business aufgebaut haben. Und es lohnt sich, bis zum Schluss dabei zu sein: Am Ende gibt es ein Geschenk.",
+    f'<div style="flex:1;display:flex;gap:70px;align-items:center">'
+    + f'<div style="flex:0 0 560px;height:720px;transform:rotate(-3deg);border:3px dashed {GELB};border-radius:30px;background:rgba(232,201,122,.06);'
+      f'display:flex;align-items:center;justify-content:center;text-align:center;padding:50px;{MONO}font-size:22px;line-height:1.5;color:{GELB}">'
+      f'OFFEN<br><br>Bild oder GIF: Teilnehmer wird mit Infos überschüttet.<br>Eigenes Motiv, Rechte klären.</div>'
+    + '<div style="flex:1;display:flex;flex-direction:column">'
+    + eyebrow("Bevor wir starten") + h2(f"Gib uns {m('eine Chance.')}", 96)
+    + sub("Du warst schon bei vielen Webinaren. Du hörst oft das Gleiche und gehst mit mehr Fragezeichen raus als rein.", 34, 26)
+    + f'<div style="margin-top:40px;background:linear-gradient(160deg,#10241A,#152C20);border:1.5px solid {MINT};border-radius:26px;padding:36px 42px;font-size:36px;font-weight:600;line-height:1.35">'
+      f'Wir zeigen dir heute vor allem {m("die Menschen")}, die mit uns in den letzten 5 Jahren ihr Business aufgebaut haben.</div>'
+    + f'<div style="margin-top:24px;background:#131312;border:1px solid #34322F;border-radius:22px;padding:26px 34px;font-size:28px;color:#B4AFA6">'
+      f'{w("Bleib bis zum Schluss:")} Am Ende gibt es ein Geschenk für dich. Fragen notieren, Q&amp;A kommt am Ende. Keine Aufzeichnung.</div>'
+    + "</div></div>")
+
+
+def code_box(px=150):
+    return (f'<div style="margin:40px auto 0;background:#131312;border:1.5px solid #2C4A3A;border-radius:30px;padding:56px 130px;text-align:center">'
+            f'<span style="font-family:Newsreader,serif;font-size:{px - 10}px;color:{MINT}">“</span>'
+            f'<span style="font-size:{px}px;font-weight:700;letter-spacing:.02em">[CODE]</span>'
+            f'<span style="font-family:Newsreader,serif;font-size:{px - 10}px;color:{MINT}">”</span></div>')
+
+
+ZENTRIERT = GRUEN.replace("justify-content:center", "justify-content:center;align-items:center")
+neu("Code merken", "A", "Diesen Code wirst du heute noch brauchen. Schreib ihn dir jetzt auf oder mach einen Screenshot. Am Ende sagen wir dir, wofür.",
+    f'<div style="text-align:center">{eyebrow("Schreib ihn dir jetzt auf")}</div>' + code_box()
+    + sub(f"Mach einen Screenshot. {w('Du brauchst den Code am Ende.')}", 40, 44).replace("max-width:1500px", "max-width:1500px;text-align:center;margin-left:auto;margin-right:auto")
+    + f'<div style="margin-top:30px;display:flex;justify-content:center">{offen("Code-Name festlegen", "0 0 auto", 18)}</div>', ZENTRIERT)
+
+neu("Zustand · Kalender", "M", "Erste Frage in den Chat, ganz ohne LinkedIn: Was machst du aktuell, um nächste Woche deinen Kalender zu füllen, ohne auf Empfehlungen zu hoffen?",
+    eyebrow("Frage in den Chat")
+    + h2(f"Was machst du aktuell, um nächste Woche deinen Kalender zu füllen, {c('ohne auf Empfehlungen zu hoffen?')}", 86, 30), STIL_MITTE)
+
+neu("Zustand · LinkedIn", "M", "Zweite Frage, jetzt mit LinkedIn. Die Antworten sind unsere Einwand-Landkarte für den Rest des Webinars.",
+    eyebrow("Umfrage im Chat")
+    + h2(f"Was hält dich auf LinkedIn aktuell am meisten zurück, {c('Termine zu vereinbaren?')}", 76, 30)
+    + antworten(["Zeit", "Wissen", "Technik", "Geld", "Ich weiß nicht, wo ich anfangen soll"], CORAL), STIL_MITTE)
+
+neu("Marktlage · 1 von 2", "A", "1 von 2 Selbstständigen sagt gerade: Ich habe zu wenig Aufträge. Und: Ich kann nicht sagen, wie es in 3 bis 4 Monaten aussieht.",
+    eyebrow("Die Lage", CORAL)
+    + f'<div style="margin-top:30px;font-size:200px;font-weight:700;letter-spacing:-0.04em;line-height:.9;color:{CORAL}">1 von 2</div>'
+    + h2("Selbstständigen sagt gerade: Ich habe zu wenig Aufträge.", 62, 24)
+    + sub(f"Und: {w('Ich kann nicht sagen, wie es in 3 bis 4 Monaten aussieht.')}", 42, 36), STIL_MITTE)
+
+
+def stat(zahl, text, quelle):
+    return (f'<div style="flex:1;background:linear-gradient(160deg,#241512,#2B1915);border:1.5px solid {CORAL};border-radius:26px;padding:44px 38px;'
+            f'display:flex;flex-direction:column;justify-content:center;gap:20px">'
+            f'<div style="font-size:120px;font-weight:700;letter-spacing:-0.04em;line-height:.9;color:{CORAL}">{zahl}</div>'
+            f'<div style="font-size:34px;font-weight:600;line-height:1.3">{text}</div>'
+            f'<div style="{MONO}font-size:16px;letter-spacing:.1em;color:#8C8780">{quelle}</div></div>')
+
+
+neu("Marktlage · Zahlen", "A", "Kurz gesagt: Die Stimmung im deutschsprachigen Raum ist schlecht. 48,4 Prozent der Solo-Selbstständigen haben Auftragsmangel. 80,6 Prozent haben Schwierigkeiten, die Geschäftsentwicklung vorherzusagen. Und 85 Prozent der Selbstständigen in unseren Gesprächen sagen: Empfehlungen sind als Lead-Quelle weggebrochen. Es fehlt Planbarkeit. Es fehlen Signale. Es fehlt ein klares System.",
+    eyebrow("Die Stimmung ist schlecht", CORAL) + h2(f"Es fehlt {c('Planbarkeit.')}", 84)
+    + reihe(stat("48,4 %", "der Solo-Selbstständigen haben Auftragsmangel.", "QUELLE: [OFFEN]"),
+            stat("80,6 %", "können ihre Geschäftsentwicklung kaum vorhersagen.", "QUELLE: [OFFEN]"),
+            stat("85 %", "sagen: Empfehlungen sind als Lead-Quelle weggebrochen.", "IN UNSEREN GESPRÄCHEN"), gap=28, top=44)
+    + f'<div style="margin-top:22px;display:flex">{offen("Quellen für 48,4 % und 80,6 % (im Call fiel auch 48,8 %)", "1", 18)}</div>')
+
+neu("Alte Welt · Covid", "M", "Alte Welt: Covid hat einen regelrechten Boom ausgelöst. Es war einfach. Die meisten lebten von Empfehlungen, weil der Aufholbedarf riesig war. Und deshalb werden wir immer öfter gefragt, und vielleicht fragst du dich das gerade selbst: Ist LinkedIn tot?",
+    eyebrow("Die alte Welt") + h2(f"Covid hat einen {m('Boom')} ausgelöst. Es war einfach.", 84)
+    + reihe(karte("Aufholbedarf", "Alle wollten nachholen, alle wollten online.", size=48),
+            karte("Empfehlungen", "Die meisten lebten davon. Der Kalender füllte sich von selbst.", size=48),
+            karte("Vorbei", "Und jetzt fragen sich viele: Ist LinkedIn tot?", "coral", size=48), top=48))
+
+neu("Vertrauenskrise 2027", "A", "Neue Welt: LinkedIn funktioniert. Das Thema ist ein ganz anderes. Wir haben kein LinkedIn-Problem. Wir leben in einer Vertrauenskrise: politische Unsicherheit, Anbieter am Markt, die enttäuscht haben, und KI-Content, der alles überschwemmt.",
+    eyebrow("Die neue Welt") + h2(f"Kein LinkedIn-Problem. Eine {c('Vertrauenskrise.')}", 84)
+    + reihe(karte("Politische Unsicherheit", "Menschen sind verunsichert und halten Geld zurück.", "coral", size=40),
+            karte("Enttäuschende Anbieter", "Fast jeder hat schon gekauft und wurde enttäuscht.", "coral", size=40),
+            karte("KI-Content überall", "Der Feed ist voll. Niemand weiß mehr, wem er glauben kann.", "coral", size=40), top=48))
+
+neu("Wendepunkt", "M", "Doch in jeder Krise liegt eine Chance. Krise bedeutet eigentlich nur Wendepunkt. Wer jetzt seine Hausaufgaben macht, geht gestärkt aus der Krise. Doch jede Chance hat nur ein kurzes Fenster.",
+    zitat(f"Krise heißt Wendepunkt. Wer jetzt seine Hausaufgaben macht, {m('geht gestärkt raus.')}", 84)
+    + sub("Doch jede Chance hat nur ein kurzes Fenster.", 40, 50), STIL_MITTE)
+
+fenster = [("1998", "Internet"), ("2010", "Facebook und Instagram"), ("2020", "LinkedIn-Reichweite, kostenfrei"), ("Jetzt", "KI")]
+neu("Chance · Fenster", "M", "1998 war das Internet eine große Chance. 2010 Facebook und Instagram. 2020 schenkte dir LinkedIn enorme Reichweite, völlig kostenfrei. Jetzt erleben wir dank KI die größte Chance. Wenn du sie nutzt. Frage: Wie oft hast du dir bei einer vertanen Chance ein paar Jahre später gesagt: Hätte ich doch …",
+    eyebrow("Jede Chance hat ein Fenster") + h2(f"Jetzt ist {m('KI')} die größte Chance. Wenn du sie nutzt.", 76)
+    + reihe(*[karte(f'<span style="font-size:84px;letter-spacing:-0.03em;color:{MINT if j == 3 else "#F4F2EC"}">{jahr}</span>', was,
+                    "mint" if j == 3 else "neutral", size=40) for j, (jahr, was) in enumerate(fenster)], gap=24, top=44)
+    + '<div style="margin-top:36px">' + pille("Frage in den Chat: Wie oft hast du dir schon gesagt: Hätte ich doch …?") + "</div>")
+
+neu("Chance · Umfrage", "M", "Deshalb noch eine Frage: Wie groß siehst du aktuell die Chance, mit KI dein Business voranzubringen? Und wirst du sie nutzen? Egal, wie du sie siehst: Dein Mitbewerb nutzt sie. Wer KI heute als festen Bestandteil integriert, hat einen Vorsprung, den andere nicht mehr aufholen.",
+    eyebrow("Umfrage im Chat")
+    + h2(f"Wie groß siehst du aktuell die Chance, mit KI dein Business {m('voranzubringen?')}", 76, 30)
+    + antworten(["Riesig", "Groß", "Eher klein", "Weiß ich nicht"])
+    + f'<div style="margin-top:50px">' + pille("Egal, wie du sie siehst: Dein Mitbewerb nutzt sie.", CORAL) + "</div>", STIL_MITTE)
+
+neu("KI ersetzt nichts", "A", "Und damit meinen wir nicht, dass du alles an die KI auslagern sollst. Du kannst mit KI auf Knopfdruck LinkedIn mit Content überschwemmen. Dann hast du enorm viel Müll ohne Resonanz. Du kannst deinen Online-Kurs an einem Wochenende mit KI bauen. Gekauft hat ihn trotzdem keiner. Dann hast du nur schneller nichts verdient. KI kann nicht ersetzen, was nicht vorhanden ist.",
+    eyebrow("Aber Vorsicht", CORAL) + h2(f"KI kann nicht ersetzen, {c('was nicht vorhanden ist.')}", 84)
+    + reihe(karte("Content auf Knopfdruck", "Enorm viel Müll, der keine Resonanz erzeugt.", "coral", size=42),
+            karte("Online-Kurs an einem Wochenende", "Gekauft hat ihn trotzdem keiner. Nur schneller nichts verdient.", "coral", size=42), gap=36, top=44))
+
+neu("Heute 2027", "M", "Drei Dinge heute. Wörtlich wie im Event-Text.",
+    eyebrow("Das zeigen wir dir heute") + h2(f"Drei Dinge. {m('Ein System.')}", 84)
+    + reihe(karte("Vertrauen", "Wie du in der Vertrauenskrise Vertrauen aufbaust.", "mint", "01", size=60),
+            karte("Volle Pipeline", "Woher deine Gespräche kommen, wenn du sie planst statt hoffst.", "mint", "02", size=60),
+            karte("Abschluss", "Der iPhone-Effekt: verkaufen ohne Einwandbehandlung.", "mint", "03", size=60)))
+
+# ---- Teil 1 · Vertrauen --------------------------------------------------------------------------------
+kapitel("1", "Vertrauen", "Wie gewinnst du Vertrauen zurück?", "M", "Teil 1. Wie gewinnen wir das Vertrauen zurück?")
+
+neu("Vertrauen braucht Zeit?", "M", "Jetzt wirst du vielleicht sagen: Vertrauen braucht Zeit. Dabei funktionieren wir Menschen ganz anders. Sonst würden wir alle nichts mehr kaufen. Und Menschen kaufen. Nach wie vor.",
+    zitat(f"„Vertrauen braucht Zeit.“ Dabei kaufen Menschen {m('nach wie vor.')}", 96), STIL_MITTE)
+
+neu("iPhone", "M", "Das iPhone hat es vor ein paar Wochen wieder gezeigt: alle Preise um 100 bis 200 Euro erhöht. Ein neues Modell für 2.500 Euro. Und LinkedIn ist voll von Leuten, die schreiben: Hab ich mir schon geholt. Keiner weiß, ob es funktioniert. Warum? Vertrauen ist immer ein Vorschuss.",
+    eyebrow("Ein Beispiel") + f'<div style="margin-top:30px;display:flex;align-items:center;gap:80px;flex:1"><div style="flex:1">'
+    + h2(f"Neues iPhone für {m('2.500 €.')} Vorbestellt, bevor es jemand in der Hand hatte.", 72, 0)
+    + sub("Alle Preise um 100 bis 200 € erhöht. Und LinkedIn ist voll von Käufern.", 36, 30)
+    + '<div style="margin-top:40px">' + pille("Vertrauen ist immer ein Vorschuss.") + "</div>"
+    + f'<div style="margin-top:22px;display:flex">{offen("Modellname und Preis prüfen, Screenshot eines Käufer-Posts", "1", 18)}</div></div>'
+    + f'<div style="flex:0 0 360px;height:640px;border-radius:56px;border:3px solid #34322F;background:linear-gradient(180deg,#1C1B1A,#0D0D0D);display:flex;align-items:center;justify-content:center;{MONO}font-size:20px;color:#6B665F">BILD</div></div>')
+
+fails = ["Akkus, die viel zu schnell leer waren.", "iPhone 4: Antenne an der falschen Stelle. Apple verschenkt Hüllen, statt das Gerät zurückzurufen.",
+         "Ein Modell verbiegt sich in der Hosentasche.", "Und trotzdem: vorbestellt für 2.500 €."]
+neu("Apple Fails", "M", "Ich nehme ganz bewusst Apple. Die haben schon so oft etwas falsch gemacht. Akkus. Die Antenne beim iPhone 4, Apple hat Hüllen verschenkt statt das Gerät vom Markt zu nehmen. Ein iPhone, das sich in der Hosentasche verbiegt. Fails über Fails. Und trotzdem wird das neue Modell für 2.500 Euro vorbestellt.",
+    eyebrow("Fails über Fails", CORAL) + h2(f"Apple hat {c('oft danebengelegen.')} Und trotzdem kaufen alle.", 76)
+    + nummern(fails, 99, CORAL)
+    + f'<div style="margin-top:20px;display:flex">{offen("Beispiele prüfen: Das Verbiegen betraf das iPhone 6 Plus, nicht das 7", "1", 18)}</div>')
+
+neu("Was Apple richtig macht", "M", "Weil Apple eines richtig macht: Sie kennen ihre Zielgruppe. Sie kennen deren Bedürfnisse. Und sie verpacken ihre Produkte in die passende Story. Und du hast dieselben Voraussetzungen: Du hast in der Vergangenheit großartige Ergebnisse bei deinen Kunden erzeugt. Du hast großartige Angebote.",
+    eyebrow("Was Apple richtig macht") + h2(f"Und du hast {m('dieselben Voraussetzungen.')}", 84)
+    + reihe(karte("Sie kennen ihre Zielgruppe.", label="01", size=44), karte("Sie kennen deren Bedürfnisse.", label="02", size=44),
+            karte("Sie verpacken ihr Produkt in die passende Story.", label="03", size=44), top=44)
+    + '<div style="margin-top:36px">' + pille("Du hast großartige Ergebnisse bei deinen Kunden erzeugt. Du hast ein großartiges Angebot.") + "</div>")
+
+
+def spalte(titel, punkte, art):
+    farbe = MINT if art == "mint" else CORAL
+    zeichen = "✓" if art == "mint" else "✕"
+    return (f'<div style="flex:1;{"background:linear-gradient(160deg,#10241A,#152C20);border:1.5px solid " + MINT if art == "mint" else "background:#131312;border:1px solid #34322F"};'
+            f'border-radius:26px;padding:44px;display:flex;flex-direction:column;justify-content:center;gap:28px">'
+            f'<div style="{MONO}font-size:18px;letter-spacing:.14em;color:{farbe}">{titel}</div>{haken(punkte, farbe, zeichen)}</div>')
+
+
+neu("Kommunikation 2027", "M", "Vor ein paar Jahren hat es gereicht zu sagen: Ich mache X, und ich mache das so und so. Heute hat jeder schon Erfahrungen damit. Um 2027 Vertrauen zu bekommen, brauchst du weniger Tipps, Expertise und Methode. Und mehr Zielgruppenverständnis, ihre Focus Pain Situations, eine Positionierung, die auf ihr Motiv einzahlt, und eine Brücke: dein transformatives Angebot.",
+    eyebrow("Alte Welt, neue Welt") + h2(f"Was 2027 {m('Vertrauen')} schafft.", 84)
+    + reihe(spalte("WENIGER DAVON", ["Info-Content: Tipps und Tricks", "Expertise", "Deine Methode"], "coral"),
+            spalte("MEHR DAVON", ["Zielgruppenverständnis", "Bedürfnisse und Focus Pain Situations", "Positionierung auf das Motiv deiner Zielgruppe",
+                                  "Eine Brücke: dein transformatives Angebot"], "mint"), gap=36, top=44))
+
+stufen("UA OS", "M", "Stell dir vor, du hast ein System: unser UA OS. Live, maximal drei bis vier Minuten: Deine letzten zehn Testimonials in die KI, sie zieht die Kundenworte raus, du vergleichst mit deinem Angebotstext. Die KI erfindet nichts, sie zeigt dir, was du schon gesagt bekommen hast. KI ersetzt kein System. Sie macht es leichter zu fahren.", 2,
+       lambda k: live_badge() + h2(f"Stell dir vor, du hast ein System: {m('UA OS.')}", 80, 28)
+       + reihe(karte("Deine letzten 10 Testimonials", label="Schritt 1"), karte("Die KI zieht die Kundenworte raus", label="Schritt 2"),
+               karte("Vergleich mit deinem Angebotstext", "Bei den meisten klafft eine Lücke.", "mint", "Schritt 3"), top=44)
+       + f'<div style="margin-top:36px;display:flex;gap:24px;align-items:center;{"" if k >= 2 else "visibility:hidden"}">'
+       + pille("KI ersetzt kein System. Sie macht es leichter zu fahren.") + "</div>"
+       + f'<div style="margin-top:18px;display:flex">{offen("Name UA OS final? Testimonials für die Demo bereitlegen (nur lokal)", "1", 18)}</div>')
+
+# ---- Teil 2 · Volle Pipeline ---------------------------------------------------------------------------
+kapitel("2", "Volle Pipeline", "Du brauchst Menschen, die mit dir sprechen.", "A", "Teil 2. Du brauchst eine volle Pipeline.")
+
+neu("Nachrichten · alte und neue Welt", "A", "Alte Welt: 100 Massennachrichten. Das ist der Grund, warum Outreach nicht funktioniert hat, und die Plattform bestraft Volumen. Neue Welt: Die KI zeigt dir mit Signalen, wen du ansprechen solltest und warum gerade jetzt. Heute brauchst du nicht mehr 100, sondern nur noch 40, die richtigen, für dasselbe Ergebnis.",
+    eyebrow("Alte Welt, neue Welt") + h2(f"Nicht mehr 100. {m('Nur noch 40, die richtigen.')}", 84)
+    + reihe(f'<div style="flex:1;background:#131312;border:1px solid #34322F;border-radius:26px;padding:44px;display:flex;flex-direction:column;justify-content:center;gap:16px">'
+            f'<div style="{MONO}font-size:18px;letter-spacing:.14em;color:{CORAL}">ALTE WELT</div>'
+            f'<div style="font-size:150px;font-weight:700;letter-spacing:-0.04em;line-height:1;color:#6B665F;text-decoration:line-through;text-decoration-color:{CORAL}">100</div>'
+            f'<div style="font-size:36px;font-weight:600">Massennachrichten</div><div style="font-size:28px;color:#B4AFA6">Die Plattform bestraft Volumen.</div></div>',
+            f'<div style="flex:1;background:linear-gradient(160deg,#10241A,#152C20);border:1.5px solid {MINT};border-radius:26px;padding:44px;display:flex;flex-direction:column;justify-content:center;gap:16px;box-shadow:0 0 80px -30px rgba(125,219,166,.6)">'
+            f'<div style="{MONO}font-size:18px;letter-spacing:.14em;color:{MINT}">NEUE WELT</div>'
+            f'<div style="font-size:150px;font-weight:700;letter-spacing:-0.04em;line-height:1;color:{MINT}">40</div>'
+            f'<div style="font-size:36px;font-weight:600">die richtigen, mit KI-Signalen</div><div style="font-size:28px;color:#B4AFA6">Du weißt, wen du ansprichst und warum gerade jetzt.</div></div>',
+            gap=36, top=44)
+    + '<div style="margin-top:30px">' + pille("Gleiches Ergebnis. Weniger als die Hälfte der Nachrichten.") + "</div>")
+
+neu("Das meinen wir nicht", "A", "Und damit meinen wir nicht solche Nachrichten. Ich habe diese Woche wieder zwei, drei davon bekommen. Kurz vorlesen. Das meinen wir nicht. Wir meinen persönliche Nachrichten an die Richtigen.",
+    eyebrow("Das meinen wir nicht", CORAL) + h2(f"Solche Nachrichten {c('meinen wir nicht.')}", 84)
+    + reihe(offen("Screenshot generische Pitch-Nachricht 1 (Absender unkenntlich)", "1"), offen("Screenshot generische Pitch-Nachricht 2 (Absender unkenntlich)", "1"), gap=36, top=44))
+
+weg = [("40", "Nachrichten an die Richtigen", False), ("[?]", "Antworten", False), ("[?]", "Gespräche", False),
+       ("3 bis 4", "Termine im Kalender", True), ("1 bis 2", "neue Kunden, je nach Abschlussquote", True)]
+
+
+def rechenweg(k=99):
+    zeilen = "".join(
+        f'<div style="{"" if k > j else "visibility:hidden;"}width:1100px;margin:0 auto;flex:1;display:flex;align-items:center;gap:40px;padding:0 50px;border-radius:20px;'
+        f'{"background:linear-gradient(90deg,#10241A,#1a4231);border:1.5px solid " + MINT if gut else "background:#1C1B1A;border:1px solid #34322F"}">'
+        f'<div style="width:260px;font-size:60px;font-weight:700;color:{MINT if gut else "#F4F2EC"}">{z}</div>'
+        f'<div style="font-size:34px;color:{"#F4F2EC" if gut else "#B4AFA6"}">{t_}</div></div>'
+        for j, (z, t_, gut) in enumerate(weg))
+    return f'<div style="margin-top:40px;flex:1;display:flex;flex-direction:column;gap:14px">{zeilen}</div>'
+
+
+stufen("Rechenweg", "A", "Das macht das Ergebnis messbar. Aus 40 Nachrichten an die Richtigen werden 3 bis 4 Termine. Je nach Abschlussquote sind das 1 bis 2 neue Kunden. Und im persönlichen Gespräch kommt dein größter USP voll zur Geltung: deine Persönlichkeit.", 5,
+       lambda k: eyebrow("Rechenbeispiel, konservativ") + h2(f"Aus 40 Nachrichten werden {m('1 bis 2 Kunden.')}", 72) + rechenweg(k)
+       + f'<div style="margin-top:16px;display:flex">{offen("Erfahrungswerte für Antworten und Gespräche, jede Zahl begründet", "1", 18)}</div>')
+
+# ---- Teil 3 · Abschluss --------------------------------------------------------------------------------
+kapitel("3", "Abschluss", "Der iPhone-Effekt.", "M", "Teil 3. Nicht über Closing-Skripte reden. Zeigen, dass bei richtigem System kein harter Abschluss nötig ist.")
+
+neu("iPhone-Effekt", "M", "Beim iPhone macht keiner eine Einwandbehandlung. Wenn dein Angebot und deine Pipeline zusammenspielen, wird dein Abschluss zum Selbstläufer. Das ist der iPhone-Effekt.",
+    eyebrow("Der iPhone-Effekt")
+    + h2(f"Beim iPhone macht {m('keiner eine Einwandbehandlung.')}", 96, 30)
+    + reihe(karte("Vertrauen", "Dein Angebot trifft die Zielgruppe.", size=48), karte("Volle Pipeline", "Die Richtigen sprechen mit dir.", size=48),
+            karte("Selbstläufer", "Der Abschluss passiert fast von allein.", "mint", size=48), top=50), STIL_MITTE)
+
+# ---- Pitch -----------------------------------------------------------------------------------------------
+neu("Garantie 2027", "A", "Unser Versprechen: Kein Return on Invest nach 90 Tagen? Dann arbeiten wir so lange mit dir weiter, wie es notwendig ist. In der Gruppe, mit priorisierten Hot Seats. Wir lassen niemanden am Anfang stehen.",
+    eyebrow("Unser Versprechen") + h2(f"Wir lassen niemanden {m('am Anfang stehen.')}", 92)
+    + reihe(karte("Kein ROI nach 90 Tagen?", "Das kann passieren.", size=44),
+            karte("Wir arbeiten weiter mit dir, so lange es nötig ist.", "In der Gruppe, mit priorisierten Hot Seats.", "mint", size=44), gap=40)
+    + f'<div style="margin-top:22px;display:flex;gap:20px">{offen("Wie messen wir ROI?", "1", 18)}{offen("Alternative im Call genannt: 3 Monate 1:1. Was gilt?", "1", 18)}</div>')
+
+neu("Return 2027", "A", "Erinnerst du dich? Aus 40 Nachrichten an die Richtigen werden 3 bis 4 Termine, je nach Abschlussquote 1 bis 2 neue Kunden.",
+    eyebrow("Zur Erinnerung") + h2(f"Aus 40 Nachrichten werden {m('1 bis 2 Kunden.')}", 72) + rechenweg())
+
+
+def bonus_einwand(nr, einwand, titel, text):
+    return (f'<div style="flex:1;min-height:380px;background:#F0EEE6;color:#141413;border-radius:24px;padding:34px 28px;display:flex;flex-direction:column;gap:16px;'
+            f'transform:rotate({(-2, 2, -1, 3)[nr - 1]}deg);box-shadow:0 30px 60px -25px #000">'
+            f'<div style="display:flex;justify-content:space-between;align-items:center"><span style="{MONO}font-size:14px;letter-spacing:.12em;color:#B4513A">EINWAND: {einwand}</span>'
+            f'<span style="{MONO}font-size:14px;letter-spacing:.12em;background:#141413;color:#F0EEE6;border-radius:8px;padding:6px 12px">BONUS {nr}</span></div>'
+            f'<div style="font-size:34px;font-weight:700;line-height:1.15">{titel}</div><div style="font-size:22px;line-height:1.4;color:#5A564F">{text}</div></div>')
+
+
+neu("Boni nach Einwand", "M", "Jeder Bonus beantwortet einen Einwand. Bonus 1, Thema Zeit: Was auch immer in den nächsten drei Monaten dazwischenkommt, Ferien, Weihnachten und Co., hängen wir hinten dran. Du kannst die drei Monate komplett nochmal mit uns durchgehen, als würdest du neu starten. Damit gibt es keine Ausrede.",
+    '<div style="text-align:center">' + h2(f"Jeder Bonus beantwortet {m('einen Einwand.')}", 84, 0) + "</div>"
+    + f'<div style="margin-top:56px;flex:1;display:flex;gap:26px;padding:0 20px;align-items:center">'
+    + bonus_einwand(1, "ZEIT", "+3 Monate", "Ferien, Weihnachten, was auch immer dazwischenkommt: hängen wir hinten dran. Alle 3 Monate komplett nutzbar.")
+    + bonus_einwand(2, "GELD", "[Bonus 2]", "Kandidat. Muss den Geld-Einwand entkräften.")
+    + bonus_einwand(3, "[EINWAND]", "[Bonus 3]", "Kandidat.")
+    + bonus_einwand(4, "[EINWAND]", "[Bonus 4]", "Kandidat.")
+    + "</div>"
+    + f'<div style="margin-top:30px;display:flex">{offen("Bonus 2 bis 4: je ein Einwand, Wert, Anzahl Plätze [N]", "1", 18)}</div>',
+    "padding:70px 96px;background:radial-gradient(1200px 700px at 50% 40%, #152C20, #0D0D0D);display:flex;flex-direction:column")
+
+neu("Code einlösen", "A", "Erinnerst du dich an den Code vom Anfang? Nenn ihn im Strategie-Call. Dann bekommst du dein Geschenk: einen KI-Skill, der dir zeigt, was dir auf LinkedIn noch fehlt.",
+    f'<div style="text-align:center">{eyebrow("Erinnerst du dich an deinen Code?")}</div>' + code_box(120)
+    + sub(f"Nenn ihn im Strategie-Call. {w('Dann bekommst du dein Geschenk:')} einen KI-Skill, der dir zeigt, was dir auf LinkedIn noch fehlt.", 36, 40).replace("max-width:1500px", "max-width:1400px;text-align:center;margin-left:auto;margin-right:auto")
+    + f'<div style="margin-top:28px;display:flex;justify-content:center">{offen("Skill bauen: LinkedIn-Profil-Roaster oder Focus-Pain-Diagnose", "0 0 auto", 18)}</div>', ZENTRIERT)
+
+neu("iPhone-Effekt · Schluss", "A", "Zum Schluss: Wenn dein Angebot und deine Pipeline zusammenspielen, verkaufst du wie Apple. Ohne Einwandbehandlung. Das ist der iPhone-Effekt. Und genau den bauen wir in 90 Tagen mit dir.",
+    f'<div style="text-align:center">{eyebrow("Zum Schluss")}</div>'
+    + f'<div style="margin-top:30px;text-align:center;font-size:104px;font-weight:700;letter-spacing:-0.03em;line-height:1.05">Vertrauen plus volle Pipeline<br>ist dein {m("iPhone-Effekt.")}</div>'
+    + sub("Kein Überzeugen. Keine Einwandbehandlung. Menschen, die längst wissen, dass du das Richtige für sie bist.", 38, 44).replace("max-width:1500px", "max-width:1400px;text-align:center;margin-left:auto;margin-right:auto"),
+    ZENTRIERT)
+
+
+# ---- Ablauf: verkaufspsychologisch gestrafft, Stand Skript 23.10.2026 (22.10.2026) -------------------------------------------
 # Jede Zeile: Folienname und welche Stufen gezeigt werden. "alle" = jede Aufbaustufe, "letzte" = nur die fertige Folie,
 # Liste = genau diese Stufen (1-basiert). Folien, die hier fehlen, werden gebaut, aber nicht gezeigt.
 ABLAUF = [
-    # 1. Aufmerksamkeit und Vertrauen
-    ("Titel", "alle"), ("Video · Unternehmensathlet", "alle"), ("Wie es den meisten geht", "alle"), ("Social Proof früh", "alle"),
-    ("Umfrage 1", "alle"), ("Umfrage 2", "alle"),
-    # 2. Problem und Zuspitzung
-    ("LinkedIn ist tot?", "alle"), ("Du hast viel probiert", "alle"), ("Vertrauenskrise", "letzte"), ("Marktlage", "alle"),
-    ("Der Ausfall", "letzte"), ("Kein System", "alle"), ("Empfehlungen", "alle"),
-    # 3. Zielbild, Filter, Dringlichkeit
-    ("Stell dir vor", "letzte"), ("Für wen das ist", "alle"), ("Warum jetzt · Jahresende", "alle"), ("Warum jetzt · KI", "letzte"),
-    # 4. Glaubenssatz brechen, Beweis, Versprechen
-    ("Opportunity LinkedIn", "alle"), ("Denkfehler", [1, 4]), ("Case-Teaser", "alle"), ("Heute", "letzte"),
-    # 5. Kapitel 1 · Foundation
-    ("Kapitel 01", "alle"), ("Case · Kapitel 01", "alle"), ("Alte Welt, neue Welt", "letzte"), ("KI-Moment · Kundensprache", "letzte"),
-    # 6. Kapitel 2 · Voller Kalender (Alex)
-    ("Kapitel 02", "alle"), ("Case · Kapitel 02", "alle"), ("Wie deine Kunden entstehen", "alle"), ("Drei Quellen", "letzte"),
-    ("Framework", "letzte"), ("Rechenbeispiel", "alle"), ("KI-Moment · Kontext", "alle"),
-    # 7. Kapitel 3 · Deal closen
-    ("Kapitel 03", "alle"), ("Case · Kapitel 03", "alle"), ("Wer fragt, führt", "alle"), ("Kein Geld gerade", "alle"),
-    ("Messung", "alle"), ("Zwischenfazit", "letzte"), ("Stell dir mal vor", "alle"),
-    # 8. Kapazität und Vertrauensbrücke
+    # 1. Hook und Vertrauen
+    ("Titel", "alle"), ("Video · Unternehmensathlet", "alle"), ("Hook", "alle"), ("Gib uns eine Chance", "alle"),
+    ("Social Proof früh", "alle"), ("Code merken", "alle"),
+    # 2. Zustand abholen
+    ("Zustand · Kalender", "alle"), ("Zustand · LinkedIn", "alle"), ("Umfrage 1", "alle"),
+    # 3. Marktlage
+    ("Marktlage · 1 von 2", "alle"), ("Marktlage · Zahlen", "alle"), ("Kein System", "alle"),
+    # 4. Alte Welt, neue Welt, Vertrauenskrise
+    ("Alte Welt · Covid", "alle"), ("LinkedIn ist tot?", "alle"), ("Vertrauenskrise 2027", "alle"),
+    # 5. Chance, Fenster, KI-Warnung
+    ("Wendepunkt", "alle"), ("Chance · Fenster", "alle"), ("Chance · Umfrage", "alle"), ("KI ersetzt nichts", "alle"),
+    # 6. Case, Agenda, Filter
+    ("Case-Teaser", "alle"), ("Heute 2027", "alle"), ("Für wen das ist", "alle"),
+    # 7. Teil 1 · Vertrauen
+    ("Kapitel 1", "alle"), ("Case · Kapitel 01", "alle"), ("Vertrauen braucht Zeit?", "alle"), ("iPhone", "alle"), ("Apple Fails", "alle"),
+    ("Was Apple richtig macht", "alle"), ("Kommunikation 2027", "alle"), ("UA OS", "alle"),
+    # 8. Teil 2 · Volle Pipeline (Alex)
+    ("Kapitel 2", "alle"), ("Case · Kapitel 02", "alle"), ("Opportunity LinkedIn", "alle"), ("Denkfehler", [1, 4]),
+    ("Wie deine Kunden entstehen", "alle"), ("Drei Quellen", "letzte"), ("Nachrichten · alte und neue Welt", "alle"),
+    ("Das meinen wir nicht", "alle"), ("KI-Moment · Kontext", "alle"), ("Rechenweg", "alle"),
+    # 9. Teil 3 · Abschluss
+    ("Kapitel 3", "alle"), ("Case · Kapitel 03", "alle"), ("iPhone-Effekt", "alle"), ("Kein Geld gerade", "alle"),
+    ("KI-Moment · Muster", "alle"), ("Messung", "alle"), ("Zwischenfazit", "letzte"), ("Stell dir mal vor", "alle"),
+    # 10. Kapazität und Vertrauensbrücke
     ("System muss gefahren werden", "alle"), ("Kapazität", "alle"), ("Wer wir sind", "alle"),
-    # 9. Pitch: Schmerz des Nichthandelns, Wahl, Ergebnis vor Weg
+    # 11. Pitch
     ("Ein weiteres Jahr", "letzte"), ("Zwei Optionen", "alle"), ("Woran es scheitert", "letzte"), ("Ergebnis zuerst", "alle"),
     ("Was ist das konkret", "alle"), ("Der Weg", "letzte"), ("Stimmen · Umsetzungsbegleitung", "alle"), ("Einmal aufbauen", "alle"),
-    # 10. Beweis, Anker, Invest, Risiko raus, Return
-    ("Drei Cases", "alle"), ("Marktanker", "alle"), ("Dein Invest", "alle"), ("Garantie", "alle"), ("Return", "alle"),
+    ("Drei Cases", "alle"), ("Marktanker", "alle"), ("Dein Invest", "alle"), ("Garantie 2027", "alle"), ("Return 2027", "alle"),
     ("Proof · Gruppen-Chat", "alle"), ("Referenz nach Invest", "alle"),
-    # 11. Qualifizieren, Kalender vor Boni, Bonus, Knappheit, Abschluss
-    ("Buch dir keinen Call, wenn", "alle"), ("So läuft dein Call ab", "alle"), ("Kalender offen", "alle"), ("Bonus erste [N]", "alle"),
-    ("Webinar-Code", "alle"), ("Knappheit", "alle"), ("Einwände", "alle"), ("Live Q&A", "alle"), ("Finaler CTA", "alle"),
+    # 12. Qualifizieren, Kalender, Boni, Code, Schluss
+    ("Buch dir keinen Call, wenn", "alle"), ("So läuft dein Call ab", "alle"), ("Kalender offen", "alle"), ("Boni nach Einwand", "alle"),
+    ("Code einlösen", "alle"), ("Knappheit", "alle"), ("Einwände", "alle"), ("Live Q&A", "alle"), ("iPhone-Effekt · Schluss", "alle"),
+    ("Finaler CTA", "alle"),
 ]
 
 alle_stufen = {}
