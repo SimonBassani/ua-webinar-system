@@ -130,6 +130,51 @@ Alles, was am Copiloten und an Simons Live-Demo hängt: Mini-Demo, Drei Fragen, 
 So arbeitet der Copilot, Schritt 1 bis 4, Brand Voice, Follow-up-Framework, Live-Demo Copilot,
 Touchpoints, Zusammenspiel, 97 % → 20 %, Arten von Follow-ups, Masterclass-Bonus.
 
+## Skript-Review 23.10.2026 (gilt ab jetzt, 84 Folien)
+
+Grundlage: Notion „Webinar-Aufbau LinkedIn Performance System 2027 – Script“ und das Skript-Review vom 23.10. Reihenfolge steht in `ABLAUF` in `build.py`.
+
+- **Einleitung nach Skript:** Hook („warum deine Kundengewinnung 2026 nicht mehr funktioniert“) → Gib uns eine Chance (mit Geschenk-Ankündigung) → Social Proof → **Code früh** („schreib ihn dir jetzt auf“) → Zustand (Kalender ohne Empfehlungen, was hält dich auf LinkedIn zurück, wie sicher) → Marktlage (1 von 2, dann 48,4 % · 80,6 % · 85 %) → kein System → Alte Welt Covid → LinkedIn tot? → Vertrauenskrise → Wendepunkt → Chance-Fenster 1998, 2010, 2020, jetzt KI → Umfrage KI-Chance → KI ersetzt nichts → Case → Agenda → Für wen.
+- **Agenda neu:** Vertrauen · Volle Pipeline · Abschluss (iPhone-Effekt).
+- **Teil 1 Vertrauen komplett neu:** Vertrauen braucht Zeit? → iPhone (Vertrauen als Vorschuss) → Apple-Fails → Was Apple richtig macht → Was 2027 Vertrauen schafft (weniger Tipps/Expertise/Methode, mehr Zielgruppe, Focus Pains, Motiv, transformatives Angebot) → „Stell dir vor, du hast ein System: UA OS“ mit KI-Live-Demo.
+- **Teil 2 Volle Pipeline:** „Deine Kunden sind schon da“ und Denkfehler als Brücke an den Anfang. 5-Schritte-Framework gestrichen (zu viel Wie). Neu: 100 Massennachrichten → 40 die richtigen mit KI-Signalen, „Das meinen wir nicht“ (Negativbeispiele), Rechenweg statt Pyramide bis 1 bis 2 Kunden.
+- **Teil 3 Abschluss:** iPhone-Effekt statt Closing-Skripte. „Wer fragt, führt“ gestrichen, „Kein Geld gerade“ bleibt, KI-Moment Kaufsignale wieder drin.
+- **Pitch:** Garantie neu: kein ROI nach 90 Tagen → wir arbeiten weiter, so lange nötig. Bonus 1 (Einwand Zeit): Pausen wie Weihnachten hängen wir hinten dran, alle 3 Monate nutzbar. Jeder Bonus beantwortet einen Einwand. Code am Ende einlösen: Geschenk ist ein KI-Skill (Profil-Roaster oder Focus-Pain-Diagnose). Schlussfolie iPhone-Effekt.
+- Aus dem Ablauf genommen: Ausfall, Stell dir vor, Warum jetzt Jahresende, Empfehlungen-Folie (jetzt Zustandsfrage plus 85 %), Pricing alte/neue Welt, Wer fragt führt, Framework, alte Rechenbeispiel-Pyramide.
+
+⚠ OFFEN: Quellen 48,4 % und 80,6 % (im Call fiel 48,8 %) · iPhone-Modell und Preis prüfen, Verbiegen war iPhone 6 Plus · Name UA OS final · Screenshots Negativ-Nachrichten · Werte für Antworten und Gespräche im Rechenweg · ROI-Kriterium und ob statt Weiterarbeit „3 Monate 1:1“ gilt · Boni 2 bis 4 · Code-Name · Skill bauen · Idee Umsatzlevel-Range statt Fixpreis · Sprecher-Kürzel Teil 1 vorläufig M.
+
+## Straffung und Referenzen 22.10.2026
+
+114 → **72 Folien**. Die Reihenfolge steht als Liste `ABLAUF` am Ende von `build.py`, Abschnitt für Abschnitt kommentiert:
+
+1. Aufmerksamkeit und Vertrauen: Titel, Video, „Wie es den meisten geht“, Social Proof (5 echte Referenzen), 2 Umfragen
+2. Problem und Zuspitzung: LinkedIn tot?, viel probiert, Vertrauenskrise, Marktlage, Ausfall, kein System, Empfehlungen
+3. Zielbild, Filter, Dringlichkeit: Stell dir vor, Für wen, Warum jetzt (Jahresende, KI)
+4. Glaubenssatz brechen und Versprechen: Chance LinkedIn, Denkfehler, Case-Teaser, Agenda
+5. Kapitel 1 bis 3, jedes startet mit einer echten Referenz
+6. Kapazität und Vertrauensbrücke: System fahren, Kapazität, „Wer wir sind“ (eine Folie statt drei)
+7. Pitch: weiteres Jahr, zwei Optionen, Scheitern, Ergebnis, Produkt, Weg, Stimmen, einmal aufbauen, drei Cases, Anker, Invest, Garantie, Return, Gruppen-Chat, Referenz nach Invest, Qualifizierung, Call-Ablauf, Kalender, Boni, Code, Knappheit, Einwände, Q&A, CTA
+
+Gestrichen aus dem Ablauf (Code bleibt, falls ihr sie zurückwollt): Gleicher Aufwand, Zufall statt System, Content und Outreach, KI-Moment Muster, Mühelos (Satz steht in der Notiz zu Kapazität), Founder einzeln, Zwei Welten. Aufbaustufen nur noch bei Denkfehler, Rechenbeispiel, Stell dir mal vor und Zwei Optionen.
+
+**Referenzen:** echte Namen, Zahlen, Zitate und Fotos stammen aus dem Akquise-Copilot-Deck und dem Notion. Sie liegen nur lokal in `deck/referenzen/` (`lps-referenzen.json`, `fotos/`, `screens/`). `build.py` baut zwei Fassungen: `deck.html` hier im Repo mit Platzhaltern und die Präsentationsfassung mit echten Referenzen in `deck/referenzen/lps-2026-10-27/` (nie im Repo).
+
+⚠ OFFEN: Freigaben aller Referenzen für dieses Webinar · Fotos und Ergebnis für zwei Cases ohne Material · Einheit der großen Zahl bei einem Case · Kapitel-1-Case hat noch kein Ergebnis in Zahlen.
+
+## Anpassungen 22.10.2026 (angelehnt an Webinar-Aufbau Tim Krasenbrink)
+
+Struktur übernommen, Texte und Look eigene. Neu im Deck:
+
+- Folie 3 „In den meisten Webinaren geht es den Teilnehmern so“ mit Versprechen „klare Reihenfolge“ und Q&A-Hinweis (⚠ OFFEN: eigenes Bild oder GIF, Rechte).
+- Folie 4 Social Proof früh: „Über 250 Selbstständige haben mit uns ihre Kundengewinnung aufgebaut“ plus 5 Stimmen (⚠ OFFEN: Stimmen, Fotos, Freigaben, Formulierung 250+).
+- „Für wen das ist und für wen nicht“ jetzt aus dem Akquise-Copilot-Webinar übernommen und auf LinkedIn 2027 angepasst.
+- Schwenk „Die größte Chance 2027: LinkedIn“ und „Der größte Denkfehler“: mehr Content, mehr Kommentare, mehr Reichweite gegen die Richtigen kennen, ins Gespräch kommen, Termin. Schluss: EPAs statt posten.
+- Kapitel 2 (Alex): „Vergiss das Bild, das du im Kopf hast“ mit 3 Kundenbeispielen (⚠ OFFEN: Namen mit Freigabe) und „In 5 Schritten vom Kontakt zum Termin“ als Framework: Qualifizieren, Nach-Qualifizieren, Problembewusstsein, Hilfsbereitschaft, Termin. Nur Schrittnamen, keine Formulierungen. Quelle: Notion „Outreach–Framework (Messenger)“, Stand 13.10.2026. Ersetzt „Der Weg zum Gespräch“. Alle Kapitel-2-Folien Sprecher A.
+- Pitch: „Was dich ein weiteres Jahr kostet“, Zwei Optionen mit „Die Abkürzung, Reihenfolge bei über 250 Selbstständigen“, „Woran es meistens scheitert“, „Einmal aufbauen, für den Rest deiner Selbstständigkeit“, „Buch dir bitte keinen Call, wenn …“ (⚠ OFFEN: Stunden pro Woche), „So läuft dein Strategie-Call ab“.
+- Boni: „Bonus nur für die ersten [N]“ mit Gesamtvorteil (⚠ OFFEN: Boni, Masterclass existiert noch nicht, Werte, N).
+- Webinar-Code für Teilnehmer, im Strategie-Call nennen (⚠ OFFEN: Name, Vorteil. Passt ein Rabatt zur Selektions-Logik ohne Zahlungserleichterung?).
+
 ## Review 21.10.2026 (eingearbeitet in build.py)
 
 Die Tabellen oben zeigen den ersten Stand. Gültig ist ab jetzt die Reihenfolge in `build.py` und `deck.html`. Geändert wurde:
