@@ -7,21 +7,29 @@ mit einer Kopie dieses Skripts statt mit `vorlagen/neues-webinar-build.py`.
 
 Jedes Webinar läuft in genau einem Design (UA oder Alex-Simon), nie in beiden.
 
-## 1. Einheitlicher Kopf auf jeder Inhaltsfolie
+## 1. Einheitlicher Kopf: zwei feste Höhen
 
-- Die **Kopfzeile** (Eyebrow) steht immer bei **88 px** von oben, die **Überschrift** immer bei **124 px**.
-- Folien ohne Kopfzeile: die Überschrift steht trotzdem bei 124 px.
-- Inhaltsfolien werden **nie senkrecht zentriert**. Sonst springt der Kopf von Folie zu Folie, je nachdem
-  wie viel Inhalt darunter steht.
-- Im Skript erledigt das `einheitlicher_kopf()` automatisch für alle Folien. Ausnahmen mit eigenem Aufbau
-  stehen in `KOPF_AUSNAHMEN` (Deckblatt, Video, Kapitel, Zitate, Referenzen, Preisfolien, Kalender offen, Live Q&A).
+Inhaltsfolien werden **nie senkrecht zentriert**. Sonst springt der Kopf von Folie zu Folie, je nachdem wie viel
+Inhalt darunter steht. Stattdessen gibt es genau zwei Folientypen mit fester Höhe:
+
+| Typ | Kopfzeile (Eyebrow) | Überschrift | Wofür |
+|---|---|---|---|
+| **Inhalt** | 88 px | 124 px | Folien mit viel Inhalt: Karten, Listen, Tabellen, Schritte |
+| **Aussage** | 219 px | 256 px | Fragen, Umfragen, große Aussagen und Folien mit wenig Inhalt. Maß ist „Unser Versprechen“ (Garantie) |
+
+- Aussage-Folien nie oben ankleben lassen. Das sieht leer und gequetscht aus.
+- Folien ohne Kopfzeile: die Überschrift steht trotzdem auf der Höhe ihres Typs.
+- Im Skript erledigt das `einheitlicher_kopf()` automatisch. Aussage-Folien stehen in `AUSSAGE_FOLIEN`,
+  Folien mit eigenem, freigegebenem Aufbau in `KOPF_AUSNAHMEN` (Deckblatt, Video, Kapitel, Zitate, Referenzen,
+  Preisfolien, Kalender offen, Live Q&A). Freigegebene Folien nie nachträglich umstellen.
 - Folien mit Bild daneben: Text und Bild oben bündig (`align-items:flex-start`), nicht mittig.
 - Lange Überschriften früher umbrechen (`max-width` auf der Überschrift), statt sie über die ganze Breite laufen zu lassen.
 
 ## 2. Frage- und Umfragefolien
 
 - Kopfzeile „Frage in den Chat“ oder „Umfrage im Chat“, großes Fragezeichen im Hintergrund.
-- Die **Antwortkarten** stehen immer auf derselben Höhe (**480 px** von oben), egal ob die Frage
+- Frage- und Umfragefolien sind vom Typ **Aussage** (Kopfzeile bei 219 px).
+- Die **Antwortkarten** stehen immer auf derselben Höhe (**600 px** von oben), egal ob die Frage
   zwei oder drei Zeilen hat (`antworten()`, `ANTWORT_OBEN`). Jede Karte mit Nummer, darunter
   „Tippe die Zahl 1–n für deine Antwort in den Chat.“
 
