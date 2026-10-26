@@ -529,29 +529,36 @@ neu("Opportunity LinkedIn", "A", "Der Schwenk: Die größte Chance für Selbstst
     + f'<img src="{bild(BILDER / "linkedin-wuerfel.png", 640)}" alt="" style="position:absolute;right:260px;bottom:150px;width:440px;height:auto;'
       'filter:drop-shadow(0 40px 60px rgba(0,0,0,.55))">', GRUEN + ";position:relative;overflow:hidden")
 
-denken = ["Ich muss mehr Content posten.", "Ich muss überall kommentieren.", "Ich brauche mehr Reichweite und Follower."]
+denken = ["Ich muss mehr Content posten.", "Ich muss überall kommentieren.", "Ich brauche mehr Reichweite und Follower.", "LinkedIn den Rücken kehren."]
 wirklich = [("Die Richtigen kennen", "Wer genau kauft bei dir, und wo ist diese Person gerade aktiv?"),
             ("Ins Gespräch kommen", "Persönliche Direktnachricht statt noch ein Beitrag."),
             ("Gespräch in Termin verwandeln", "2 bis 3 Nachrichten, dann ein Termin im Kalender.")]
 
 
-def denkfehler(k):
-    """Stufen: 1 Überschrift, 2 linke Box komplett, 3–5 rechte Box Punkt für Punkt, 6 Schlusssatz."""
+def vergleich_boxen(k, kopf, links_label, links_punkte, rechts_label, rechts_punkte, schluss=""):
+    """Pinke Box (bisher, Problem) links, türkise Box (Lösung) rechts.
+    Stufen: 1 Überschrift, 2 linke Box komplett, ab 3 rechte Box Punkt für Punkt, danach der Schlusssatz."""
     rechts = "".join(f'<div style="{unsichtbar(k >= j + 3)}display:flex;gap:20px;align-items:flex-start">'
                      f'<div style="width:52px;height:52px;border-radius:14px;background:{MINT};color:#10241A;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700">{j + 1}</div>'
-                     f'<div><div style="font-size:36px;font-weight:600">{t}</div><div style="font-size:26px;color:#B4AFA6;margin-top:6px">{x}</div></div></div>'
-                     for j, (t, x) in enumerate(wirklich))
+                     f'<div><div style="font-size:36px;font-weight:600">{t}</div>'
+                     + (f'<div style="font-size:26px;color:#B4AFA6;margin-top:6px">{x}</div>' if x else "") + '</div></div>'
+                     for j, (t, x) in enumerate(rechts_punkte))
     links = "".join(f'<div style="display:flex;align-items:flex-start;gap:18px;font-size:34px;line-height:1.3">'
-                    f'<span style="color:{CORAL};font-weight:700">✕</span><span style="color:#F4F2EC">{p}</span></div>' for p in denken)
-    return (eyebrow("Auf LinkedIn") + h2(f"2026 hat LinkedIn {m('komplett verändert.')}", 72)
+                    f'<span style="color:{CORAL};font-weight:700">✕</span><span style="color:#F4F2EC">{p}</span></div>' for p in links_punkte)
+    return (kopf
             + reihe(f'<div class="karte karte-coral" style="{unsichtbar(k >= 2)}flex:1;background:linear-gradient(160deg,#241512,#2B1915);border:1.5px solid {CORAL};border-radius:26px;padding:44px;display:flex;flex-direction:column;justify-content:flex-start;gap:30px">'
-                    f'<div style="{MONO}font-size:18px;letter-spacing:.14em;color:{CORAL}">WAS DIR NICHT HILFT</div>{links}</div>',
+                    f'<div style="{MONO}font-size:18px;letter-spacing:.14em;color:{CORAL}">{links_label}</div>{links}</div>',
                     f'<div class="karte karte-mint" style="{unsichtbar(k >= 3)}flex:1;background:linear-gradient(160deg,#10241A,#152C20);border:1.5px solid {MINT};border-radius:26px;padding:44px;display:flex;flex-direction:column;justify-content:flex-start;gap:30px">'
-                    f'<div style="{MONO}font-size:18px;letter-spacing:.14em;color:{MINT}">WIE ES WIRKLICH IST</div>{rechts}</div>', gap=36, top=40)
-            + f'<div style="margin-top:30px;text-align:center;{unsichtbar(k >= 6)}">'
-            + '<div style="font-size:34px;font-weight:600">Du musst nicht mehr posten.</div>'
-            + f'<div style="font-size:34px;color:{MINT};margin-top:8px">Du darfst verstehen, welche einkommensproduzierenden Aktivitäten deinen Kalender füllen.</div></div>')
+                    f'<div style="{MONO}font-size:18px;letter-spacing:.14em;color:{MINT}">{rechts_label}</div>{rechts}</div>', gap=36, top=40)
+            + (f'<div style="margin-top:30px;text-align:center;{unsichtbar(k >= len(rechts_punkte) + 3)}">{schluss}</div>' if schluss else ""))
 
+
+def denkfehler(k):
+    """Stufen: 1 Überschrift, 2 linke Box komplett, 3–5 rechte Box Punkt für Punkt, 6 Schlusssatz."""
+    return vergleich_boxen(k, eyebrow("Auf LinkedIn") + h2(f"2026 hat LinkedIn {m('komplett verändert.')}", 72),
+                     "WAS DIR NICHT HILFT", denken, "WIE ES WIRKLICH IST", wirklich,
+                     '<div style="font-size:34px;font-weight:600">Du musst nicht mehr posten.</div>'
+                     f'<div style="font-size:34px;color:{MINT};margin-top:8px">Du darfst verstehen, welche einkommensproduzierenden Aktivitäten deinen Kalender füllen.</div>')
 
 stufen("Denkfehler", "A", "Was die meisten denken: mehr Content, mehr Kommentare, mehr Reichweite. Wie es wirklich ist: die Richtigen kennen, ins Gespräch kommen, Gespräch in Termin verwandeln. Du musst nur wissen, welche EPAs, also einkommensproduzierende Aktivitäten, deinen Kalender füllen.", 6, denkfehler)
 
@@ -729,21 +736,25 @@ stufen("Kein Geld gerade", "M", "Der häufigste Satz in Verkaufsgesprächen gera
     "padding:88px 96px;display:flex;flex-direction:column;background:radial-gradient(1100px 700px at 75% 60%, rgba(232,145,122,.16), transparent 60%), "
     "radial-gradient(800px 500px at 15% 20%, rgba(232,145,122,.08), transparent 60%), #0D0D0D")
 
-neu("KI-Moment · Muster", "A", "Nach jedem Gespräch, egal ob es ein Kunde wird: zwei Minuten, Notizen in eine KI, Muster über die letzten zehn Gespräche. Wo hakt es immer an derselben Stelle?",
-    eyebrow("KI im Alltag") + h2(f"Zwei Minuten nach jedem Gespräch. {m('Muster statt Bauchgefühl.')}", 72)
-    + reihe(karte("Notizen in die KI", label="Nach dem Call"), karte("Muster über 10 Gespräche", "Wo hakt es immer an derselben Stelle?", label="Jede Woche"),
-            karte("Kaufsignale erkennen", "In DMs, mit Vorschlag für den nächsten Schritt.", "mint", "Im Programm"), hoehe=BOX_H), STIL_MITTE)
+muster_bisher = ["Du führst selten echte Gespräche.", "Empfehlungen brauchen selten Einwandbehandlung.",
+                 "Du hast kein richtiges CRM.", "Daher fehlt es dir an den richtigen Informationen."]
+muster_leicht = [("Du hast automatisch alle LinkedIn-Infos im CRM.", "Mit einem Klick von LinkedIn übernommen und gespeichert."),
+                 ("Nach jedem Call hast du eine Gesprächszusammenfassung im CRM.", ""),
+                 ("Deine Calls werden analysiert.", "Du erhältst sofort Feedback und eine klare Empfehlung für den Aufbau des Angebotsgesprächs.")]
+stufen("KI-Moment · Muster", "A", "Wie es bisher lief: selten echte Gespräche, Empfehlungen brauchen kaum Einwandbehandlung, kein richtiges CRM, also fehlen die Informationen. Was dir mehr Leichtigkeit gibt: LinkedIn-Infos mit einem Klick im CRM, nach jedem Call eine Zusammenfassung, jeder Call wird analysiert, mit Feedback und Empfehlung fürs Angebotsgespräch.", 5,
+       lambda k: vergleich_boxen(k, eyebrow("KI im Alltag") + h2(f"Zwei Minuten nach jedem Gespräch. {m('Muster statt Bauchgefühl.')}", 72),
+                           "WIE ES BISHER LIEF", muster_bisher, "WAS DIR MEHR LEICHTIGKEIT GIBT", muster_leicht))
 
 neu("Messung", "A", "Wenn ihr eure Zahlen aus diesen drei Bereichen kennt, wie viele Gespräche aus welcher Quelle, wie viele davon zu Kunden werden, dann wisst ihr im Oktober, wie euer Januar aussieht.",
     eyebrow("Die Brücke") + h2(f"Im Oktober wissen, wie dein {m('Januar')} aussieht.", 84)
     + reihe(karte("Welche Quelle", label="Messen"), karte("Wie viele Gespräche", label="Messen"), karte("Wie viele Kunden", label="Messen"),
             karte("Dein Januar", "Planbar.", "mint", "Ergebnis"), gap=24, hoehe=BOX_H), STIL_MITTE)
 
-fazit = ["Klarheit zuerst. Dein Angebot spricht die Worte deiner Kunden.",
-         "Drei Quellen statt Zufall: Empfehlungen, Netzwerk, Direktansprache.",
+fazit = ["Wir leben in einer Vertrauenskrise.",
+         "Content gewinnt keine Kunden.",
          "Fünf Richtige schlagen zwanzig Beliebige.",
-         "Im Gespräch führst du. Es geht um Passung, nicht um Überzeugung.",
-         "Wer seine Zahlen kennt, kennt seinen Januar."]
+         "Ein Transfergespräch bildet die Brücke zwischen Interessent und Abschluss.",
+         "KI ist dein Hebel. Wenn du sie richtig einsetzt."]
 stufen("Zwischenfazit", "M", "Fünf Punkte, jeder einzeln. Wechselnde Satzanfänge.", 5,
        lambda k: eyebrow("Was du heute mitnimmst") + f'<div style="margin-top:40px;flex:1;display:flex;flex-direction:column;gap:18px">'
        + "".join(f'<div style="{"" if k > j else "visibility:hidden;"}flex:1;display:flex;align-items:center;gap:30px;background:#131312;border:1px solid #34322F;border-radius:22px;padding:0 40px">'
@@ -1088,7 +1099,7 @@ stufen("Wendepunkt", "M", "Doch in jeder Krise liegt eine Chance. Krise bedeutet
 fenster = [("1998", "Internet"), ("2010", "Facebook und Instagram"), ("2020", "LinkedIn-Reichweite, kostenfrei"), ("Jetzt", "KI")]
 stufen("Chance · Fenster", "M", "1998 war das Internet eine große Chance. 2010 Facebook und Instagram. 2020 schenkte dir LinkedIn enorme Reichweite, völlig kostenfrei. Jetzt erleben wir dank KI die größte Chance. Wenn du sie nutzt. Frage: Wie oft hast du dir bei einer vertanen Chance ein paar Jahre später gesagt: Hätte ich doch …", 5,
        lambda k: eyebrow("Jede Chance hat ein Fenster")
-       + f'<div style="{"" if k >= 5 else "visibility:hidden"}">' + h2(f"Jetzt ist {m('KI')} die größte Chance. Wenn du sie nutzt.", 76) + "</div>"
+       + f'<div style="{"" if k >= 5 else "visibility:hidden"}">' + h2(f"Jetzt ist {m('KI')} die größte Chance.<br>Wenn du sie nutzt.", 76) + "</div>"
        + reihe(*[karte(f'<span style="font-size:84px;letter-spacing:-0.03em;color:{MINT if j == 3 else "#F4F2EC"}">{jahr}</span>', was,
                        "mint" if j == 3 else "neutral", size=40, sichtbar=k > j) for j, (jahr, was) in enumerate(fenster)], gap=24, top=44, hoehe=BOX_H)
        + f'<div style="margin-top:36px;{"" if k >= 5 else "visibility:hidden"}">' + pille("Frage in den Chat: Wie oft hast du dir schon gesagt: Hätte ich doch …?") + "</div>", STIL_MITTE)
@@ -1169,6 +1180,14 @@ stufen("UA OS", "M", "Stell dir vor, du hast ein System: unser UAPS. Maximal dre
                karte("Vergleich mit deinem Angebotstext", "z.&nbsp;B. deinem LinkedIn-Profil.<br>Und sieht sofort, was du optimieren kannst.", "mint", "Schritt 3"), top=44)
        + f'<div style="margin-top:36px;display:flex;gap:24px;align-items:center;{"" if k >= 2 else "visibility:hidden"}">'
        + pille("KI gewinnt nicht deine Kunden. Sie hilft dir, gezielter voranzukommen.") + "</div>")
+
+stufen("UAPS · Akquise-Copilot", "A", "Stell dir vor, du hast ein System: UAPS. Unser Akquise-Copilot prüft deine bestehenden Kontakte, schlägt dir passende Vernetzungen vor und gibt dir stets drei Vorschläge, wie deine DM für den nächsten Schritt passend formuliert ist. KI übernimmt nicht dein LinkedIn.", 2,
+       lambda k: h2(f"Stell dir vor, du hast ein System: {m('UAPS.')}", 80, 28)
+       + reihe(karte("Unser Akquise-Copilot prüft deine bestehenden Kontakte", label="Schritt 1"),
+               karte("Schlägt dir passende Vernetzungen vor", label="Schritt 2"),
+               karte("Gibt dir stets 3 Vorschläge, wie deine DM für den nächsten Schritt passend formuliert ist", "", "mint", "Schritt 3"), top=44)
+       + f'<div style="margin-top:36px;display:flex;gap:24px;align-items:center;{"" if k >= 2 else "visibility:hidden"}">'
+       + pille("KI übernimmt nicht dein LinkedIn. Sie hilft dir, strukturiert und gezielt voranzukommen.") + "</div>")
 
 # ---- Teil 2 · Volle Pipeline ---------------------------------------------------------------------------
 kapitel("2", "Volle Pipeline", "Du brauchst Menschen, die mit dir sprechen.", "A", "Teil 2. Du brauchst eine volle Pipeline.")
@@ -1322,10 +1341,10 @@ ABLAUF = [
     # 8. Teil 2 · Volle Pipeline (Alex)
     ("Kapitel 2", "alle"), ("Opportunity LinkedIn", "alle"), ("Case · Kapitel 02", "alle"), ("Denkfehler", "alle"),
     ("Wie deine Kunden entstehen", "alle"), ("Reichweite", "alle"), ("Drei Quellen", "letzte"), ("Nachrichten · 100", "alle"),
-    ("Das meinen wir nicht", "alle"), ("KI-Moment · Kontext", "alle"),
+    ("Das meinen wir nicht", "alle"), ("KI-Moment · Kontext", "alle"), ("UAPS · Akquise-Copilot", "alle"),
     # 9. Teil 3 · Abschluss
     ("Kapitel 3", "alle"), ("Case · Kapitel 03", "alle"), ("Kein Geld gerade", "alle"), ("iPhone-Effekt", "alle"), ("iPhone-Effekt · UAPS", "alle"),
-    ("KI-Moment · Muster", "alle"), ("Messung", "alle"), ("Zwischenfazit", "alle"), ("Stell dir mal vor", "alle"),
+    ("KI-Moment · Muster", "alle"), ("Zwischenfazit", "alle"), ("Stell dir mal vor", "alle"),
     # 10. Kapazität und Vertrauensbrücke
     ("Wer wir sind", "alle"), ("Zertifiziert", "alle"),
     # 11. Pitch
