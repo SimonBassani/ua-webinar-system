@@ -82,6 +82,9 @@ Zwischendurch reicht es, nur die HTML zu bauen und im Browser zu öffnen (`F` = 
 - Jede Referenz mit Foto. Keine Platzhalter ins fertige Deck. Fehlt Material, am Ende klar auflisten.
 - Sprecher-Kürzel auf jeder Folie.
 - Code-Bausteine zum Kopieren: `vorlagen/folien-bausteine.md`.
+- **Webinar im UA-Design:** Muster in `vorlagen/ua-webinar-muster.md` lesen und befolgen (fester Kopf bei
+  88/124 px, Antwortkarten auf fester Höhe, Preisfolien, QR-Code, Live Q&A mit Mitteilungen). Ausgangspunkt ist
+  `webinare/2026-10-27-linkedin-performance-system/build.py`, nicht das Alex-Simon-Deck.
 
 ### 6. Abliefern
 
