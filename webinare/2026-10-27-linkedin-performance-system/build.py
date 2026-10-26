@@ -170,21 +170,23 @@ def screen(key, hoehe=300):
             f'justify-content:center;{MONO}font-size:20px;color:{GELB}">SCREENSHOT</div>')
 
 
-def proof(label, wer, notiz, key, eyebrow_text, kopf="", mit_screen=False):
+def proof(label, wer, notiz, key, eyebrow_text, kopf="", mit_screen=False, k=99, extra=""):
     """Referenz-Folie im Stil des Akquise-Copilot: große Zahl, Zitat, Hebel, Foto rechts."""
     neu(label, wer, notiz,
         f'<div style="flex:1;display:flex;align-items:center;gap:90px">'
         f'<div style="flex:1">{eyebrow(eyebrow_text)}{h2(kopf, 64, 24) if kopf else ""}'
         # Peer-Identität: die Referenz stand dort, wo der Zuschauer heute steht
         + (f'<div style="margin-top:18px;font-size:30px;color:#B4AFA6">Stand genau da, wo du heute stehst.</div>' if not kopf else "")
+        # Stufe 1 nur die Frage, Stufe 2 Ergebnis und Foto, Stufe 3 zusätzlich der Screenshot
+        + f'<div style="{unsichtbar(k >= 2)}">'
         + f'<div style="margin-top:30px;font-size:150px;font-weight:700;letter-spacing:-0.04em;line-height:.95;color:{MINT}">{r(key, "ergebnis")}</div>'
         f'<div style="margin-top:12px;font-size:40px;font-weight:600">{r(key, "zusatz")}</div>'
         + (f'<div style="margin-top:40px;font-size:36px;line-height:1.4;color:#E4E0D8">„{r(key, "zitat")}“</div>' if r(key, "zitat") else "")
         + (f'<div style="margin-top:34px;padding-top:22px;border-top:1px solid #34322F"><div style="{MONO}font-size:16px;letter-spacing:.14em;color:{MINT}">DER HEBEL</div>'
            f'<div style="margin-top:10px;font-size:28px;color:#B4AFA6">{r(key, "hebel")}</div></div>' if r(key, "hebel") else "")
-        + f'</div><div style="display:flex;flex-direction:column;align-items:center;gap:18px">{ref_foto(key, 300 if mit_screen else 380)}'
+        + f'</div></div><div style="{unsichtbar(k >= 2)}display:flex;flex-direction:column;align-items:center;gap:18px">{ref_foto(key, 300 if mit_screen else 380)}'
         f'<div style="font-size:44px;font-weight:700">{r(key, "name")}</div><div style="font-size:24px;color:#8C8780">{r(key, "rolle")}</div>'
-        + (screen(key, 330) if mit_screen else "") + '</div></div>',
+        + (f'<div style="{unsichtbar(k >= 3)}">{screen(key, 330)}</div>' if mit_screen else "") + '</div></div>' + extra,
         GRUEN)
 
 
@@ -298,7 +300,7 @@ neu("Titel", "A", "Willkommen zum LinkedIn Performance System 2027. Heute geht e
     '<div style="position:absolute;left:96px;top:0;bottom:0;width:860px;z-index:2;display:flex;flex-direction:column;justify-content:center">'
     f'<div class="badge-live" style="display:inline-flex;align-self:flex-start;align-items:center;gap:14px;padding:15px 28px;border-radius:999px;'
     f'background:{CORAL};color:#3A1B12;{MONO}font-size:18px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;'
-    f'box-shadow:0 0 34px -8px rgba(232,145,122,.7)"><span style="width:10px;height:10px;border-radius:50%;background:#3A1B12"></span>Inkl. Live-Q&amp;A</div>'
+    f'box-shadow:0 0 34px -8px rgba(232,145,122,.7)"><span style="width:10px;height:10px;border-radius:50%;background:#3A1B12;animation:punktBlinken 1.1s ease-in-out infinite"></span>Inkl. Live-Q&amp;A</div>'
     '<h1 style="margin:30px 0 0;font-weight:700;letter-spacing:-0.03em;line-height:0.98;font-size:112px">LinkedIn<br>Performance<br>'
     f'<span style="color:{MINT};font-size:84px;letter-spacing:-0.025em;line-height:1.2">System 2027</span></h1>'
     '<p style="margin:34px 0 0;font-size:27px;line-height:1.45;color:#B4AFA6">'
@@ -337,10 +339,65 @@ def unsichtbar(bedingung):
     return "" if bedingung else "visibility:hidden;"
 
 
+def qr_oben():
+    return f'<div style="{QR_OBEN_STIL}">{qr_code(150, link=False)}</div>'
+
+
+# Mitteilungen im Apple-Stil, ganz rechts oben. Die Animation startet jedes Mal neu, wenn die Folie aufgerufen wird.
+MITTEILUNG_CSS = (
+    '<style>.ios-noti{position:absolute;right:16px;z-index:30;width:310px;display:flex;gap:11px;align-items:center;padding:12px 14px;'
+    'border-radius:17px;background:rgba(58,58,60,.72);backdrop-filter:blur(30px) saturate(1.6);-webkit-backdrop-filter:blur(30px) saturate(1.6);'
+    'border:1px solid rgba(255,255,255,.14);box-shadow:0 15px 35px -10px rgba(0,0,0,.8);font-family:-apple-system,"SF Pro Text","Helvetica Neue",Montserrat,sans-serif;'
+    'opacity:0;transform:translateY(-160%) scale(.96)}'
+    '@keyframes iosNotiRein{0%{opacity:0;transform:translateY(-160%) scale(.96)}60%{opacity:1}100%{opacity:1;transform:translateY(0) scale(1)}}'
+    '@keyframes iosNotiRaus{0%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(60px)}}'
+    # zweite Mitteilung rutscht nach oben an den Platz der ersten (72 px = Abstand der beiden)
+    '@keyframes iosNotiHoch{0%{opacity:1;transform:translateY(0)}100%{opacity:1;transform:translateY(-72px)}}'
+    '@keyframes iosNotiRausOben{0%{opacity:1;transform:translate(0,-72px)}100%{opacity:0;transform:translate(60px,-72px)}}</style>')
+NOTI_REIN = "iosNotiRein .7s cubic-bezier(.2,1.25,.35,1)"
+NOTI_RAUS = "iosNotiRaus .5s ease-in"
+
+
+def mitteilung(klasse, top, animation, text):
+    return (f'<style>.slide.active .{klasse}{{animation:{animation}}}</style>'
+            f'<div class="ios-noti {klasse}" style="top:{top}px">'
+            '<div style="flex-shrink:0;width:38px;height:38px;border-radius:9px;background:linear-gradient(160deg,#2B7BFF,#0B5CE0);display:flex;align-items:center;justify-content:center">'
+            '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+            '<rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/><path d="m9 15 2 2 4-4"/></svg></div>'
+            '<div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;align-items:baseline">'
+            '<span style="font-size:12px;font-weight:600;color:#FFFFFF">Neue Buchung</span><span style="font-size:10px;color:rgba(235,235,245,.6)">jetzt</span></div>'
+            f'<div style="margin-top:2px;font-size:11px;line-height:1.35;color:rgba(235,235,245,.85)">{text}</div></div></div>')
+
+
+def kurze_mitteilung(klasse, rein):
+    """Eine Buchung: erscheint nach `rein` Sekunden, steht 2 Sekunden, verschwindet."""
+    return MITTEILUNG_CSS + mitteilung(klasse, 16, f"{NOTI_REIN} {rein}s forwards,{NOTI_RAUS} {rein + 2.7}s forwards",
+                                       "Ein Strategie-Call wurde soeben über Calendly gebucht.")
+
+
+QR_LINK = "https://unternehmensathleten.com/webinar"
+# feste Stelle oben rechts, auf Höhe der zweizeiligen Überschrift
+QR_OBEN_STIL = "position:absolute;top:88px;right:96px"
+
+
+def qr_code(groesse, link=True, link_size=18):
+    """QR-Code zum Strategie-Call (https://calendly.com/unternehmensathleten/system), optional mit Link darunter."""
+    img = (f'<img src="{bild(BILDER / "qr-strategie-call.png", 600)}" alt="QR-Code Strategie-Call" '
+           f'style="width:{groesse}px;height:{groesse}px;border-radius:{max(10, groesse // 16)}px;display:block">')
+    if not link:
+        return img
+    return (f'<div style="display:flex;flex-direction:column;align-items:center;gap:{max(10, groesse // 25)}px">{img}'
+            f'<div style="{MONO}font-size:{link_size}px;letter-spacing:.04em;color:#A9E8C5;white-space:nowrap">{QR_LINK}</div></div>')
+
+
+ANTWORT_OBEN = 480
+
+
 def antworten(opts, farbe="#34322F", sichtbar=True):
     """Antwort-Karten für Umfragen: jede mit Nummer, darunter die Anleitung für den Chat."""
     art = "antwort-problem" if farbe == CORAL else "antwort-gut"
-    return (f'<div style="{unsichtbar(sichtbar)}"><div style="margin-top:56px;display:flex;gap:20px;height:240px">'
+    # feste Höhe auf der Folie, unabhängig davon, ob die Frage zwei oder drei Zeilen hat
+    return (f'<div style="{unsichtbar(sichtbar)}position:absolute;left:96px;right:96px;top:{ANTWORT_OBEN}px"><div style="display:flex;gap:20px;height:240px">'
             + "".join(f'<div class="antwort {art}" style="flex:1;border:1.5px solid {farbe};border-radius:20px;background:#131312;display:flex;flex-direction:column;align-items:center;'
                       f'justify-content:center;gap:14px;text-align:center;padding:24px;font-size:{30 if len(o) > 20 else 40}px;font-weight:600;line-height:1.2">'
                       f'<span style="font-size:44px;font-weight:700;line-height:1;opacity:.55">{j}</span>{o}</div>'
@@ -466,7 +523,10 @@ stufen("Warum jetzt · KI", "M", "1998 das Internet, 2010 Social Media, jetzt KI
 
 neu("Opportunity LinkedIn", "A", "Der Schwenk: Die größte Chance für Selbstständige mit einem Angebot, das verkauft, ist 2027 LinkedIn. Deine Kunden sind schon da. Die meisten nutzen es nur falsch.",
     eyebrow("Die größte Chance 2027") + h2(f"Deine Kunden sind schon da. Auf {m('LinkedIn.')}", 110, 30)
-    + sub("Die meisten Selbstständigen nutzen es nur falsch.", 44, 40), GRUEN)
+    + sub("Die meisten Selbstständigen nutzen<br>es nur falsch.", 44, 40)
+    # LinkedIn-Würfel (eigenes Bild, schwarzer Hintergrund freigestellt)
+    + f'<img src="{bild(BILDER / "linkedin-wuerfel.png", 640)}" alt="" style="position:absolute;right:260px;bottom:150px;width:440px;height:auto;'
+      'filter:drop-shadow(0 40px 60px rgba(0,0,0,.55))">', GRUEN + ";position:relative;overflow:hidden")
 
 denken = ["Ich muss mehr Content posten.", "Ich muss überall kommentieren.", "Ich brauche mehr Reichweite und Follower."]
 wirklich = [("Die Richtigen kennen", "Wer genau kauft bei dir, und wo ist diese Person gerade aktiv?"),
@@ -485,7 +545,7 @@ def denkfehler(k):
     return (eyebrow("Auf LinkedIn") + h2(f"2026 hat LinkedIn {m('komplett verändert.')}", 72)
             + reihe(f'<div class="karte karte-coral" style="{unsichtbar(k >= 2)}flex:1;background:linear-gradient(160deg,#241512,#2B1915);border:1.5px solid {CORAL};border-radius:26px;padding:44px;display:flex;flex-direction:column;justify-content:flex-start;gap:30px">'
                     f'<div style="{MONO}font-size:18px;letter-spacing:.14em;color:{CORAL}">WAS DIR NICHT HILFT</div>{links}</div>',
-                    f'<div class="karte karte-mint" style="{unsichtbar(k >= 3)}flex:1.25;background:linear-gradient(160deg,#10241A,#152C20);border:1.5px solid {MINT};border-radius:26px;padding:44px;display:flex;flex-direction:column;justify-content:flex-start;gap:30px">'
+                    f'<div class="karte karte-mint" style="{unsichtbar(k >= 3)}flex:1;background:linear-gradient(160deg,#10241A,#152C20);border:1.5px solid {MINT};border-radius:26px;padding:44px;display:flex;flex-direction:column;justify-content:flex-start;gap:30px">'
                     f'<div style="{MONO}font-size:18px;letter-spacing:.14em;color:{MINT}">WIE ES WIRKLICH IST</div>{rechts}</div>', gap=36, top=40)
             + f'<div style="margin-top:30px;text-align:center;{unsichtbar(k >= 6)}">'
             + '<div style="font-size:34px;font-weight:600">Du musst nicht mehr posten.</div>'
@@ -494,14 +554,14 @@ def denkfehler(k):
 
 stufen("Denkfehler", "A", "Was die meisten denken: mehr Content, mehr Kommentare, mehr Reichweite. Wie es wirklich ist: die Richtigen kennen, ins Gespräch kommen, Gespräch in Termin verwandeln. Du musst nur wissen, welche EPAs, also einkommensproduzierende Aktivitäten, deinen Kalender füllen.", 6, denkfehler)
 
-stufen("Case-Teaser", "A", f"Nur einer, als Vorgriff. {r('caro_moritz', 'name')} kamen mit {r('caro_moritz', 'vorher')} im Monat zu uns. Heute sind es {r('caro_moritz', 'heute')}. Am Ende zeig ich euch, was sich konkret verändert hat. Nicht Motivation. Steuerung.", 2,
-       lambda k: eyebrow("Ein Vorgriff") + f'<div style="margin-top:30px;display:flex;align-items:center;gap:70px;flex:1">{ref_foto("caro_moritz", 340)}'
+stufen("Case-Teaser", "A", f"Nur einer, als Vorgriff. {r('caro_moritz', 'name')} kamen mit {r('caro_moritz', 'vorher')} im Monat zu uns. Heute sind es {r('caro_moritz', 'heute')}. Am Ende zeigen wir euch, was sich konkret verändert hat.", 2,
+       lambda k: f'<div style="margin-top:30px;display:flex;align-items:center;gap:70px;flex:1">{ref_foto("caro_moritz", 340)}'
        f'<div style="flex:1">' + h2(f'<span style="white-space:nowrap">{r("caro_moritz", "name")}</span>', 64, 0)
        # Vorher-Betrag zuerst, Pfeil und Heute-Betrag im zweiten Schritt; Beträge nie umbrechen
        + f'<div style="margin-top:26px;display:flex;align-items:baseline;gap:30px;font-weight:700;white-space:nowrap"><span style="font-size:80px;color:#8C8780">{r("caro_moritz", "vorher")}</span>'
        f'<span style="{unsichtbar(k >= 2)}font-size:60px;color:{MINT}">→</span><span style="{unsichtbar(k >= 2)}font-size:120px;color:{MINT}">{r("caro_moritz", "heute")}</span></div>'
        f'<div style="margin-top:8px;font-size:30px;color:#B4AFA6">Umsatz im Monat</div>'
-       + sub("Am Ende zeig ich dir, was sich konkret verändert hat. Nicht Motivation. Steuerung.", 34, 36) + "</div></div>")
+       + sub("Am Ende zeigen wir dir, was sich konkret verändert hat.", 34, 36) + "</div></div>")
 
 agenda = [("01", "Foundation", "Wo du wirklich stehst und was du verkaufst."),
           ("02", "Voller Kalender", "Qualifizierte Gespräche mit Framework, geplant statt erhofft."),
@@ -775,14 +835,18 @@ def stimme_gross(key):
 
 
 neu("Stimmen · Umsetzungsbegleitung", "A", f"Zwei Stimmen aus unserer Umsetzungsbegleitung. {r('barbara', 'name')}: {r('barbara', 'zitat')} {r('christine', 'name')}: {r('christine', 'zitat')} Und die Erkenntnis von beiden: Der Fahrplan ist bei uns allen der gleiche.",
-    eyebrow("Stimmen aus der Umsetzungsbegleitung") + h2(f"„Der Fahrplan ist bei uns {m('allen der gleiche.')}“", 76)
+    h2(f"Teilnehmer{m('stimmen')}", 76)
     + reihe(stimme_gross("barbara"), stimme_gross("christine"), gap=36, top=44))
 
 neu("Proof · Gruppen-Chat", "A", f"Aus unseren Umsetzungsbegleitungen: {r('chat', 'ergebnis')}. {r('chat', 'zusatz')} Die Zahlen aus dem Trichter sind kein Wunschdenken.",
-    f'<div style="flex:1;display:flex;align-items:center;gap:90px"><div style="flex:1">{eyebrow("Ergebnisse")}'
-    # „4 Neukunden“ und „im September“ je in einer eigenen Zeile
-    f'<div style="margin-top:30px;font-size:110px;font-weight:700;letter-spacing:-0.03em;line-height:1.05;white-space:nowrap">{m(r("chat", "ergebnis").replace(" im ", "<br>im ", 1))}</div>'
-    + f'</div>{screen("chat", 420)}</div>', GRUEN)
+    # Aufbau wie „Kalender offen“: Text links, Bild rechts, beides zusammen mittig auf der Folie
+    f'<div style="flex:0 0 auto">{eyebrow("Ergebnisse")}'
+    # genau zwei Zeilen: „4 Neukunden“ / „im September“, keine weiteren Umbrüche
+    + "".join(f'<div style="{"margin-top:30px;" if j == 0 else ""}font-size:100px;font-weight:700;letter-spacing:-0.03em;line-height:1.05;white-space:nowrap">{m(z)}</div>'
+              for j, z in enumerate(r("chat", "ergebnis").split(" im ", 1)[:1] + ["im " + t for t in r("chat", "ergebnis").split(" im ", 1)[1:]]))
+    + f'<div style="margin-top:50px;display:flex">{qr_code(230, link_size=16)}</div></div>'
+    + f'<div style="flex-shrink:0">{screen("chat", 460)}</div>',
+    "padding:100px 80px;background:linear-gradient(120deg, #0D0D0D 0%, #10241A 100%);display:flex;align-items:center;justify-content:center;gap:100px;position:relative;overflow:hidden")
 
 neu("Einmal aufbauen", "A", "Das Beste daran: Du baust dieses System einmal auf und nutzt es für den Rest deiner Selbstständigkeit. Etwas, das dir niemand mehr wegnehmen kann.",
     f'<div style="text-align:center">{eyebrow("Das Beste daran")}</div>'
@@ -823,9 +887,8 @@ stufen("Dein Invest", "A", "Invest, nie Preis. Erst: Unsere Kunden haben für di
                   + f'<div style="margin-top:20px;display:flex;align-items:baseline;gap:30px"><div style="font-size:220px;font-weight:700;letter-spacing:-0.04em;line-height:1;color:{MINT}">3.750 €</div>'
                   + '<div style="font-size:44px;color:#B4AFA6">einmalig</div></div>'
                   + '<div style="margin-top:18px;font-size:42px;color:#F4F2EC">oder 995 € monatlich über 4 Monate</div></div>'
-                  + (f'<div style="position:absolute;left:96px;bottom:110px;display:flex;align-items:center;gap:22px">{kunden_bild(80)}'
-                     '<span style="font-size:26px;line-height:1.35;color:#B4AFA6">250+ Coaches, Berater und B2B-Dienstleister<br>erfolgreich begleitet</span></div>'
-                     if k == 1 else "")), GRUEN + ";position:relative")
+                  + (f'<div style="position:absolute;left:250px;bottom:110px;display:flex;align-items:center;gap:22px">{kunden_bild(80)}'
+                     '<span style="font-size:26px;line-height:1.35;color:#B4AFA6">250+ Coaches, Berater und B2B-Dienstleister<br>erfolgreich begleitet</span></div>')), GRUEN.replace("padding:88px 96px", "padding:88px 250px") + ";position:relative")
 
 neu("Garantie", "A", "Wir lassen niemanden am Anfang stehen. Kein ROI nach 90 Tagen, dann drei weitere Monate kostenlos. In der Runde, mit priorisierten Hot Seats, mit anderen, die dasselbe durchmachen.",
     eyebrow("Unser Versprechen") + h2(f"Wir lassen niemanden {m('am Anfang stehen.')}", 92)
@@ -836,32 +899,35 @@ neu("Garantie", "A", "Wir lassen niemanden am Anfang stehen. Kein ROI nach 90 Ta
 neu("Return", "M", "Der Trichter von vorhin. Gleiche Optik, gleiche Werte.",
     eyebrow("Zur Erinnerung") + h2(f"Aus 100 Nachrichten werden {m('3 bis 4 Termine.')}", 72) + trichter(4))
 
-proof("Referenz nach Invest", "A", f"Erinnerst du dich an {r('florian', 'name')}? {r('florian', 'ergebnis')} {r('florian', 'zusatz')}. Denkst du, für ihn hat es sich gelohnt? Danach Kalender öffnen.",
-      "florian", f"Erinnerst du dich an {r('florian', 'name')}?", f"Denkst du, für {r('florian', 'name')} {m('hat es sich gelohnt?')}", mit_screen=True)
+for k in (1, 2, 3):
+    proof("Referenz nach Invest", "A", f"Erst nur die Frage: Denkst du, für {r('florian', 'name')} hat es sich gelohnt? Dann {r('florian', 'ergebnis')} {r('florian', 'zusatz')}. Dann der Screenshot als Beweis. Danach Kalender öffnen.",
+          "florian", f"Erinnerst du dich an {r('florian', 'name')}?", f"Denkst du, für {r('florian', 'name')} {m('hat es sich gelohnt?')}", mit_screen=True, k=k,
+          extra=kurze_mitteilung("noti-florian", 3) if k == 3 else "")
 
 nicht = ["… du nur mal gucken willst, was es kostet.", "… du keine [X] Stunden pro Woche investieren kannst.",
          "… du keine Ratschläge annehmen willst.", "… du nicht bereit bist, in dich selbst zu investieren.",
          "… du erst perfekt sein willst, bevor du loslegst.", "… du dir sicher bist, dass du es allein besser kannst."]
-neu("Buch dir keinen Call, wenn", "A", "Ganz klare Qualifizierung. Wir nehmen nicht jeden.",
-    eyebrow("Ehrlich gesagt") + h2(f'<span style="white-space:nowrap">{hell("Buch dir bitte")} {c("keinen Call")}{hell(", wenn …")}</span>', 84) + nummern(nicht, 99, CORAL)
-    + f'<div style="margin-top:20px;display:flex">{offen("Stunden pro Woche festlegen", "1", 18)}</div>')
+stufen("Buch dir keinen Call, wenn", "A", "Ganz klare Qualifizierung. Wir nehmen nicht jeden. Jeden Punkt einzeln.", 7,
+       lambda k: eyebrow("Ehrlich gesagt")
+       + h2(f'<span style="white-space:nowrap">{hell("Buch dir bitte")} {c("keinen Call,")}</span><br>{hell("wenn …")}', 84) + qr_oben()
+       + nummern(nicht, k - 1, CORAL))
 
 schritte = [("01", "Termin wählen", "Du suchst dir einen passenden Termin aus."),
             ("02", "Fragen beantworten", "Ein paar kurze Fragen, damit wir vorbereitet ins Gespräch gehen."),
             ("03", "Engpass-Analyse", "Alex und Michael machen den Call persönlich und schauen sich an, wo du stehst, wo du konkret hin willst, und wenn es passt, laden sie dich ein.")]
 
 
-neu("So läuft dein Call ab", "A/M", "Auch wenn es selbsterklärend wirkt: einmal klar benennen, wie der Strategie-Call abläuft.",
-    eyebrow("Der nächste Schritt") + h2(f"So geht es weiter {m('für dich.')}", 84)
+stufen("So läuft dein Call ab", "A/M", "Auch wenn es selbsterklärend wirkt: einmal klar benennen, wie der Strategie-Call abläuft. Schritt für Schritt.", 4,
+       lambda k: eyebrow("Der nächste Schritt") + h2(f"So geht es weiter {m('für dich.')}", 84) + qr_oben()
     + f'<div style="margin-top:44px;flex:1;display:flex;gap:56px">'
     + '<div style="flex:1.1;display:flex;flex-direction:column;gap:22px">'
-    + "".join(f'<div style="flex:1;display:flex;gap:30px;align-items:center;padding:0 34px;border-radius:24px;{"background:#131312;border:1.5px solid " + MINT if nr == "03" else "border:1px solid #34322F"}">'
+    + "".join(f'<div style="{unsichtbar(k >= i + 2)}flex:1;display:flex;gap:30px;align-items:center;padding:0 34px;border-radius:24px;{"background:#131312;border:1.5px solid " + MINT if nr == "03" else "border:1px solid #34322F"}">'
               f'<div style="font-family:Newsreader,serif;font-style:italic;font-size:72px;color:{MINT if nr == "03" else "#2C4A3A"}">{nr}</div>'
               f'<div><div style="font-size:36px;font-weight:700">{t}</div><div style="font-size:24px;color:#B4AFA6;margin-top:6px;line-height:1.4">{x}</div></div></div>'
-              for nr, t, x in schritte)
+              for i, (nr, t, x) in enumerate(schritte))
     # Terminauswahl: KI-generiert über Higgsfield (GPT Image 2.5), Di 27.10. und Mi 28.10.
     + "</div>" + f'<img src="{bild(Path(__file__).resolve().parent / "bilder" / "terminauswahl.png", 1100)}" alt="Terminauswahl" '
-      'style="flex:0 0 auto;align-self:center;height:640px;width:auto;border-radius:28px;border:1.5px solid #34322F;box-shadow:0 34px 80px -18px rgba(0,0,0,.7)">' + "</div>")
+      f'style="{unsichtbar(k >= 2)}flex:0 0 auto;align-self:center;height:640px;width:auto;border-radius:28px;border:1.5px solid #34322F;box-shadow:0 34px 80px -18px rgba(0,0,0,.7)">' + "</div>")
 
 neu("Kalender offen", "A", "QR-Code zum ersten Mal, vor den Boni. Ab sofort ist unser Kalender offen. Nur 5 Plätze. Kein Verkaufsgespräch, kein Risiko. Du kennst den Deal. Jetzt geht es nur darum, ob es für dich passt.",
     '<div style="flex:0 1 760px">'
@@ -873,8 +939,7 @@ neu("Kalender offen", "A", "QR-Code zum ersten Mal, vor den Boni. Ab sofort ist 
     f'<div style="margin-top:38px;{MONO}font-size:22px;line-height:1.5;color:#B4AFA6">Kein Verkaufsgespräch. Kein Risiko. Du kennst den Deal. Jetzt geht’s nur darum, {m("ob es für dich passt.")}</div></div>'
     '<div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:22px">'
     # QR-Code führt auf https://calendly.com/unternehmensathleten/system (mit zxing geprüft)
-    f'<img src="{bild(BILDER / "qr-strategie-call.png", 560)}" alt="QR-Code Strategie-Call" style="width:560px;height:560px;border-radius:36px;display:block">'
-    f'<div style="{MONO}font-size:22px;letter-spacing:.04em;color:#A9E8C5">https://unternehmensathleten.com/webinar</div></div>',
+    + qr_code(560, link_size=22) + '</div>',
     "padding:100px 80px;background:linear-gradient(120deg, #0D0D0D 0%, #10241A 100%);display:flex;align-items:center;justify-content:center;gap:100px;position:relative;overflow:hidden")
 
 def bonus_karte(nr, titel, text):
@@ -919,8 +984,17 @@ neu("Einwände", "A/M", "Bevor ihr fragt, drei Sachen, die uns oft gefragt werde
     + reihe(offen("Einwand 1 aus euren Sales-Calls", "1"), offen("Einwand 2", "1"), offen("Einwand 3", "1"), top=44))
 
 d.folien = [alt["Live Q&A"]]
-d.ed("Live Q&A", "Stell deine Fragen — wir gehen sie gemeinsam durch, bevor die Plätze weg sind.", "Stell deine Fragen. Wir gehen sie gemeinsam durch.")
-FOLGE.append((d.folien[0], "A/M"))
+d.ed("Live Q&A", "Stell deine Fragen — wir gehen sie gemeinsam durch, bevor die Plätze weg sind.", "Stelle deine Fragen jetzt direkt in den Chat oder nutze den Q&amp;A-Button.")
+# Mitteilung im Apple-Stil: gleitet ein paar Sekunden nach dem Aufrufen der Folie oben rechts herein
+# Live Q&A: erste Mitteilung nach 3 s, zweite nach 6 s. Die erste geht bei 12 s, die zweite rutscht an ihren Platz und geht bei 14 s.
+MITTEILUNG = (MITTEILUNG_CSS
+              + mitteilung("noti-qa-1", 16, f"{NOTI_REIN} 3s forwards,{NOTI_RAUS} 12s forwards", "Ein Strategie-Call wurde soeben über Calendly gebucht.")
+              + mitteilung("noti-qa-2", 88, f"{NOTI_REIN} 6s forwards,iosNotiHoch .45s ease-in-out 12.35s forwards,iosNotiRausOben .5s ease-in 14s forwards",
+                           "Noch ein Strategie-Call wurde soeben über Calendly gebucht.")
+              # 5 s nachdem beide weg sind (14,5 s) kommt eine dritte, steht gut 2 s und geht wieder
+              + mitteilung("noti-qa-3", 16, f"{NOTI_REIN} 19.5s forwards,{NOTI_RAUS} 22.7s forwards", "Ein weiterer Strategie-Call wurde soeben über Calendly gebucht."))
+QA_QR = f'<div style="position:absolute;right:250px;top:50%;transform:translateY(-50%)">{qr_code(400, link_size=20)}</div>'
+FOLGE.append((d.folien[0].replace("padding:120px;", "padding:120px 250px;", 1).replace("</section>", QA_QR + MITTEILUNG + "</section>"), "A/M"))
 
 neu("Finaler CTA", "A", "Der Link steht im Chat. Nehmt euch zwei Minuten, wir warten. Wer heute bucht, ist noch vor Weihnachten startklar. Dann bewusst Pause, nicht weiterreden.",
     eyebrow("Jetzt") + h2(f"Der Link steht im Chat. {m('Wir warten.')}", 120, 30)
@@ -1046,9 +1120,10 @@ stufen("Vertrauen braucht Zeit?", "M", "Jetzt wirst du vielleicht sagen: Vertrau
 IPHONE = bild(Path(__file__).resolve().parent / "bilder" / "iphone-duo.jpg", 1300)   # Higgsfield (Nano Banana 2.1), fiktives „iPhone Duo“
 stufen("iPhone", "M", "Das iPhone hat es vor ein paar Wochen wieder gezeigt: alle Preise um 100 bis 200 Euro erhöht. Ein neues Modell für 2.500 Euro. Und LinkedIn ist voll von Leuten, die schreiben: Hab ich mir schon geholt. Keiner weiß, ob es funktioniert. Warum? Vertrauen ist immer ein Vorschuss.", 3,
        lambda k: (eyebrow("Ein Beispiel")
-                  + h2(f"Apple hat gerade alle Preise um {m('200 €')} angehoben. Und das neue iPhone Duo um {m('<span style=\"white-space:nowrap\">2.500 €</span>')} vorgestellt.", 84, 30))
+                  + h2(f"Apple hat gerade alle Preise um {m('200 €')} angehoben. Und das neue iPhone Duo um {m('<span style=\"white-space:nowrap\">2.500 €</span>')} vorgestellt.", 76, 18)
+                  .replace("font-size:76px", "font-size:76px;max-width:1150px"))
        if k == 1 else
-       (eyebrow("Ein Beispiel") + '<div style="margin-top:30px;display:flex;align-items:center;gap:80px"><div style="flex:1">'
+       (eyebrow("Ein Beispiel") + '<div style="margin-top:18px;display:flex;align-items:flex-start;gap:80px"><div style="flex:1">'
         + h2(f"Vorbestellungen, noch bevor du es überhaupt {m('in der Hand halten kannst.')}", 76, 0)
         + sub("Lieferzeit mittlerweile Januar 2027.", 40, 34)
         + f'<div style="margin-top:44px;{unsichtbar(k >= 3)}">' + pille("Vertrauen ist immer ein Vorschuss.") + "</div></div>"
@@ -1086,13 +1161,12 @@ stufen("Kommunikation 2027", "M", "Vor ein paar Jahren hat es gereicht zu sagen:
                                        f"Positionierung auf das {m('verkaufspsychologische')} Motiv deiner Zielgruppe",
                                        "Eine Brücke bauen: dein transformatives Angebot"], "mint") + "</div>", gap=36, top=44))
 
-stufen("UA OS", "M", "Stell dir vor, du hast ein System: unser UA OS. Live, maximal drei bis vier Minuten: Deine letzten zehn Testimonials in die KI, sie zieht die Kundenworte raus, du vergleichst mit deinem Angebotstext. Die KI erfindet nichts, sie zeigt dir, was du schon gesagt bekommen hast. KI ersetzt kein System. Sie macht es leichter zu fahren.", 2,
-       lambda k: live_badge() + h2(f"Stell dir vor, du hast ein System: {m('UA OS.')}", 80, 28)
+stufen("UA OS", "M", "Stell dir vor, du hast ein System: unser UAPS. Maximal drei bis vier Minuten: Deine letzten zehn Testimonials in die KI, sie zieht die Kundenworte raus, du vergleichst mit deinem Angebotstext. Die KI erfindet nichts, sie zeigt dir, was du schon gesagt bekommen hast. KI ersetzt kein System. Sie macht es leichter zu fahren.", 2,
+       lambda k: h2(f"Stell dir vor, du hast ein System: {m('UAPS.')}", 80, 28)
        + reihe(karte("Deine letzten 10 Testimonials", label="Schritt 1"), karte("Die KI zieht die Kundenworte raus", label="Schritt 2"),
                karte("Vergleich mit deinem Angebotstext", "Bei den meisten klafft eine Lücke.", "mint", "Schritt 3"), top=44)
        + f'<div style="margin-top:36px;display:flex;gap:24px;align-items:center;{"" if k >= 2 else "visibility:hidden"}">'
-       + pille("KI ersetzt kein System. Sie macht es leichter zu fahren.") + "</div>"
-       + f'<div style="margin-top:18px;display:flex">{offen("Name UA OS final? Testimonials für die Demo bereitlegen (nur lokal)", "1", 18)}</div>')
+       + pille("KI ersetzt kein System. Sie macht es leichter zu fahren.") + "</div>")
 
 # ---- Teil 2 · Volle Pipeline ---------------------------------------------------------------------------
 kapitel("2", "Volle Pipeline", "Du brauchst Menschen, die mit dir sprechen.", "A", "Teil 2. Du brauchst eine volle Pipeline.")
@@ -1123,6 +1197,13 @@ stufen("Nachrichten · 100", "A", "So lief Outreach bisher: 100 Massennachrichte
        + rechenweg(k, weg_100_40 if k >= 6 else weg_100))
 
 
+stufen("Reichweite", "A", "Reichweite gewinnt keine Kunden. Screenshots von Beiträgen mit viel Reichweite zeigen, aus denen kein einziger Kunde entstanden ist.", 2,
+       lambda k: eyebrow("Viel Reichweite …", CORAL) + h2(f"{hell('Reichweite')} {c('gewinnt keine Kunden.')}", 84)
+    # PLATZHALTER: Screenshots über Reichweite folgen
+    + reihe(*[f'<div style="{unsichtbar(k >= 2)}flex:1;border:3px dashed {GELB};border-radius:24px;display:flex;align-items:center;justify-content:center;'
+              f'{MONO}font-size:22px;color:{GELB};text-align:center;line-height:1.5">SCREENSHOT<br>REICHWEITE {i}</div>'
+              for i in (1, 2, 3)], gap=28, top=50, hoehe=392), STIL_MITTE)
+
 stufen("Das meinen wir nicht", "A", "Und damit meinen wir nicht solche Nachrichten. Ich habe diese Woche wieder zwei, drei davon bekommen. Kurz vorlesen. Das meinen wir nicht. Wir meinen persönliche Nachrichten an die Richtigen.", 2,
        lambda k:     eyebrow("Wenn wir von DMs sprechen …", CORAL) + h2(f"{hell('Solche Nachrichten')} {c('meinen wir nicht.')}", 84)
     # Echte Pitch-Nachrichten an Alex, Absender, Profilbilder und Vorname unkenntlich gemacht
@@ -1146,13 +1227,15 @@ stufen("iPhone-Effekt", "M", "Beim iPhone macht keiner eine Einwandbehandlung. W
        + h2(f"Beim iPhone macht {m('keiner eine Einwandbehandlung.')}", 96, 30)
        + reihe(karte("Vertrauen", "Dein Angebot trifft die Zielgruppe.", size=48, sichtbar=k >= 2), rechenzeichen("+", k >= 3),
                karte("Volle Pipeline", "Die Richtigen sprechen mit dir.", size=48, sichtbar=k >= 3), rechenzeichen("=", k >= 4),
-               karte("Selbstläufer", "Der Abschluss passiert fast von allein.", "mint", size=48, sichtbar=k >= 4), top=50, hoehe=BOX_H), STIL_MITTE)
+               karte("Selbstläufer", "Der Abschluss passiert fast von allein.", "mint", size=48, sichtbar=k >= 4), top=50, hoehe=BOX_H)
+       # Wie eine Formel: Titel und Texte aller Karten mittig auf einer Höhe, + und = genau dazwischen
+       .replace("justify-content:flex-start;gap:18px", "justify-content:center;gap:18px"), STIL_MITTE)
 
-iphone_uaps = ["Vertrauen mit dem richtigen Content aufbauen.",
-               "Die richtigen Menschen ansprechen.",
-               "Mit DMs, die zielgerichtet sind.",
-               "Ein passendes Transfergespräch schafft Vertrauen &amp; Problembewusstsein.",
-               "Dein Angebotsgespräch."]
+iphone_uaps = [f"Mit Content erstes {tuerkis('Vertrauen')} aufbauen.",
+               f"Die {tuerkis('richtigen')} Menschen ansprechen.",
+               f"Mit DMs die {tuerkis('Brücke')} von deinem Content zum Angebot bauen.",
+               f"Ein passendes Transfergespräch schafft {tuerkis('Vertrauen &amp; Problembewusstsein')}.",
+               f"Im Angebotsgespräch deinen Kunden {tuerkis('gewinnen')}."]
 stufen("iPhone-Effekt · UAPS", "M", "Der iPhone-Effekt mit dem UAPS nachgebaut. Fünf Schritte, jeder einzeln.", 5,
        lambda k: eyebrow("Der iPhone-Effekt mit dem UAPS") + f'<div style="margin-top:40px;flex:1;display:flex;flex-direction:column;gap:18px">'
        + "".join(f'<div style="{"" if k > j else "visibility:hidden;"}flex:1;display:flex;align-items:center;gap:30px;background:#131312;border:1px solid #34322F;border-radius:22px;padding:0 40px">'
@@ -1186,21 +1269,26 @@ def bonus_karte_bild(nr, titel, datei, fuellen=True, neu_stern=False):
             f'<div style="flex:1;min-height:0"><img src="{bild(BILDER / datei, 900)}" alt="" style="{bild_stil}"></div></div>')
 
 
-neu("Boni nach Einwand", "M", "Dein exklusiver Webinar-Bonus. Bonus 1: der Pausen-Joker, vier Wochen, die du jederzeit hinten anhängen kannst, wenn etwas dazwischenkommt. Bonus 2: unsere LinkedIn Masterclass. Bonus 3: der Kick-Start Workshop mit Starterpaket: Vorlagen, Outreach-Nachrichten, Positionierungsrahmen, LinkedIn-Profil. Bonus 4, ganz neu: die KI Content Masterclass.",
-    '<div style="text-align:center">' + h2(f"Dein exklusiver {m('Webinar-Bonus.')}", 84, 0) + "</div>"
+def versteckt(sichtbar, html):
+    """Blendet ein fertiges Element aus, ohne das Layout zu verschieben."""
+    return html if sichtbar else html.replace(' style="', ' style="visibility:hidden;', 1)
+
+
+stufen("Boni nach Einwand", "M", "Dein exklusiver Webinar-Bonus. Bonus 1: der Pausen-Joker, vier Wochen, die du jederzeit hinten anhängen kannst, wenn etwas dazwischenkommt. Bonus 2: unsere LinkedIn Masterclass. Bonus 3: der Kick-Start Workshop mit Starterpaket: Vorlagen, Outreach-Nachrichten, Positionierungsrahmen, LinkedIn-Profil. Bonus 4, ganz neu: die KI Content Masterclass.", 5,
+    lambda k: '<div style="text-align:center">' + h2(f"Dein exklusiver {m('Webinar-Bonus.')}", 84, 0) + "</div>"
     + '<div style="margin-top:70px;display:flex;gap:28px;padding:0 10px">'
     # Bilder: Joker, Starterpaket und KI-Box über Higgsfield erzeugt; LinkedIn-Box ist das bestehende Produktbild
-    + bonus_karte_bild(1, "+4 Wochen Pausen-Joker", "bonus-joker.jpg")
-    + bonus_karte_bild(2, "LinkedIn Masterclass", "linkedin-masterclass.png", fuellen=False)
-    + bonus_karte_bild(3, "Kick-Start Workshop", "bonus-starterpaket.jpg")
-    + bonus_karte_bild(4, "KI Content Masterclass", "ki-content-masterclass.png", fuellen=False)   # „NEU“ steht schon auf der Box
-    + "</div>",
+    + versteckt(k >= 2, bonus_karte_bild(1, "+4 Wochen Pausen-Joker", "bonus-joker.jpg"))
+    + versteckt(k >= 3, bonus_karte_bild(2, "LinkedIn Masterclass", "linkedin-masterclass.png", fuellen=False))
+    + versteckt(k >= 4, bonus_karte_bild(3, "Kick-Start Workshop", "bonus-starterpaket.jpg"))
+    + versteckt(k >= 5, bonus_karte_bild(4, "KI Content Masterclass", "ki-content-masterclass.png", fuellen=False))   # „NEU“ steht schon auf der Box
+    + "</div>" + (kurze_mitteilung("noti-boni", 0.3) if k == 5 else ""),
     "padding:70px 96px;background:radial-gradient(1200px 700px at 50% 40%, #152C20, #0D0D0D);display:flex;flex-direction:column;justify-content:center")
 
 neu("Code einlösen", "A", "Erinnerst du dich an den Code vom Anfang? Nenn ihn im Strategie-Call. Dann bekommst du dein Geschenk: einen KI-Skill, der dir zeigt, was dir auf LinkedIn noch fehlt.",
     f'<div style="text-align:center">{eyebrow("Erinnerst du dich an deinen Code?")}</div>' + code_box()
     + sub(f"Nenn ihn im Strategie-Call. {w('Dann bekommst du dein Geschenk:')} einen KI-Skill, der dir zeigt, was dir auf LinkedIn noch fehlt.", 36, 40).replace("max-width:1500px", "max-width:1400px;text-align:center;margin-left:auto;margin-right:auto")
-    + f'<div style="margin-top:28px;display:flex;justify-content:center">{offen("Skill bauen: LinkedIn-Profil-Roaster oder Focus-Pain-Diagnose", "0 0 auto", 18)}</div>', ZENTRIERT)
+    + f'<div style="margin-top:40px;display:flex;justify-content:center">{qr_code(240, link_size=16)}</div>', ZENTRIERT)
 
 neu("iPhone-Effekt · Schluss", "A", "Zum Schluss: Wenn dein Angebot und deine Pipeline zusammenspielen, verkaufst du wie Apple. Ohne Einwandbehandlung. Das ist der iPhone-Effekt. Und genau den bauen wir in 90 Tagen mit dir.",
     f'<div style="text-align:center">{eyebrow("Zum Schluss")}</div>'
@@ -1227,14 +1315,14 @@ ABLAUF = [
     # 6. Case, Agenda, Filter
     ("Case-Teaser", "alle"), ("Heute 2027", "alle"), ("Für wen das ist", "alle"),
     # 7. Teil 1 · Vertrauen
-    ("Kapitel 1", "alle"), ("Case · Kapitel 01", "alle"), ("Vertrauen braucht Zeit?", "alle"), ("iPhone", "alle"), ("Apple Fails", "alle"),
+    ("Kapitel 1", "alle"), ("Vertrauen braucht Zeit?", "alle"), ("Case · Kapitel 01", "alle"), ("iPhone", "alle"), ("Apple Fails", "alle"),
     ("Was Apple richtig macht", "alle"), ("Kommunikation 2027", "alle"), ("UA OS", "alle"),
     # 8. Teil 2 · Volle Pipeline (Alex)
-    ("Kapitel 2", "alle"), ("Case · Kapitel 02", "alle"), ("Opportunity LinkedIn", "alle"), ("Denkfehler", "alle"),
-    ("Wie deine Kunden entstehen", "alle"), ("Drei Quellen", "letzte"), ("Nachrichten · 100", "alle"),
+    ("Kapitel 2", "alle"), ("Opportunity LinkedIn", "alle"), ("Case · Kapitel 02", "alle"), ("Denkfehler", "alle"),
+    ("Wie deine Kunden entstehen", "alle"), ("Reichweite", "alle"), ("Drei Quellen", "letzte"), ("Nachrichten · 100", "alle"),
     ("Das meinen wir nicht", "alle"), ("KI-Moment · Kontext", "alle"),
     # 9. Teil 3 · Abschluss
-    ("Kapitel 3", "alle"), ("Case · Kapitel 03", "alle"), ("iPhone-Effekt", "alle"), ("iPhone-Effekt · UAPS", "alle"), ("Kein Geld gerade", "alle"),
+    ("Kapitel 3", "alle"), ("Case · Kapitel 03", "alle"), ("Kein Geld gerade", "alle"), ("iPhone-Effekt", "alle"), ("iPhone-Effekt · UAPS", "alle"),
     ("KI-Moment · Muster", "alle"), ("Messung", "alle"), ("Zwischenfazit", "alle"), ("Stell dir mal vor", "alle"),
     # 10. Kapazität und Vertrauensbrücke
     ("Wer wir sind", "alle"), ("Zertifiziert", "alle"),
@@ -1244,9 +1332,8 @@ ABLAUF = [
     ("Drei Cases", "alle"), ("Marktanker", "alle"), ("Dein Invest", "alle"), ("Garantie 2027", "alle"), ("Kalender offen", "alle"), ("Return 2027", "alle"),
     ("Proof · Gruppen-Chat", "alle"), ("Referenz nach Invest", "alle"),
     # 12. Qualifizieren, Kalender, Boni, Code, Schluss
-    ("Buch dir keinen Call, wenn", "alle"), ("So läuft dein Call ab", "alle"), ("Boni nach Einwand", "alle"),
-    ("Code einlösen", "alle"), ("Knappheit", "alle"), ("Einwände", "alle"), ("Live Q&A", "alle"), ("iPhone-Effekt · Schluss", "alle"),
-    ("Finaler CTA", "alle"),
+    ("So läuft dein Call ab", "alle"), ("Buch dir keinen Call, wenn", "alle"), ("Boni nach Einwand", "alle"),
+    ("Code einlösen", "alle"), ("Live Q&A", "alle"),
 ]
 
 alle_stufen = {}
@@ -1274,7 +1361,36 @@ def mit_fragezeichen(html):
     return html.replace("</section>", FRAGEZEICHEN + "</section>", 1) if frage else html
 
 
-auswahl = [(mit_fragezeichen(f), wer) for f, wer in auswahl]
+# Einheitlicher Kopf (Review Michael 26.10.): Auf jeder Inhaltsfolie steht die Kopfzeile (Eyebrow) bei 88 px und die
+# Überschrift bei 124 px, egal wie viel Inhalt folgt. Inhaltsfolien werden deshalb nie senkrecht zentriert.
+# Ausgenommen sind Folien mit eigenem, freigegebenem Aufbau.
+KOPF_OBEN, H2_OBEN = 88, 124
+KOPF_AUSNAHMEN = {"Titel", "Video · Unternehmensathlet", "Deal", "Code merken", "Kein System", "Wendepunkt",
+                  "Vertrauen braucht Zeit?", "Case-Teaser", "Einmal aufbauen", "Marktanker", "Dein Invest", "Garantie 2027",
+                  "Kalender offen", "Proof · Gruppen-Chat", "Referenz nach Invest", "Code einlösen", "Boni nach Einwand", "Live Q&A"}
+EYEBROW_ANFANG = re.compile(r"<div style=\"[^\"]*font-size:15px;letter-spacing:\.16em;text-transform:uppercase[^\"]*\">[^<]*</div>")
+
+
+def einheitlicher_kopf(html):
+    m = re.search(r'<section data-label="([^"]*)"[^>]*?style="([^"]*)">', html)
+    label, stil = m.group(1).replace("&amp;", "&"), m.group(2)
+    if label in KOPF_AUSNAHMEN or label.startswith(("Kapitel", "Case ·")) or "flex-direction:column" not in stil:
+        return html
+    rest = html[m.end():]
+    eb = EYEBROW_ANFANG.match(rest)
+    if eb:
+        oben = KOPF_OBEN
+        rest = rest[:eb.end()] + re.sub(r'^<h2 style="margin:\d+px 0 0;', f'<h2 style="margin:{H2_OBEN - KOPF_OBEN - 18}px 0 0;', rest[eb.end():], count=1)
+    elif rest.startswith("<h2 "):
+        oben = H2_OBEN
+        rest = re.sub(r'^<h2 style="margin:\d+px 0 0;', '<h2 style="margin:0 0 0;', rest, count=1)
+    else:
+        return html
+    neuer_stil = stil.replace("justify-content:center", "justify-content:flex-start") + f";padding-top:{oben}px"
+    return html[:m.start(2)] + neuer_stil + html[m.end(2):m.end()] + rest
+
+
+auswahl = [(mit_fragezeichen(einheitlicher_kopf(f)), wer) for f, wer in auswahl]
 d.folien = [f for f, _ in auswahl]
 d.kuerzel([(n, n, wer) for n, (_, wer) in enumerate(auswahl, 1)])
 d.speichern(ZIEL, titel="LinkedIn Performance System 2027")
@@ -1302,7 +1418,10 @@ UA_FARBEN = {
 UA_RGB = {"125,219,166": "44,217,156", "232,145,122": "214,7,72", "244,242,236": "255,255,255", "13,13,13": "0,0,0"}
 UA_SCHRIFTEN = ('<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;800'
                 '&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">\n'
-                "<style>h1,h2{font-family:'League Spartan',sans-serif!important;text-transform:uppercase;"
+                # Folie nie stauchen: in Fenstern unter 1920 px schrumpfte #deck mit, der Text brach dann anders um als im PDF
+                "<style>#deck{flex-shrink:0!important;width:1920px!important;height:1080px!important}"
+                "@keyframes punktBlinken{0%,100%{opacity:1}50%{opacity:.15}}"
+                "h1,h2{font-family:'League Spartan',sans-serif!important;text-transform:uppercase;"
                 "color:#78A49C;letter-spacing:-0.01em!important}"
                 ".frage-deko{font-family:'League Spartan',sans-serif!important}"
                 ".bleibt-tuerkis{color:#2CD99C!important}"
@@ -1342,6 +1461,10 @@ def ua_fassung(quelle):
     # In Überschriften nie UA-Grün und Türkis im selben Satz: Hervorhebungen werden dort weiß
     t = re.sub(r"<h2\b.*?</h2>", lambda m: m.group(0).replace("color:#2CD99C", "color:#FFFFFF"), t, flags=re.S)
     t = re.sub(r"(\d) (€|%)", "\\1&nbsp;\\2", t)
+    # Alle schwarzen Folien bekommen den grünen Verlauf (wie „Code merken“), nur am <section>-Hintergrund
+    VERLAUF = "linear-gradient(120deg,#000000 0%,#0B1F1B 100%)"
+    t = re.sub(r'(<section\b[^>]*?style="[^"]*?background:)#000000(?=[;"])', lambda m: m.group(1) + VERLAUF, t)
+    t = re.sub(r'(<section\b[^>]*?style="[^"]*?transparent 55%\), )#000000(?=[;"])', lambda m: m.group(1) + VERLAUF, t)
     t = t.replace("</head>", UA_SCHRIFTEN + "</head>", 1)
     quelle.write_text(t, encoding="utf-8")
     print(f"UA-Design angewendet: {quelle}")
