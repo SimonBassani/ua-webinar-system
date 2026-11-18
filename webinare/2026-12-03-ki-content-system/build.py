@@ -1461,6 +1461,54 @@ stufen("Content bringt Kunden", "A", "Wichtig für unseren Titel, wir haben dami
        + f'<div style="margin-top:36px;display:flex">{offen("Entscheiden: Folie behalten? Welche Content-Arten bauen Vertrauen auf? Wie schließt die Masterclass die Lücke?", "1", 20)}</div>')
 
 
+# ---- Neu 18.11. (Alex, nach Vorlage Krasenbrink): Denkfehler KI-Content und Keine Erfahrung = dein Vorteil ----------
+ki_denken = ["Ich muss technisch fit sein.", "Ich brauche erst den perfekten Prompt.", "Ich muss erst alles über KI lernen."]
+ki_wirklich = [("Wissen, was du sagen willst", "Deine Erfahrung, deine Gespräche, deine Haltung."),
+               ("Mit der KI chatten", "So wie du jeden Tag Nachrichten schreibst."),
+               ("Prüfen und posten", "Die KI liefert. Du entscheidest, was rausgeht.")]
+
+
+def denkfehler_ki(k):
+    """Stufen: 1 Überschrift, 2 linke Box, 3–5 rechte Box Punkt für Punkt, 6 Schlusssatz."""
+    return vergleich_boxen(k, eyebrow("Bei KI-Content") + h2(f"Der größte {c('Denkfehler')} beim Schreiben mit KI.", 72),
+                           "WAS DIE MEISTEN DENKEN", ki_denken, "WIE ES WIRKLICH IST", ki_wirklich,
+                           '<div style="font-size:34px;font-weight:600">Du musst kein Technik-Profi sein.</div>'
+                           f'<div style="font-size:34px;color:{MINT};margin-top:8px">Du musst nur wissen, was du sagen willst.</div>')
+
+
+stufen("Denkfehler · KI-Content", "M", "Was die meisten denken: Ich muss technisch fit sein, ich brauche den perfekten Prompt, ich muss erst alles über KI lernen. Wie es wirklich ist: Du weißt, was du sagen willst. Du chattest mit der KI. Du prüfst und postest. Bewusst nicht erklären, was die KI im Hintergrund alles braucht.", 6, denkfehler_ki)
+
+ki_zeitstrahl = [("Vor 5 Jahren", "KI für alle? Gab es nicht.", False), ("Ende 2022", "ChatGPT startet.", True),
+                 ("2023", "Erste brauchbare Texte.", True), ("2024", "KI spricht in Echtzeit.", True),
+                 ("2025", "Agenten erledigen Aufgaben selbst.", True), ("Heute", "Niemand hat zehn Jahre Erfahrung.", True)]
+
+
+def zeitstrahl(k):
+    n = len(ki_zeitstrahl)
+    punkte = ""
+    for j, (wann, was, aktiv) in enumerate(ki_zeitstrahl):
+        x = 4 + j * (92 / (n - 1))
+        oben = j % 2 == 0
+        letzter = j == n - 1
+        farbe = MINT if aktiv else "#6B665F"
+        gross = 46 if letzter else 30
+        punkte += (f'<div style="position:absolute;left:{x}%;top:50%;transform:translate(-50%,-50%);width:{gross}px;height:{gross}px;border-radius:50%;'
+                   f'background:{farbe};{"box-shadow:0 0 0 12px rgba(125,219,166,.18),0 0 40px rgba(125,219,166,.6);" if letzter else ""}"></div>'
+                   f'<div style="position:absolute;left:{x}%;{"bottom:58%" if oben else "top:58%"};transform:translateX(-50%);width:300px;text-align:center">'
+                   f'<div style="font-family:Newsreader,serif;font-style:italic;font-size:{46 if letzter else 38}px;color:{farbe}">{wann}</div>'
+                   f'<div style="margin-top:6px;font-size:{30 if letzter else 26}px;line-height:1.3;font-weight:{700 if letzter else 500};color:{"#F4F2EC" if aktiv else "#8C8780"}">{was}</div></div>')
+    return (eyebrow("Versprochen ist versprochen")
+            + h2(f"Keine KI-Erfahrung? {m('Dein Vorteil.')}", 84)
+            + sub("Niemand hat zehn Jahre Erfahrung mit KI. Wie auch?", 38, 20)
+            + f'<div style="position:relative;flex:1;margin:10px 40px 0">'
+              f'<div style="position:absolute;left:4%;right:4%;top:50%;height:4px;transform:translateY(-50%);border-radius:2px;'
+              f'background:linear-gradient(90deg,#34322F 0%,{MINT} 22%,{MINT} 100%)"></div>{punkte}</div>'
+            + f'<div style="{unsichtbar(k >= 2)}">' + pille(f"Du startest mit allen anderen bei null. {w('Und KI ist so einfach wie chatten.')}") + "</div>")
+
+
+stufen("Keine Erfahrung · Vorteil", "M", "Den Loop vom Anfang schließen. Du hast noch nie mit KI gearbeitet? Das ist dein Vorteil. Vor fünf Jahren gab es KI für alle noch gar nicht. Ende 2022 startet ChatGPT, 2023 kommen die ersten brauchbaren Texte, 2024 spricht KI in Echtzeit, 2025 erledigen Agenten Aufgaben selbst. Niemand hat zehn Jahre Erfahrung. Du startest mit allen anderen bei null. Und KI ist so einfach wie chatten.", 2, zeitstrahl)
+
+
 # ---- Ablauf: verkaufspsychologisch gestrafft, Stand Skript 23.10.2026 (22.10.2026) -------------------------------------------
 # Jede Zeile: Folienname und welche Stufen gezeigt werden. "alle" = jede Aufbaustufe, "letzte" = nur die fertige Folie,
 # Liste = genau diese Stufen (1-basiert). Folien, die hier fehlen, werden gebaut, aber nicht gezeigt.
@@ -1478,8 +1526,8 @@ ABLAUF = [
     ("Kapitel 2", "alle"), ("KI klingt nach KI", "alle"), ("KI-Posts · Das meinen wir nicht", "alle"), ("Mehr als ein Prompt", "alle"),
     ("So klingt es mit System", "alle"),
     # 5. Teil 3 · Ganz einfach (Glaubenssatz: kostet Zeit, zu technisch)
-    ("Kapitel 3", "alle"), ("Einwände · System", "alle"), ("Zeit · Vorher nachher", "alle"), ("Zoom kannst du", "alle"),
-    ("Riesenvorteil", "alle"), ("Content bringt Kunden", "alle"),
+    ("Kapitel 3", "alle"), ("Einwände · System", "alle"), ("Zeit · Vorher nachher", "alle"), ("Denkfehler · KI-Content", "alle"),
+    ("Zoom kannst du", "alle"), ("Keine Erfahrung · Vorteil", "alle"), ("Content bringt Kunden", "alle"),
     # 6. Vertrauensbrücke (wie 27.10.)
     ("Wer wir sind", "alle"), ("Zertifiziert", "alle"),
     # 7. Pitch (wie 27.10., Angebot noch nicht neu)
