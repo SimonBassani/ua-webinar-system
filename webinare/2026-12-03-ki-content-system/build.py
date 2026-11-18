@@ -1152,7 +1152,7 @@ stufen("Heute 2027", "M", "Heute zeigen wir dir, wie du mit LinkedIn in 2027 Kun
                                          "Der iPhone-Effekt: Wie du aus deinen Terminen zahlende Kunden machst."])], hoehe=BOX_H), STIL_MITTE)
 
 # ---- Teil 1 · Vertrauen --------------------------------------------------------------------------------
-kapitel("1", "Vertrauen", "Wie gewinnst du Vertrauen zurück?", "M", "Teil 1. Wie gewinnen wir das Vertrauen zurück?")
+kapitel("1", "Warum jetzt", "LinkedIn ist nicht vorbei. Und KI verändert noch einmal alles.", "M", "Teil 1. Warum LinkedIn und KI gerade noch einmal alles verändern.")
 
 stufen("Vertrauen braucht Zeit?", "M", "Jetzt wirst du vielleicht sagen: Vertrauen braucht Zeit. Dabei funktionieren wir Menschen ganz anders. Sonst würden wir alle nichts mehr kaufen. Und Menschen kaufen. Nach wie vor.", 2,
        lambda k: zitat(f"„Vertrauen braucht Zeit.“ <span style=\"{'' if k >= 2 else 'visibility:hidden'}\">Dabei kaufen Menschen {m('nach wie vor.')}</span>", 96), STIL_MITTE)
@@ -1218,7 +1218,7 @@ stufen("UAPS · Akquise-Copilot", "A", "Stell dir vor, du hast ein System: UAPS.
        + pille("KI übernimmt nicht dein LinkedIn. Sie hilft dir, strukturiert und gezielt voranzukommen.") + "</div>")
 
 # ---- Teil 2 · Volle Pipeline ---------------------------------------------------------------------------
-kapitel("2", "Volle Pipeline", "Du brauchst Menschen, die mit dir sprechen.", "A", "Teil 2. Du brauchst eine volle Pipeline.")
+kapitel("2", "Deine Stimme", "Klingt das wirklich nach mir?", "A", "Teil 2. Wie die KI nach dir klingt, statt generischem Einheitsbrei.")
 
 weg = [("40", "Nachrichten an die Richtigen", False), ("70", "Kontakte", False), ("28", "DM-Gespräche", False),
        ("3 bis 4", "Termine im Kalender", True), ("1 bis 2", "neue Kunden, je nach Abschlussquote", True)]
@@ -1266,7 +1266,7 @@ stufen("Rechenweg", "A", "Das macht das Ergebnis messbar. Aus 40 Nachrichten an 
        + f'<div style="margin-top:16px;display:flex">{offen("Erfahrungswerte für Antworten und Gespräche, jede Zahl begründet", "1", 18)}</div>')
 
 # ---- Teil 3 · Abschluss --------------------------------------------------------------------------------
-kapitel("3", "Abschluss", "Der iPhone-Effekt.", "M", "Teil 3. Nicht über Closing-Skripte reden. Zeigen, dass bei richtigem System kein harter Abschluss nötig ist.")
+kapitel("3", "Ganz einfach", "Kostet dich keine Zeit. Bringt dir mehr, als es kostet.", "M", "Teil 3. Warum so ein System einfach ist und dir mehr bringt, als es kostet.")
 
 def rechenzeichen(z, sichtbar):
     return (f'<div style="{unsichtbar(sichtbar)}flex:0 0 auto;align-self:center;font-size:120px;font-weight:700;line-height:1;color:{MINT}">{z}</div>')
@@ -1347,41 +1347,147 @@ neu("iPhone-Effekt · Schluss", "A", "Zum Schluss: Wenn dein Angebot und deine P
     ZENTRIERT)
 
 
+# =====================================================================================================
+# NEUER MITTELTEIL 03.12.2026 · nach Besprechung Michael (Transkript 18.11.2026)
+# Versprechen: KI-Content-System. Drei Glaubenssätze: 1. Warum jetzt (LinkedIn + KI), 2. Klingt das nach mir?,
+# 3. So ein System ist einfach und spart mehr Zeit, als es kostet. Sportlogik ja, Sportbegriffe nein.
+# Einstieg, „Für wen das ist“, „Wer wir sind“ und der Pitch bleiben wie im Deck vom 27.10.
+# =====================================================================================================
+stufen("Hook · Content", "A", "Bevor wir loslegen: Heute geht es um eine Frage, die sich gerade viele stellen. Lohnt sich Content auf LinkedIn überhaupt noch? Und warum KI das gerade komplett neu verteilt.", 2,
+       lambda k: eyebrow("Heute geht es um eine Frage")
+       + h2(f"Lohnt sich Content auf LinkedIn {c('überhaupt noch?')}", 96, 30)
+       + f'<div style="{unsichtbar(k >= 2)}">' + sub(f"Und warum KI gerade {w('alles noch einmal auf null setzt.')}", 42, 40) + "</div>", STIL_MITTE)
+
+heute_drei = ["Warum LinkedIn und KI gerade noch einmal alles verändern.",
+              "Wie die KI nach dir klingt. Statt generischem Einheitsbrei.",
+              "Warum so ein System dich keine Zeit kostet, sondern dir mehr bringt, als es kostet."]
+stufen("Heute · Drei Dinge", "M", "Wir zeigen dir heute drei Dinge. Einzeln einblenden. Zum Schluss den Loop öffnen: Warum es sogar ein Riesenvorteil ist, wenn du noch nie mit KI gearbeitet hast. Das lösen wir in Teil 3 auf.", 5,
+       lambda k: eyebrow("Heute zeigen wir dir") + h2(f"Drei Dinge für dein {m('KI-Content-System.')}", 84)
+       + reihe(*[karte(tt, "", "mint", f"0{j + 1}", sichtbar=k > j + 1, size=42) for j, tt in enumerate(heute_drei)], hoehe=BOX_H)
+       + f'<div style="margin-top:36px;{unsichtbar(k >= 5)}">'
+       + pille(f"Und warum es ein {w('Riesenvorteil')} ist, wenn du noch nie mit KI gearbeitet hast.") + "</div>")
+
+# ---- Teil 1 · Warum jetzt ---------------------------------------------------------------------------------
+frust = ["Der Algorithmus hat sich verändert.", "Die Impressions sind eingebrochen.",
+         "Jeden Tag eine Stunde für einen einzigen Beitrag.", "Mir gehen die Ideen aus.",
+         "Es reagiert sowieso niemand.", "Für 50 Impressions lohnen sich keine zwei Stunden."]
+stufen("Frust · Content", "M", "Abholen. Wir wissen, viele sind auf LinkedIn frustriert. Ja, der Algorithmus hat sich verändert. Ja, die Impressions sind gesunken. Jeden Tag eine Stunde, die Ideen gehen aus, es reagiert eh niemand. Immer zwei Punkte zusammen einblenden.", 4,
+       lambda k: eyebrow("Ehrlich gesagt", CORAL) + h2(f"Viele sind auf LinkedIn {c('frustriert.')}", 84)
+       + nummern(frust, 2 * (k - 1), CORAL))
+
+stufen("Lohnt sich Content?", "M", "Die Frage, die sich gerade viele stellen: Kann ich mit LinkedIn und Content überhaupt noch Kunden gewinnen? Kurze Pause. Dann klar: Ja.", 2,
+       lambda k: eyebrow("Die Frage, die sich gerade viele stellen")
+       + h2(f"Kann ich mit LinkedIn und Content {c('überhaupt noch Kunden gewinnen?')}", 86, 30)
+       + f'<div style="{unsichtbar(k >= 2)}">' + h2(m("Ja."), 200, 50) + "</div>", STIL_MITTE)
+
+werkzeuge = [("Feder und Kohle", "Vor Hunderten von Jahren."), ("Kugelschreiber", "Schneller, sauberer."),
+             ("Schreibmaschine", "Vor 50 Jahren konnte das kaum jemand."), ("Computer", "Heute schreibt jeder so."),
+             ("KI", "Das nächste Werkzeug, mit dem geschrieben wird.")]
+stufen("Schreibwerkzeuge", "M", "KI nicht als große Revolution verkaufen, sondern als natürliche Fortsetzung des Schreibens. Füllfeder, Kugelschreiber, Schreibmaschine, Computer. Und jetzt KI. Der Inhalt war auf der Füllfeder derselbe wie auf der Schreibmaschine. Den produzierst du. Es ändert sich nur das Werkzeug.", 6,
+       lambda k: eyebrow("Wie wir schreiben")
+       + f'<div style="{unsichtbar(k >= 6)}">' + h2(f"Der Inhalt bleibt {m('deiner.')} Nur das Werkzeug ändert sich.", 76) + "</div>"
+       # Fünf gleich breite Karten: min-width:0 und weniger Innenabstand, damit „Schreibmaschine“ hineinpasst
+       + reihe(*[karte(t_, txt, "mint" if j == 4 else "neutral", f"0{j + 1}", sichtbar=k > j, size=32, text_size=26)
+                 .replace("flex:1;", "flex:1;min-width:0;", 1).replace("padding:44px 38px", "padding:40px 26px", 1)
+                 for j, (t_, txt) in enumerate(werkzeuge)], gap=20, top=44, hoehe=BOX_H), STIL_MITTE)
+
+stufen("Von Hand schneller", "M", "Beim Computer gab es immer den Einwand: Wozu? Ich schreibe von Hand viel schneller, viel besser. Viele machen ihren Kalender heute noch auf Papier statt in Outlook. Am Anfang war der Computer für dich auch neu. Heute gehst du selbstverständlich damit um. Genauso wird es mit KI.", 2,
+       lambda k: zitat(f"„Ich schreibe von Hand {c('viel schneller.')}“ <span style=\"{unsichtbar(k >= 2)}\">Heute schreibst du {m('selbstverständlich am Computer.')}</span>", 88), STIL_MITTE)
+
+stufen("Du bist hier", "M", "Gratulieren. Du bist heute hier, du scheinst es zu checken. Die Chance ist da, und du hast sie erkannt. Danach direkt die Umfrage.", 2,
+       lambda k: eyebrow("Und du?") + h2(f"Du bist heute hier. {m('Glückwunsch.')}", 110, 30)
+       + f'<div style="{unsichtbar(k >= 2)}">' + sub("Das heißt: Du hast die Chance schon erkannt.", 46, 40) + "</div>", STIL_MITTE)
+
+stufen("Umfrage · Was hält dich ab", "M", "Umfrage im Chat. Antworten vorlesen. Wahrscheinlich ist die häufigste Antwort: Ich weiß nicht, wo ich anfangen soll. Damit ist Teil 1 geschafft: LinkedIn und KI sind eine Chance.", 2,
+       lambda k: eyebrow("Umfrage im Chat")
+       + h2(f"Was hält dich bei LinkedIn und KI {c('aktuell am meisten zurück?')}", 80, 30)
+       + antworten(["Zeit", "Klingt nach KI", "Technik", "Keine Ideen", "Ich weiß nicht, wo ich anfangen soll"], CORAL, k >= 2), STIL_MITTE)
+
+# ---- Teil 2 · Klingt das nach mir? --------------------------------------------------------------------------
+stufen("KI klingt nach KI", "A", "Der größte Einwand: Ich habe es mit KI probiert, das ist nur generisch. Das erkennt doch jeder gleich. Das stimmt. Solange du der KI nur einen Prompt gibst. So einfach dürfen wir es nicht darstellen.", 2,
+       lambda k: zitat(f"„Das klingt doch alles {c('nach KI.')}“ <span style=\"{unsichtbar(k >= 2)}\">Stimmt. Solange du der KI {m('nur einen Prompt')} gibst.</span>", 88), STIL_MITTE)
+
+stufen("KI-Posts · Das meinen wir nicht", "A", "Negativbeispiele zeigen, so wie bei den Outreach-Nachrichten: zwei, drei typische KI-Beiträge. Das will niemand lesen. Das meinen wir nicht.", 2,
+       lambda k: eyebrow("Wenn wir von KI-Content sprechen …", CORAL) + h2(f"{hell('Solche Beiträge')} {c('meinen wir nicht.')}", 84)
+       + f'<div style="{unsichtbar(k >= 2)}flex:0 0 auto;display:flex;gap:28px;margin-top:50px;height:392px">'
+       + "".join(offen(f"Screenshot {i}: typischer KI-Beitrag, Absender unkenntlich", "1", 22) for i in (1, 2, 3)) + "</div>", STIL_MITTE)
+
+stufen("Mehr als ein Prompt", "A", "Damit daraus richtig guter Content wird, ist einiges notwendig. Zum Beispiel eine Stimme, die nach dir klingt. Bewusst nicht alles aufzählen: Sonst denken die einen, das habe ich alles nicht, und die anderen, das baue ich mir selbst. Stattdessen: Wir haben ein System gebaut, das genau das sicherstellt.", 3,
+       lambda k: eyebrow("Damit richtig guter Content entsteht") + h2(f"Dafür braucht es {m('mehr als einen Prompt.')}", 84)
+       + reihe(karte("Deine Stimme", "Eine Brand Voice, die nach dir klingt. Nicht nach KI.", "mint", "Zum Beispiel", sichtbar=k >= 2),
+               f'<div style="flex:1;display:flex;{unsichtbar(k >= 2)}">'
+               + offen("Welche weiteren Bausteine zeigen wir? Bewusst nicht alles nennen.", "1", 24) + "</div>", hoehe=360)
+       + f'<div style="margin-top:40px;{unsichtbar(k >= 3)}">' + pille(f"Wir haben ein System gebaut, {w('das genau das sicherstellt.')}") + "</div>")
+
+stufen("So klingt es mit System", "A", "Keine Live-Demo. Nur fertige Beispiele zeigen. Erst der generische Beitrag, dann derselbe Gedanke mit dem System, in deiner Stimme.", 2,
+       lambda k: eyebrow("Vorher und nachher") + h2(f"So klingt es, wenn das System {m('dich kennt.')}", 84)
+       + reihe(offen("Vorher: generischer KI-Beitrag (fertiger Screenshot)", "1", 24),
+               f'<div style="flex:1;display:flex;{unsichtbar(k >= 2)}">'
+               + offen("Nachher: derselbe Gedanke mit dem System, in deiner Stimme (fertiger Screenshot)", "1", 24) + "</div>", hoehe=BOX_H))
+
+# ---- Teil 3 · Einfach und spart Zeit ------------------------------------------------------------------------
+system_einwaende = ["„Das ist wieder ein System, das ich pflegen muss.“", "„Der Aufbau kostet mehr Zeit, als er mir spart.“",
+                    "„Für so ein System bin ich technisch nicht fit genug.“"]
+stufen("Einwände · System", "M", "Jetzt glaubst du an die Chance, und du weißt, dass KI nach dir klingen kann. Vielleicht denkst du trotzdem gerade eines davon. Jeden Punkt einzeln. Dann: Schauen wir uns alle drei an.", 5,
+       lambda k: eyebrow("Vielleicht denkst du gerade", CORAL) + h2(f"Klingt gut. {c('Aber …')}", 84)
+       + reihe(*[karte(e, "", "coral", sichtbar=k > j + 1, size=40) for j, e in enumerate(system_einwaende)], hoehe=400)
+       + f'<div style="margin-top:40px;{unsichtbar(k >= 5)}">' + pille("Schauen wir uns alle drei an.") + "</div>")
+
+stufen("Zeit · Vorher nachher", "M", "Du musst nicht mehr stundenlang an einem Post sitzen, der dann nicht funktioniert. Für 50 Impressions lohnen sich keine zwei Stunden. Mit dem System: so und so viele Minuten rein, so und so viele Beiträge raus. Echte Zahlen aus dem Alltag.", 2,
+       lambda k: eyebrow("Was das im Alltag heißt") + h2(f"Weniger Zeit rein. {m('Mehr Beiträge raus.')}", 84)
+       + reihe(karte("Ohne System", "Ein bis zwei Stunden an einem Beitrag. Und am Ende 50 Impressions.", "coral", "Vorher"),
+               f'<div style="flex:1;display:flex;{unsichtbar(k >= 2)}">'
+               + karte("Mit dem System", "", "mint", "Nachher", fuss=offen("Echte Zahlen: x Minuten pro Woche rein, y Beiträge raus", "1", 22)) + "</div>",
+               hoehe=BOX_H))
+
+stufen("Zoom kannst du", "A", "Die Technik: Wenn du heute in Zoom reingefunden hast, bringst du schon mehr mit als nötig. Zoom installieren, updaten, anmelden ist aufwendiger, als mit einer KI zu sprechen. Mit einer KI arbeiten heißt: chatten. Das machst du jeden Tag.", 3,
+       lambda k: eyebrow("Und die Technik?")
+       + h2(f"Du hast heute in Zoom reingefunden? {m('Dann kannst du mehr als nötig.')}", 76)
+       + reihe(karte("Zoom", "Installieren, updaten, anmelden, Kamera und Ton einstellen.", "neutral", "Hast du heute geschafft"),
+               karte("KI", "Schreiben, wie du chattest. So wie jeden Tag.", "mint", "Mehr braucht es nicht", sichtbar=k >= 2), hoehe=360)
+       + f'<div style="margin-top:40px;{unsichtbar(k >= 3)}">' + pille(f"Mit einer KI arbeiten heißt: {w('chatten.')} Das kannst du längst.") + "</div>")
+
+stufen("Riesenvorteil", "M", "Den Loop vom Anfang schließen. Du hast noch nie mit KI gearbeitet? Das ist ein Riesenvorteil. Fast niemand kennt sich wirklich aus. Du bist ganz am Anfang. Und KI ist so einfach wie chatten.", 2,
+       lambda k: eyebrow("Versprochen ist versprochen")
+       + h2(f"Du hast noch nie mit KI gearbeitet? {m('Das ist ein Riesenvorteil.')}", 86, 30)
+       + f'<div style="{unsichtbar(k >= 2)}">' + sub(f"Fast niemand kennt sich wirklich aus. Du bist ganz am Anfang. {w('Und KI ist so einfach wie chatten.')}", 42, 40) + "</div>"
+       + f'<div style="margin-top:40px;display:flex">{offen("Begründung wie bei Tim ergänzen: warum der Neustart ein Vorteil ist", "0 0 auto", 20)}</div>', STIL_MITTE)
+
+kette = [("Beitrag", "Baut Vertrauen auf."), ("Gespräch", "Jemand meldet sich."), ("Termin", "Ihr sprecht wirklich."), ("Kunde", "Aus Vertrauen wird Auftrag.")]
+stufen("Content bringt Kunden", "A", "Wichtig für unseren Titel, wir haben damit über eine Million verdient. Viele hatten schon Reichweite und trotzdem keine Anfragen. Die Kette existiert: Beitrag, Gespräch, Termin, Kunde. Noch offen, ob die Folie bleibt.", 5,
+       lambda k: eyebrow("Und die Kunden?") + h2(f"„Content bringt mir nur Likes. {c('Keine Kunden.')}“", 84)
+       + reihe(*sum([[karte(t_, txt, "mint" if j == 3 else "neutral", f"0{j + 1}", sichtbar=k > j + 1, size=44, text_size=27)]
+                     + ([rechenzeichen("→", k > j + 2)] if j < 3 else []) for j, (t_, txt) in enumerate(kette)], []), gap=20, hoehe=400)
+       + f'<div style="margin-top:36px;display:flex">{offen("Entscheiden: Folie behalten? Welche Content-Arten bauen Vertrauen auf? Wie schließt die Masterclass die Lücke?", "1", 20)}</div>')
+
+
 # ---- Ablauf: verkaufspsychologisch gestrafft, Stand Skript 23.10.2026 (22.10.2026) -------------------------------------------
 # Jede Zeile: Folienname und welche Stufen gezeigt werden. "alle" = jede Aufbaustufe, "letzte" = nur die fertige Folie,
 # Liste = genau diese Stufen (1-basiert). Folien, die hier fehlen, werden gebaut, aber nicht gezeigt.
 ABLAUF = [
-    # 1. Hook und Vertrauen
-    ("Titel", "alle"), ("Video · Unternehmensathlet", "alle"), ("Hook", "alle"), ("Gib uns eine Chance", "alle"),
+    # 1. Einstieg (wie 27.10., nur der Hook ist neu)
+    ("Titel", "alle"), ("Video · Unternehmensathlet", "alle"), ("Hook · Content", "alle"), ("Gib uns eine Chance", "alle"),
     ("Social Proof früh", "alle"), ("Deal", "alle"), ("Code merken", "alle"),
-    # 2. Zustand abholen
-    ("Zustand · Kalender", "alle"), ("Zustand · LinkedIn", "alle"), ("Umfrage 1", "alle"),
-    # 3. Marktlage
-    ("Marktlage · 1 von 2", "alle"), ("Marktlage · Zahlen", "alle"), ("Kein System", "alle"),
-    # 4. Alte Welt, neue Welt, Vertrauenskrise
-    ("Alte Welt · Covid", "alle"), ("LinkedIn ist tot?", "alle"), ("Vertrauenskrise 2027", "alle"),
-    # 5. Chance, Fenster, KI-Warnung
-    ("Wendepunkt", "alle"), ("Chance · Fenster", "alle"), ("Chance · Umfrage", "alle"), ("KI ersetzt nichts", "alle"),
-    # 6. Case, Agenda, Filter
-    ("Heute 2027", "alle"), ("Case-Teaser", "alle"), ("Für wen das ist", "alle"),
-    # 7. Teil 1 · Vertrauen
-    ("Kapitel 1", "alle"), ("Vertrauen braucht Zeit?", "alle"), ("Case · Kapitel 01", "alle"), ("iPhone", "alle"), ("Apple Fails", "alle"),
-    ("Was Apple richtig macht", "alle"), ("Kommunikation 2027", "alle"),
-    # 8. Teil 2 · Volle Pipeline (Alex)
-    ("Kapitel 2", "alle"), ("Opportunity LinkedIn", "alle"), ("Case · Kapitel 02", "alle"), ("Denkfehler", "alle"),
-    ("Wie deine Kunden entstehen", "alle"), ("Reichweite", "alle"), ("Nachrichten · 100", "alle"),
-    ("Das meinen wir nicht", "alle"), ("KI-Moment · Kontext", "alle"),
-    # 9. Teil 3 · Abschluss
-    ("Kapitel 3", "alle"), ("Case · Kapitel 03", "alle"), ("Kein Geld gerade", "alle"), ("iPhone-Effekt", "alle"), ("iPhone-Effekt · UAPS", "alle"),
-    ("Zwischenfazit", "alle"), ("Stell dir mal vor", "alle"),
-    # 10. Kapazität und Vertrauensbrücke
+    # 2. Agenda und Filter
+    ("Heute · Drei Dinge", "alle"), ("Für wen das ist", "alle"),
+    # 3. Teil 1 · Warum jetzt (Glaubenssatz: Content auf LinkedIn ist vorbei)
+    ("Kapitel 1", "alle"), ("Frust · Content", "alle"), ("Lohnt sich Content?", "alle"), ("Opportunity LinkedIn", "alle"),
+    ("Schreibwerkzeuge", "alle"), ("Von Hand schneller", "alle"), ("Chance · Fenster", "alle"), ("Du bist hier", "alle"),
+    ("Umfrage · Was hält dich ab", "alle"),
+    # 4. Teil 2 · Klingt das nach mir? (Glaubenssatz: KI ist generisch)
+    ("Kapitel 2", "alle"), ("KI klingt nach KI", "alle"), ("KI-Posts · Das meinen wir nicht", "alle"), ("Mehr als ein Prompt", "alle"),
+    ("So klingt es mit System", "alle"),
+    # 5. Teil 3 · Ganz einfach (Glaubenssatz: kostet Zeit, zu technisch)
+    ("Kapitel 3", "alle"), ("Einwände · System", "alle"), ("Zeit · Vorher nachher", "alle"), ("Zoom kannst du", "alle"),
+    ("Riesenvorteil", "alle"), ("Content bringt Kunden", "alle"),
+    # 6. Vertrauensbrücke (wie 27.10.)
     ("Wer wir sind", "alle"), ("Zertifiziert", "alle"),
-    # 11. Pitch
+    # 7. Pitch (wie 27.10., Angebot noch nicht neu)
     ("Ein weiteres Jahr", "alle"), ("Zwei Optionen", "alle"), ("Woran es scheitert", "alle"), ("Ergebnis zuerst", "alle"),
     ("Der Weg", "alle"), ("Stimmen · Umsetzungsbegleitung", "alle"), ("Einmal aufbauen", "alle"),
     ("Drei Cases", "alle"), ("Marktanker", "alle"), ("Dein Invest", "alle"), ("Garantie 2027", "alle"), ("Kalender offen", "alle"), ("Return 2027", "alle"),
     ("Proof · Gruppen-Chat", "alle"), ("Referenz nach Invest", "alle"),
-    # 12. Qualifizieren, Kalender, Boni, Code, Schluss
+    # 8. Qualifizieren, Kalender, Boni, Code, Schluss (wie 27.10.)
     ("So läuft dein Call ab", "alle"), ("Boni nach Einwand", "alle"), ("Buch dir keinen Call, wenn", "alle"),
     ("Code einlösen", "alle"), ("Live Q&A", "alle"),
 ]
@@ -1420,9 +1526,10 @@ KOPF_OBEN, H2_OBEN = 88, 124
 AUSSAGE_KOPF, AUSSAGE_H2 = 219, 256
 AUSSAGE_FOLIEN = {"Hook", "Zustand · Kalender", "Zustand · LinkedIn", "Umfrage 1", "Marktlage · 1 von 2", "Chance · Umfrage",
                   "iPhone", "Opportunity LinkedIn", "Reichweite", "Drei Quellen", "Das meinen wir nicht", "Stell dir mal vor",
-                  "Ergebnis zuerst"}
+                  "Ergebnis zuerst", "Hook · Content", "Lohnt sich Content?", "Du bist hier",
+                  "Umfrage · Was hält dich ab", "Riesenvorteil"}
 KOPF_AUSNAHMEN = {"Titel", "Video · Unternehmensathlet", "Deal", "Code merken", "Kein System", "Wendepunkt",
-                  "Vertrauen braucht Zeit?", "Case-Teaser", "Einmal aufbauen", "Marktanker", "Dein Invest", "Garantie 2027",
+                  "Vertrauen braucht Zeit?", "Von Hand schneller", "KI klingt nach KI", "Case-Teaser", "Einmal aufbauen", "Marktanker", "Dein Invest", "Garantie 2027",
                   "Kalender offen", "Proof · Gruppen-Chat", "Referenz nach Invest", "Code einlösen", "Boni nach Einwand", "Live Q&A"}
 EYEBROW_ANFANG = re.compile(r"<div style=\"[^\"]*font-size:15px;letter-spacing:\.16em;text-transform:uppercase[^\"]*\">[^<]*</div>")
 
