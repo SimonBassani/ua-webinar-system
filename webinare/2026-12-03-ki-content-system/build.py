@@ -304,28 +304,12 @@ def ua_logo(**stil):
             f'style="position:absolute;height:80px;width:auto;z-index:3;{";".join(f"{k}:{v}" for k, v in stil.items())}">')
 
 
-# Titel: Text links, Alex und Michael rechts, UA-Wortmarke unten rechts (doppelte Größe)
+# Titel: fertiges Bild von Michael (22.11.), Anmelde-Knopf herausretuschiert, an seiner Stelle der Counter bis zum Start
 neu("Titel", "A", "Willkommen! Heute zeigen wir euch das KI-Content-System, mit dem wir auf LinkedIn über eine Million verdient haben. Live, keine Aufzeichnung.",
-    '<div style="position:absolute;left:96px;top:0;bottom:0;width:860px;z-index:2;display:flex;flex-direction:column;justify-content:center">'
-    f'<div class="badge-live" style="display:inline-flex;align-self:flex-start;align-items:center;gap:14px;padding:15px 28px;border-radius:999px;'
-    f'background:{CORAL};color:#3A1B12;{MONO}font-size:18px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;'
-    f'box-shadow:0 0 34px -8px rgba(232,145,122,.7)"><span style="width:10px;height:10px;border-radius:50%;background:#3A1B12;animation:punktBlinken 1.1s ease-in-out infinite"></span>Inkl. Live-Q&amp;A</div>'
-    '<h1 style="margin:30px 0 0;font-weight:700;letter-spacing:-0.03em;line-height:0.98;font-size:104px">Das KI-Content-<br>System,<br>'
-    f'<span style="display:inline-block;margin-top:12px;color:{MINT};font-size:62px;letter-spacing:-0.025em;line-height:1.12">mit dem wir auf LinkedIn<br>1 Mio+ verdient haben</span></h1>'
-    '<p style="margin:34px 0 0;font-size:27px;line-height:1.45;color:#B4AFA6">'
-    '<span>Für Selbstständige, Freelancer und Agenturen,<br>deren Angebot sich schon verkauft.</span></p>'
-    '<div style="margin-top:56px;display:flex;align-items:center;gap:22px">'
-    f'<div style="display:inline-flex;align-items:center;padding:15px 28px;border-radius:999px;background:{MINT};color:#10241A;font-weight:700;font-size:18px">Do · 03.12.2026</div>'
-    '<div style="font-size:19px;color:#B4AFA6">09:30 Uhr · Live &amp; Online · keine Aufzeichnung</div></div>'
-    f'<div style="margin-top:34px;display:flex;align-items:center;gap:22px">{kunden_bild(80)}'
-    '<span style="font-size:22px;line-height:1.35;color:#B4AFA6">250+ Coaches, Berater und B2B-Dienstleister<br>erfolgreich begleitet</span></div></div>'
-    # Michael gespiegelt, damit er zur Mitte schaut
-    + sprecher("alex.png", "Alex", 820, 350) + sprecher("michael.png", "Michael", 770, 0, spiegeln=True, kante=7)
-    + namens_pille("Alex", 575) + namens_pille("Michael", 200)
-    + countdown(ziel="2026-12-03T09:36:00+01:00")
-    + ua_logo(right="96px", bottom="64px"),
-    "padding:0;position:relative;overflow:hidden;background:radial-gradient(1100px 640px at 18% 78%, rgba(125,219,166,.10), transparent 55%), "
-    "radial-gradient(900px 700px at 78% 45%, rgba(125,219,166,.08), transparent 60%), #0D0D0D")
+    f'<img src="{bild(Path(__file__).resolve().parent / "bilder" / "titelbild-ohne-knopf.webp")}" alt="Das KI-Content-System, mit dem wir auf LinkedIn 1 Mio+ verdient haben" '
+    'style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1">'
+    + countdown(ziel="2026-12-03T09:36:00+01:00").replace("top:130px;right:130px;z-index:3;text-align:center", "top:768px;left:96px;z-index:3;text-align:left"),
+    "padding:0;position:relative;overflow:hidden;background:#0D0D0D")
 
 # Video füllt die ganze Folie, ohne Eyebrow. Das Video selbst kommt noch.
 neu("Video · Unternehmensathlet", "A", "Unternehmensathlet-Video abspielen. Vermittelt sofort unsere Werte, filtert und unterscheidet uns von anderen.",
