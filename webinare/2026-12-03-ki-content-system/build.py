@@ -1152,7 +1152,7 @@ stufen("Heute 2027", "M", "Heute zeigen wir dir, wie du mit LinkedIn in 2027 Kun
                                          "Der iPhone-Effekt: Wie du aus deinen Terminen zahlende Kunden machst."])], hoehe=BOX_H), STIL_MITTE)
 
 # ---- Teil 1 · Vertrauen --------------------------------------------------------------------------------
-kapitel("1", "Warum jetzt", "LinkedIn ist nicht vorbei. Und KI verändert noch einmal alles.", "M", "Teil 1. Warum LinkedIn und KI gerade noch einmal alles verändern.")
+kapitel("1", "So wirkt Content", "Content kann dir Kunden bringen. Wenn du weißt, wie.", "M", "Teil 1. Wie Content auf LinkedIn funktioniert.")
 
 stufen("Vertrauen braucht Zeit?", "M", "Jetzt wirst du vielleicht sagen: Vertrauen braucht Zeit. Dabei funktionieren wir Menschen ganz anders. Sonst würden wir alle nichts mehr kaufen. Und Menschen kaufen. Nach wie vor.", 2,
        lambda k: zitat(f"„Vertrauen braucht Zeit.“ <span style=\"{'' if k >= 2 else 'visibility:hidden'}\">Dabei kaufen Menschen {m('nach wie vor.')}</span>", 96), STIL_MITTE)
@@ -1454,40 +1454,171 @@ stufen("Riesenvorteil", "M", "Den Loop vom Anfang schließen. Du hast noch nie m
        + f'<div style="margin-top:40px;display:flex">{offen("Begründung wie bei Tim ergänzen: warum der Neustart ein Vorteil ist", "0 0 auto", 20)}</div>', STIL_MITTE)
 
 kette = [("Beitrag", "Baut Vertrauen auf."), ("Gespräch", "Jemand meldet sich."), ("Termin", "Ihr sprecht wirklich."), ("Kunde", "Aus Vertrauen wird Auftrag.")]
-stufen("Content bringt Kunden", "A", "Wichtig für unseren Titel, wir haben damit über eine Million verdient. Viele hatten schon Reichweite und trotzdem keine Anfragen. Die Kette existiert: Beitrag, Gespräch, Termin, Kunde. Noch offen, ob die Folie bleibt.", 5,
+stufen("Content bringt Kunden", "A", "Wichtig für unseren Titel, wir haben damit über eine Million verdient. Viele hatten schon Reichweite und trotzdem keine Anfragen. Die Kette existiert: Beitrag, Gespräch, Termin, Kunde. Abschluss von Teil 1.", 5,
        lambda k: eyebrow("Und die Kunden?") + h2(f"„Content bringt mir nur Likes. {c('Keine Kunden.')}“", 84)
        + reihe(*sum([[karte(t_, txt, "mint" if j == 3 else "neutral", f"0{j + 1}", sichtbar=k > j + 1, size=44, text_size=27)]
                      + ([rechenzeichen("→", k > j + 2)] if j < 3 else []) for j, (t_, txt) in enumerate(kette)], []), gap=20, hoehe=400)
-       + f'<div style="margin-top:36px;display:flex">{offen("Entscheiden: Folie behalten? Welche Content-Arten bauen Vertrauen auf? Wie schließt die Masterclass die Lücke?", "1", 20)}</div>')
+       + f'<div style="margin-top:36px;display:flex">{offen("Noch offen: Wie schließt die Masterclass die Lücke?", "1", 20)}</div>')
 
+
+mitnehmen = ["Warum KI auf LinkedIn gerade alles auf null setzt.", "Wie KI nach dir klingt und nicht nach KI.",
+             "Warum es ein Vorteil ist, wenn du mit KI noch nie gearbeitet hast."]
+stufen("Was du heute mitnimmst", "M", "Was du heute mitnimmst. Erstens: Warum KI auf LinkedIn gerade alles auf null setzt. Zweitens: Wie KI nach dir klingt und nicht nach KI. Drittens: Warum es ein Vorteil ist, wenn du mit KI noch nie gearbeitet hast. Jeden Punkt einzeln einblenden.", 4,
+       lambda k: eyebrow("Bevor wir starten") + h2(f"Was du heute {m('mitnimmst.')}", 84)
+       + reihe(*[karte(tt, "", "mint", lab, sichtbar=k > j + 1, size=44)
+                 for j, (lab, tt) in enumerate(zip(["Erstens", "Zweitens", "Drittens"], mitnehmen))], hoehe=BOX_H))
+
+# ---- Teil 1 · So wirkt Content (Vorlage Michael 22.11.2026) ------------------------------------------------
+# Aufgabe: Content hat das Potenzial, Kunden zu bringen, wenn ich weiß, wie.
+stufen("Likes, keine Kunden", "M", "Mein Content bringt Likes, aber keine Kunden. Das liegt selten am einzelnen Beitrag. Es liegt daran, dass alle Beiträge dasselbe tun.", 2,
+       lambda k: zitat(f"„Mein Content bringt Likes, aber {c('keine Kunden.')}“", 88)
+       + f'<div style="{unsichtbar(k >= 2)}">'
+       + sub(f"Das liegt selten am einzelnen Beitrag. {w('Es liegt daran, dass alle Beiträge dasselbe tun.')}", 42, 50) + "</div>", STIL_MITTE)
+
+aufgaben = [("Reichweite", "Menschen, die dich noch nicht kennen, werden auf dich aufmerksam."),
+            ("Vertrauen", "Menschen, die dich kennen, trauen dir die Lösung zu."),
+            ("Anfragen", "Menschen, die dir vertrauen, melden sich.")]
+stufen("Drei Aufgaben", "M", "Content hat drei Aufgaben. Aufgabe 1: Reichweite. Menschen, die dich noch nicht kennen, werden auf dich aufmerksam. Aufgabe 2: Vertrauen. Menschen, die dich kennen, trauen dir die Lösung zu. Aufgabe 3: Anfragen. Menschen, die dir vertrauen, melden sich. Die meisten posten nur für eine der drei. Deshalb bleibt es bei Likes.", 5,
+       lambda k: eyebrow("So funktioniert Content auf LinkedIn") + h2(f"Content hat {m('drei Aufgaben.')}", 84)
+       + reihe(*[karte(t_, txt, "mint", f"Aufgabe {j + 1}", sichtbar=k > j + 1, size=48)
+                 for j, (t_, txt) in enumerate(aufgaben)], hoehe=400)
+       + f'<div style="margin-top:40px;{unsichtbar(k >= 5)}">'
+       + pille(f"Die meisten posten nur für eine der drei. {w('Deshalb bleibt es bei Likes.')}", CORAL) + "</div>")
+
+stufen("Aufgaben als Beitrag", "M", "So sieht jede Aufgabe als Beitrag aus. Je ein fertiges Beispiel, keine Live-Demo.", 4,
+       lambda k: eyebrow("Drei Aufgaben, drei Beiträge") + h2(f"So sieht jede Aufgabe {m('als Beitrag')} aus.", 84)
+       + reihe(*[karte(t_, "", "neutral", f"Aufgabe {j + 1}", sichtbar=k > j + 1, size=40,
+                       fuss=offen(f"Fertiges Beispiel: {t_}-Beitrag (Screenshot)", "1", 20))
+                 for j, (t_, _) in enumerate(aufgaben)], hoehe=BOX_H))
+
+stufen("Kette · 1 Million", "M", "So ist bei uns aus diesem Zusammenspiel eine Million Umsatz geworden. Die Kette in einem Bild.", 2,
+       lambda k: eyebrow("Das Zusammenspiel") + h2(f"So ist bei uns daraus {m('eine Million Umsatz')} geworden.", 84)
+       + f'<div style="{unsichtbar(k >= 2)}flex:0 0 auto;display:flex;margin-top:50px;height:560px">'
+       + offen("Bild: unsere Kette von Reichweite über Vertrauen und Anfragen bis zur Million, in einem Bild", "1", 24) + "</div>")
+
+stufen("Halbtagsjob", "M", "Drei Aufgaben, jede Woche. Von Hand ist das ein Halbtagsjob.", 2,
+       lambda k: eyebrow("Und jetzt ehrlich", CORAL) + h2(f"Drei Aufgaben. {hell('Jede Woche.')}", 110, 30)
+       + f'<div style="{unsichtbar(k >= 2)}">' + h2(f"Von Hand ist das {c('ein Halbtagsjob.')}", 84, 40) + "</div>", STIL_MITTE)
+
+# ---- Überleitung zu Teil 2 --------------------------------------------------------------------------------
+stufen("Wer schreibt das?", "M", "Überleitung. Du weißt jetzt, was dein Content leisten muss. Bleibt die Frage: Wer schreibt das alles?", 2,
+       lambda k: eyebrow("Zwischenstand") + h2(f"Du weißt jetzt, was dein Content {m('leisten muss.')}", 96, 30)
+       + f'<div style="{unsichtbar(k >= 2)}">' + h2(f"Bleibt die Frage: {c('Wer schreibt das alles?')}", 84, 40) + "</div>", STIL_MITTE)
+
+neu("Nie LinkedIn", "M", "Das Problem war nie LinkedIn. Es war der Aufwand. Und genau da hilft KI: Wie schreibst du das jetzt mit KI? Weiter mit Teil 2.",
+    zitat(f"Das Problem war nie LinkedIn. Es war {c('der Aufwand.')}", 96), STIL_MITTE)
+
+# ---- Einleitung · Platzhalter statt Hook (Michael 22.11.) ----------------------------------------------------
+neu("Platzhalter Einstieg", "A", "Platzhalter. Hier gehört noch etwas hin, an der Stelle des alten Hooks.",
+    f'<div style="flex:1;display:flex">{offen("Platzhalter: Hier gehört noch eine Folie hin (statt des alten Hooks).", "1", 30)}</div>', STIL)
+
+# ---- Teil 2 · Klingt das nach mir? (Liste Michael 22.11.) -----------------------------------------------------
+neu("Klingt nach KI", "A", "Der größte Einwand: Das klingt doch alles nach KI.",
+    zitat(f"„Das klingt doch alles {c('nach KI.')}“", 110), STIL_MITTE)
+
+stufen("Bei diesen schon", "A", "Stimmt. Bei diesen Beiträgen schon. Zwei, drei typische KI-Beiträge zeigen, Absender unkenntlich.", 2,
+       lambda k: eyebrow("Ehrlich gesagt", CORAL) + h2(f"Stimmt. {c('Bei diesen Beiträgen schon.')}", 84)
+       + f'<div style="{unsichtbar(k >= 2)}flex:0 0 auto;display:flex;gap:28px;margin-top:50px;height:440px">'
+       + "".join(offen(f"Negativbeispiel {i}: typischer KI-Beitrag, Absender unkenntlich", "1", 22) for i in (1, 2, 3)) + "</div>")
+
+neu("Kennt dich nicht", "A", "Das Problem ist nicht die KI. Sie kennt dich nur nicht.",
+    zitat(f"Das Problem ist nicht die KI. {m('Sie kennt dich nur nicht.')}", 96), STIL_MITTE)
+
+stufen("Gleiche KI", "A", "Gleiche KI, gleiches Thema: zwei völlig verschiedene Beiträge. Erst der eine, dann der andere. Fertige Beispiele, keine Live-Demo.", 2,
+       lambda k: eyebrow("Gleiche KI, gleiches Thema") + h2(f"Zwei {m('völlig verschiedene')} Beiträge.", 84)
+       + reihe(offen("Vorher: Beitrag von einer KI, die dich nicht kennt (fertiger Screenshot)", "1", 24),
+               f'<div style="flex:1;display:flex;{unsichtbar(k >= 2)}">'
+               + offen("Nachher: gleiches Thema, KI kennt dich (fertiger Screenshot)", "1", 24) + "</div>", hoehe=BOX_H))
+
+neu("Quiz · Von Hand", "A", "Quiz im Chat: Welcher davon ist von Hand geschrieben? Antworten abwarten, dann auflösen.",
+    eyebrow("Frage in den Chat") + h2(f"Welcher davon ist {m('von Hand geschrieben?')}", 84)
+    + reihe(*[f'<div style="flex:1;display:flex;flex-direction:column;gap:14px"><div style="{MONO}font-size:22px;color:{MINT}">BEITRAG {i}</div>'
+              + offen(f"Fertiger Beitrag {i} (Screenshot)", "1", 22) + "</div>" for i in (1, 2, 3)], hoehe=440)
+    + f'<div style="margin-top:30px;font-size:32px;color:#B4AFA6">Tippe die Zahl {hell("1–3")} für deine Antwort in den Chat.</div>')
+
+stufen("Nicht im Prompt", "A", "Der Unterschied liegt nicht im Prompt. Der Unterschied liegt in dem, was die KI über dich weiß.", 2,
+       lambda k: eyebrow("Der Unterschied") + h2(f"Der Unterschied liegt {c('nicht im Prompt.')}", 96, 30)
+       + f'<div style="{unsichtbar(k >= 2)}">' + h2(f"Er liegt in dem, was die KI {m('über dich weiß.')}", 84, 40) + "</div>", STIL_MITTE)
+
+neu("Wer gewinnt", "A", "Wenn alle KI nutzen, gewinnt der, dessen KI ihn am besten kennt.",
+    zitat(f"Wenn alle KI nutzen, gewinnt der, {m('dessen KI ihn am besten kennt.')}", 92), STIL_MITTE)
+
+neu("Kundenbeispiel · Reaktion", "A", "Kundenbeispiel: ein Beitrag und die Reaktion aus dem Netzwerk.",
+    eyebrow("Kundenbeispiel") + h2(f"Ein Beitrag. {m('Und die Reaktion darauf.')}", 84)
+    + reihe(offen("Kundenbeispiel: Beitrag (Screenshot, mit Freigabe)", "1", 24),
+            offen("Reaktion aus dem Netzwerk (Screenshot, mit Freigabe)", "1", 24), hoehe=BOX_H))
+
+# ---- Teil 3 · Ganz einfach (Liste Michael 22.11.) --------------------------------------------------------------
+neu("Nur der richtige Prompt", "M", "Jetzt denkst du vielleicht: Dann brauche ich also nur den richtigen Prompt.",
+    zitat(f"„Dann brauche ich also nur {c('den richtigen Prompt.')}“", 100), STIL_MITTE)
+
+stufen("Freelancer oder Mitarbeiter", "M", "Ein Prompt ist ein Freelancer, den du jeden Morgen neu briefst. Ein System ist ein Mitarbeiter, der dich seit Jahren kennt.", 2,
+       lambda k: eyebrow("Prompt oder System")
+       + reihe(karte("Ein Prompt ist ein Freelancer, den du jeden Morgen neu briefst.", "", "coral", "Prompt", size=52),
+               karte("Ein System ist ein Mitarbeiter, der dich seit Jahren kennt.", "", "mint", "System", sichtbar=k >= 2, size=52),
+               gap=40, top=60, hoehe=BOX_H), STIL_MITTE)
+
+neu("Technik und Pflege", "M", "Der nächste Einwand: Klingt nach Technik. Und nach noch einem Tool, das ich pflegen muss.",
+    zitat(f"„Klingt nach Technik. Und nach {c('noch einem Tool, das ich pflegen muss.')}“", 92), STIL_MITTE)
+
+stufen("Zoom gefunden", "A", "Du hast heute in dieses Zoom gefunden. Installieren, anmelden, Kamera, Ton. Das war der schwierigere Teil.", 2,
+       lambda k: eyebrow("Und die Technik?") + h2("Du hast heute in dieses Zoom gefunden.", 96, 30)
+       + f'<div style="{unsichtbar(k >= 2)}">' + h2(m("Das war der schwierigere Teil."), 84, 40) + "</div>", STIL_MITTE)
+
+neu("Du chattest", "A", "Mit dem System arbeitest du so: Du chattest. So wie jeden Tag.",
+    eyebrow("Mit dem System arbeitest du so") + h2(f"Du {m('chattest.')}", 200, 30), STIL_MITTE)
+
+stufen("Anfänger im Vorteil", "M", "Den Loop vom Anfang schließen: Warum Anfänger im Vorteil sind. Nichts zu verlernen.", 2,
+       lambda k: eyebrow("Versprochen ist versprochen") + h2("Warum Anfänger im Vorteil sind:", 96, 30)
+       + f'<div style="{unsichtbar(k >= 2)}">' + h2(m("Nichts zu verlernen."), 120, 40) + "</div>", STIL_MITTE)
+
+stufen("Die Rechnung", "M", "Die Rechnung: Minuten rein, so und so viele Beiträge raus. Vorher so viele Stunden pro Woche, nachher so viele Minuten. Echte Zahlen.", 3,
+       lambda k: eyebrow("Die Rechnung") + h2(f"Minuten rein. {m('Beiträge raus.')}", 84)
+       + f'<div style="margin-top:30px;display:flex">{offen("Zahl: [y] Beiträge pro Woche", "0 0 auto", 22)}</div>'
+       + reihe(karte("Vorher", "", "coral", "Ohne System", sichtbar=k >= 2, fuss=offen("Stunden pro Woche", "1", 22)),
+               karte("Nachher", "", "mint", "Mit dem System", sichtbar=k >= 3, fuss=offen("Minuten pro Woche", "1", 22)), hoehe=360))
+
+neu("Kundenbeispiel · Technik", "M", "Kundenbeispiel: kein Technik-Mensch, und das System läuft.",
+    eyebrow("Kundenbeispiel") + h2(f"Kein Technik-Mensch. {m('Und das System läuft.')}", 84)
+    + f'<div style="margin-top:50px;display:flex;height:440px">{offen("Kundenbeispiel: Foto, Name, Zitat (mit Freigabe)", "1", 24)}</div>')
+
+stufen("Bedienen ist leicht", "M", "Bedienen ist leicht. Das Bauen ist die eigentliche Arbeit. Überleitung zum Angebot.", 2,
+       lambda k: zitat(f"Bedienen ist leicht. <span style=\"{unsichtbar(k >= 2)}\">{m('Das Bauen ist die eigentliche Arbeit.')}</span>", 100), STIL_MITTE)
 
 # ---- Ablauf: verkaufspsychologisch gestrafft, Stand Skript 23.10.2026 (22.10.2026) -------------------------------------------
 # Jede Zeile: Folienname und welche Stufen gezeigt werden. "alle" = jede Aufbaustufe, "letzte" = nur die fertige Folie,
 # Liste = genau diese Stufen (1-basiert). Folien, die hier fehlen, werden gebaut, aber nicht gezeigt.
 ABLAUF = [
-    # 1. Einstieg (wie 27.10., nur der Hook ist neu)
-    ("Titel", "alle"), ("Video · Unternehmensathlet", "alle"), ("Hook · Content", "alle"), ("Gib uns eine Chance", "alle"),
+    # 1. Einstieg (Hook gestrichen, Platzhalter; Michael 22.11.)
+    ("Titel", "alle"), ("Video · Unternehmensathlet", "alle"), ("Platzhalter Einstieg", "alle"), ("Was du heute mitnimmst", "alle"),
     ("Social Proof früh", "alle"), ("Deal", "alle"), ("Code merken", "alle"),
-    # 2. Agenda und Filter
-    ("Heute · Drei Dinge", "alle"), ("Für wen das ist", "alle"),
-    # 3. Teil 1 · Warum jetzt (Glaubenssatz: Content auf LinkedIn ist vorbei)
-    ("Kapitel 1", "alle"), ("Frust · Content", "alle"), ("Lohnt sich Content?", "alle"), ("Opportunity LinkedIn", "alle"),
-    ("Schreibwerkzeuge", "alle"), ("Von Hand schneller", "alle"), ("Chance · Fenster", "alle"), ("Du bist hier", "alle"),
-    ("Umfrage · Was hält dich ab", "alle"),
-    # 4. Teil 2 · Klingt das nach mir? (Glaubenssatz: KI ist generisch)
-    ("Kapitel 2", "alle"), ("KI klingt nach KI", "alle"), ("KI-Posts · Das meinen wir nicht", "alle"), ("Mehr als ein Prompt", "alle"),
-    ("So klingt es mit System", "alle"),
-    # 5. Teil 3 · Ganz einfach (Glaubenssatz: kostet Zeit, zu technisch)
-    ("Kapitel 3", "alle"), ("Einwände · System", "alle"), ("Zeit · Vorher nachher", "alle"), ("Zoom kannst du", "alle"),
-    ("Riesenvorteil", "alle"), ("Content bringt Kunden", "alle"),
-    # 6. Vertrauensbrücke (wie 27.10.)
+    # 2. Zustand abholen (wie 27.10.; Marktlage und „Kein System“ gestrichen)
+    ("Zustand · Kalender", "alle"), ("Zustand · LinkedIn", "alle"), ("Umfrage 1", "alle"),
+    # 3. Content auf LinkedIn, KI als nächstes Schreibwerkzeug
+    ("LinkedIn ist tot?", "alle"), ("Frust · Content", "alle"), ("Lohnt sich Content?", "alle"), ("Opportunity LinkedIn", "alle"),
+    ("Schreibwerkzeuge", "alle"), ("Von Hand schneller", "alle"), ("Du bist hier", "alle"), ("Umfrage · Was hält dich ab", "alle"),
+    # 4. KI-Warnung, Agenda, Case, Filter (Wendepunkt, Chancen-Fenster und Chancen-Umfrage gestrichen)
+    ("KI ersetzt nichts", "alle"), ("Heute · Drei Dinge", "alle"), ("Case-Teaser", "alle"), ("Für wen das ist", "alle"),
+    # 5. Teil 1 · So wirkt Content, Kette am Ende, Überleitung
+    ("Kapitel 1", "alle"), ("Likes, keine Kunden", "alle"), ("Drei Aufgaben", "alle"), ("Aufgaben als Beitrag", "alle"),
+    ("Kette · 1 Million", "alle"), ("Halbtagsjob", "alle"), ("Content bringt Kunden", "alle"),
+    ("Wer schreibt das?", "alle"), ("Nie LinkedIn", "alle"),
+    # 6. Teil 2 · Klingt das nach mir?
+    ("Kapitel 2", "alle"), ("Klingt nach KI", "alle"), ("Bei diesen schon", "alle"), ("Kennt dich nicht", "alle"),
+    ("Gleiche KI", "alle"), ("Quiz · Von Hand", "alle"), ("Nicht im Prompt", "alle"), ("Wer gewinnt", "alle"),
+    ("Kundenbeispiel · Reaktion", "alle"),
+    # 7. Teil 3 · Ganz einfach
+    ("Kapitel 3", "alle"), ("Nur der richtige Prompt", "alle"), ("Freelancer oder Mitarbeiter", "alle"), ("Technik und Pflege", "alle"),
+    ("Zoom gefunden", "alle"), ("Du chattest", "alle"), ("Anfänger im Vorteil", "alle"), ("Die Rechnung", "alle"),
+    ("Kundenbeispiel · Technik", "alle"), ("Bedienen ist leicht", "alle"),
+    # 8. Vertrauensbrücke (wie 27.10.)
     ("Wer wir sind", "alle"), ("Zertifiziert", "alle"),
-    # 7. Pitch (wie 27.10., Angebot noch nicht neu)
+    # 9. Pitch (wie 27.10., Angebot noch nicht neu)
     ("Ein weiteres Jahr", "alle"), ("Zwei Optionen", "alle"), ("Woran es scheitert", "alle"), ("Ergebnis zuerst", "alle"),
     ("Der Weg", "alle"), ("Stimmen · Umsetzungsbegleitung", "alle"), ("Einmal aufbauen", "alle"),
     ("Drei Cases", "alle"), ("Marktanker", "alle"), ("Dein Invest", "alle"), ("Garantie 2027", "alle"), ("Kalender offen", "alle"), ("Return 2027", "alle"),
     ("Proof · Gruppen-Chat", "alle"), ("Referenz nach Invest", "alle"),
-    # 8. Qualifizieren, Kalender, Boni, Code, Schluss (wie 27.10.)
+    # 10. Qualifizieren, Kalender, Boni, Code, Schluss (wie 27.10.)
     ("So läuft dein Call ab", "alle"), ("Boni nach Einwand", "alle"), ("Buch dir keinen Call, wenn", "alle"),
     ("Code einlösen", "alle"), ("Live Q&A", "alle"),
 ]
@@ -1527,9 +1658,11 @@ AUSSAGE_KOPF, AUSSAGE_H2 = 219, 256
 AUSSAGE_FOLIEN = {"Hook", "Zustand · Kalender", "Zustand · LinkedIn", "Umfrage 1", "Marktlage · 1 von 2", "Chance · Umfrage",
                   "iPhone", "Opportunity LinkedIn", "Reichweite", "Drei Quellen", "Das meinen wir nicht", "Stell dir mal vor",
                   "Ergebnis zuerst", "Hook · Content", "Lohnt sich Content?", "Du bist hier",
-                  "Umfrage · Was hält dich ab", "Riesenvorteil"}
+                  "Umfrage · Was hält dich ab", "Riesenvorteil", "Halbtagsjob", "Wer schreibt das?", "Nicht im Prompt", "Zoom gefunden", "Du chattest",
+                  "Anfänger im Vorteil"}
 KOPF_AUSNAHMEN = {"Titel", "Video · Unternehmensathlet", "Deal", "Code merken", "Kein System", "Wendepunkt",
-                  "Vertrauen braucht Zeit?", "Von Hand schneller", "KI klingt nach KI", "Case-Teaser", "Einmal aufbauen", "Marktanker", "Dein Invest", "Garantie 2027",
+                  "Vertrauen braucht Zeit?", "Von Hand schneller", "KI klingt nach KI", "Likes, keine Kunden", "Nie LinkedIn", "Klingt nach KI", "Kennt dich nicht", "Wer gewinnt",
+                  "Nur der richtige Prompt", "Technik und Pflege", "Bedienen ist leicht", "Platzhalter Einstieg", "Case-Teaser", "Einmal aufbauen", "Marktanker", "Dein Invest", "Garantie 2027",
                   "Kalender offen", "Proof · Gruppen-Chat", "Referenz nach Invest", "Code einlösen", "Boni nach Einwand", "Live Q&A"}
 EYEBROW_ANFANG = re.compile(r"<div style=\"[^\"]*font-size:15px;letter-spacing:\.16em;text-transform:uppercase[^\"]*\">[^<]*</div>")
 
